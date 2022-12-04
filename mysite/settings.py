@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'backmkaly.app1.apps.App1Config',
 ]
 
 MIDDLEWARE = [
