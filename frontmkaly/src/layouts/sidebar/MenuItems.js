@@ -32,7 +32,7 @@ const OperatorMenuItems = [
 
 const Menuitems = [
 	{
-		title: 'Inicio',
+		title: 'Dashboard',
 		icon: 'home',
 		href: '/dashboard',
 	},

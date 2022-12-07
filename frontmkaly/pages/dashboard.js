@@ -8,7 +8,7 @@ import BaseCard from '../src/components/baseCard/BaseCard';
 import {OptionButton} from '../src/components';
 
 const Dashboard = () => {
-	const [userRol, setUserRol] = useState('manager');
+	const [userRol, setUserRol] = useState('operator');
 
 	if (userRol === 'client') {
 		return <ClientDashboard />;
@@ -21,7 +21,7 @@ const Dashboard = () => {
 	if (userRol === 'manager') {
 		return <ManagerDashboard />;
 	}
-	
+
 	if (userRol === 'operator') {
 		return <OperatorDashboard />;
 	}
@@ -35,38 +35,38 @@ const ClientDashboard = () => {
 const AdminDashboard = () => {
 	const users = [
 		{
-		time: "1",
-		color: "secondary.main",
-		text: "Admins",
-	  },
-	  {
-		time: "10",
-		color: "#FFFF00",
-		text: "Clients",
-	  },
-	  {
-		time: "20",
-		color: "success.main",
-		text: "Operators",
-	  },
-	  {
-		time: "5",
-		color: "primary.main",
-		text: "Managers",
-	  },
+			time: '1',
+			color: 'secondary.main',
+			text: 'Admins',
+		},
+		{
+			time: '10',
+			color: '#FFFF00',
+			text: 'Clients',
+		},
+		{
+			time: '20',
+			color: 'success.main',
+			text: 'Operators',
+		},
+		{
+			time: '5',
+			color: 'primary.main',
+			text: 'Managers',
+		},
 	];
 	return (
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12} lg={12}>
-					<SalesOverview title='Sales'/>
+					<SalesOverview title="Sales" />
 				</Grid>
 				{/* ------------------------- row 1 ------------------------- */}
 				<Grid item xs={12} lg={4}>
-					<DailyActivity title='Users' activities= {users}/>
+					<DailyActivity title="Users" activities={users} />
 				</Grid>
 				<Grid item xs={12} lg={8}>
-					<SalesOverview title='Users simultaneously logged on'/>
+					<SalesOverview title="Users simultaneously logged on" />
 				</Grid>
 			</Grid>
 		</>
@@ -77,41 +77,41 @@ const AdminDashboard = () => {
 const ManagerDashboard = () => {
 	const clientState = [
 		{
-		time: "1",
-		color: "secondary.main",
-		text: "In debt",
-	  },
-	  {
-		time: "20",
-		color: "success.main",
-		text: "Up to date",
-	  },
+			time: '1',
+			color: 'secondary.main',
+			text: 'In debt',
+		},
+		{
+			time: '20',
+			color: 'success.main',
+			text: 'Up to date',
+		},
 	];
 	const serviceState = [
 		{
-		time: "1",
-		color: "secondary.main",
-		text: "Suspended",
-	  },
-	  {
-		time: "20",
-		color: "success.main",
-		text: "Active",
-	  },
+			time: '1',
+			color: 'secondary.main',
+			text: 'Suspended',
+		},
+		{
+			time: '20',
+			color: 'success.main',
+			text: 'Active',
+		},
 	];
 	return (
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12} lg={12}>
-					<SalesOverview title='Sales'/>
+					<SalesOverview title="Sales" />
 				</Grid>
 				{/* ------------------------- row 1 ------------------------- */}
 				<Grid item xs={12} lg={4}>
-					<DailyActivity title='Clients State' activities= {clientState}/>
-					<DailyActivity title='Active/Suspended services' activities= {serviceState}/>
+					<DailyActivity title="Clients State" activities={clientState} />
+					<DailyActivity title="Active/Suspended services" activities={serviceState} />
 				</Grid>
 				<Grid item xs={12} lg={8}>
-					<SalesOverview title='Online vs Face-to-face Payments'/>
+					<SalesOverview title="Online vs Face-to-face Payments" />
 				</Grid>
 			</Grid>
 		</>
@@ -132,16 +132,16 @@ const OperatorDashboard = () => {
 					justifyContent: 'center',
 				}}
 			>
-				<BaseCard title="GESTIÓN CLIENTE">
+				<BaseCard title="CLIENT MANAGEMENT">
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="REGISTRAR CLIENTE" icon="client" />
-						<OptionButton title="MODIFICAR CLIENTE" icon="edit" />
+						<OptionButton title="REGISTER CLIENT" icon="client" />
+						<OptionButton title="MODIFY CLIENT" icon="edit" />
 					</Stack>
 					<br />
 					<br />
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="CONSULTAR CLIENTE" icon="search" />
-						<OptionButton title="REGISTRAR PAGO" icon="payment" />
+						<OptionButton title="SEARCH CLIENT" icon="search" />
+						<OptionButton title="REGISTER PAYMENTS" icon="payment" />
 					</Stack>
 				</BaseCard>
 			</Box>
