@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {Box, Drawer, useMediaQuery, List, Link, Button, Typography, ListItem, Collapse, ListItemIcon, ListItemText} from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 // import LogoIcon from "../logo/LogoIcon";
-import Menuitems from './MenuItems';
+import {Menuitems, ClientMenuItems, ManagerMenuItems, OperatorMenuItems, AdminMenuItems} from './MenuItems';
 import Buynow from './Buynow';
 import {useRouter} from 'next/router';
 
@@ -62,7 +62,7 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
 				</List>
 			</Box>
 
-			<Buynow />
+			{/* <Buynow /> */}
 		</Box>
 	);
 	if (lgUp) {

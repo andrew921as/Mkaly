@@ -19,8 +19,9 @@ export default function MyApp(props) {
 	return (
 		<CacheProvider value={emotionCache}>
 			<Head>
-				<title>Flexy NextJs Starter kit page</title>
+				<title>Energeia ⚡️</title>
 				<meta name="viewport" content="initial-scale=1, width=device-width" />
+				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
