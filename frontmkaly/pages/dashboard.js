@@ -6,7 +6,7 @@ import DailyActivity from '../src/components/dashboard/DailyActivity';
 import ProductPerfomance from '../src/components/dashboard/ProductPerfomance';
 
 const Dashboard = () => {
-	const [userRol, setUserRol] = useState('client');
+	const [userRol, setUserRol] = useState('manager');
 
 	if (userRol === 'client') {
 		return <ClientDashboard />;
@@ -14,6 +14,10 @@ const Dashboard = () => {
 
 	if (userRol === 'admin') {
 		return <AdminDashboard />;
+	}
+
+	if (userRol === 'manager') {
+		return <ManagerDashboard />;
 	}
 };
 
@@ -23,21 +27,40 @@ const ClientDashboard = () => {
 
 // ADMIN
 const AdminDashboard = () => {
+	const users = [
+		{
+		time: "1",
+		color: "secondary.main",
+		text: "Admins",
+	  },
+	  {
+		time: "10",
+		color: "#FFFF00",
+		text: "Clients",
+	  },
+	  {
+		time: "20",
+		color: "success.main",
+		text: "Operators",
+	  },
+	  {
+		time: "5",
+		color: "primary.main",
+		text: "Managers",
+	  },
+	];
 	return (
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12} lg={12}>
-					<SalesOverview />
+					<SalesOverview title='Sales'/>
 				</Grid>
 				{/* ------------------------- row 1 ------------------------- */}
 				<Grid item xs={12} lg={4}>
-					<DailyActivity />
+					<DailyActivity title='Users' activities= {users}/>
 				</Grid>
 				<Grid item xs={12} lg={8}>
-					<ProductPerfomance />
-				</Grid>
-				<Grid item xs={12} lg={12}>
-					<BlogCard />
+					<SalesOverview title='Users simultaneously logged on'/>
 				</Grid>
 			</Grid>
 		</>
@@ -46,21 +69,43 @@ const AdminDashboard = () => {
 
 // MANAGER
 const ManagerDashboard = () => {
+	const clientState = [
+		{
+		time: "1",
+		color: "secondary.main",
+		text: "In debt",
+	  },
+	  {
+		time: "20",
+		color: "success.main",
+		text: "Up to date",
+	  },
+	];
+	const serviceState = [
+		{
+		time: "1",
+		color: "secondary.main",
+		text: "Suspended",
+	  },
+	  {
+		time: "20",
+		color: "success.main",
+		text: "Active",
+	  },
+	];
 	return (
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12} lg={12}>
-					<SalesOverview />
+					<SalesOverview title='Sales'/>
 				</Grid>
 				{/* ------------------------- row 1 ------------------------- */}
 				<Grid item xs={12} lg={4}>
-					<DailyActivity />
+					<DailyActivity title='Clients State' activities= {clientState}/>
+					<DailyActivity title='Active/Suspended services' activities= {serviceState}/>
 				</Grid>
 				<Grid item xs={12} lg={8}>
-					<ProductPerfomance />
-				</Grid>
-				<Grid item xs={12} lg={12}>
-					<BlogCard />
+					<SalesOverview title='Online vs Face-to-face Payments'/>
 				</Grid>
 			</Grid>
 		</>

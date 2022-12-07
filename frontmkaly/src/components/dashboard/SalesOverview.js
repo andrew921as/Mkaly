@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import BaseCard from "../baseCard/BaseCard";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const SalesOverview = () => {
+const SalesOverview = ({title}) => {
   const optionssalesoverview = {
     grid: {
       show: true,
@@ -104,7 +104,7 @@ const SalesOverview = () => {
     },
   ];
   return (
-    <BaseCard title="Sales Overview">
+    <BaseCard title= {title}>
       <Chart
         options={optionssalesoverview}
         series={seriessalesoverview}
