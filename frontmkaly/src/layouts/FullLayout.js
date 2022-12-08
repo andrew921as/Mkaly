@@ -28,7 +28,7 @@ const PageWrapper = experimentalStyled('div')(({theme}) => ({
 const FullLayout = ({children}) => {
 	const [isSidebarOpen, setSidebarOpen] = useState(true);
 	const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-	const [user, setUser] = useState(true);
+	const [user, setUser] = useState(null);
 	const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 	return (
 		<MainWrapper>
@@ -50,7 +50,7 @@ const FullLayout = ({children}) => {
 					maxWidth={false}
 					sx={{
 						paddingTop: '20px',
-						paddingLeft: isSidebarOpen && lgUp ? '280px!important' : '',
+						paddingLeft: isSidebarOpen && lgUp && user ? '280px!important' : '',
 					}}
 				>
 					<Box sx={{minHeight: 'calc(100vh - 170px)'}}>{children}</Box>
