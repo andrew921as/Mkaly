@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from .models import User
 #from .models import 
 # Create your views here.
 
@@ -22,58 +23,57 @@ def manager_view(request):
 
 
 def admin_view(request):
-    usuariosListados = Usuarios.objects.all()
-    return render(request, "front", {"usuarios": usuariosListados})
+    userList = User.objects.all()
+    return render(request, "front", {"users": userList})
 
 
-def admin_editing(request,documento,tipo_documento,registro):
-    usuario = Usuario.objects.get(documento=documento,tipo_documento=tipo_documento)
-    return render(request, "plantilla editar del front", {"usuario":usuario})
+def admin_editing(request,id_card,type_card,registro):
+    user = User.objects.get(id_card=id_card,type_card=type_card)
+    return render(request, "plantilla editar del front", {"user":user})
 
 def admin_edit(request):
-    documento = request.POST['txtfDoc']
-    tipo_documento = request.POST['txtfTipoDoc']
-    pri_nombre_usuario = request.POST['txtfPriNom']
-    seg_nombre_usuario = request.POST['txtfSegNom']
-    pri_apellido_usuario = request.POST['txtfPrimApe']
-    seg_apellido_usuario = request.POST['txtfSegApe']
-    correo = request.POST['txtfCorreo']
-    contraseña = request.POST['txtfCont']
-    ciudad = request.POST['txtfCiudad']
+    id_card = request.POST['txtfDoc']
+    type_card = request.POST['txtfDocType']
+    first_name_user = request.POST['txtfFirstUserName']
+    sec_name_user = request.POST['txtfSecUserName']
+    first_lastname_user = request.POST['txtfFirstUserLastname']
+    sec_lastname_user = request.POST['txtfSecUserLastname']
+    mail = request.POST['txtfMail']
+    password = request.POST['txtfPass']
+    city = request.POST['txtfCity']
 
-    usuario = Usuario.objects.get(documento=documento,tipo_documento=tipo_documento)
-    usuario.pri_nombre_usuario = pri_nombre_usuario
-    usuario.seg_nombre_usuario = seg_nombre_usuario
-    usuario.pri_apellido_usuario = pri_apellido_usuario
-    usuario.seg_apellido_usuario = seg_apellido_usuario
-    usuario.correo = correo
-    usuario.contraseña = contraseña
-    usuario.ciudad = ciudad
-    usuario.save()
+    user = User.objects.get(id_card=id_card,type_card=type_card)
+    user.first_name_user = first_name_user
+    user.sec_name_user = sec_name_user
+    user.first_lastname_user = first_lastname_user
+    user.sec_lastname_user = sec_lastname_user
+    user.mail = mail
+    user.password = password
+    user.city = city
+    user.save()
 
     return redirect('/admin_view')
     
 
 def admin_post(request):
-    documento = request.POST['txtfDoc']
-    tipo_documento = request.POST['txtfTipoDoc']
-    pri_nombre_usuario = request.POST['txtfPriNom']
-    seg_nombre_usuario = request.POST['txtfSegNom']
-    pri_apellido_usuario = request.POST['txtfPrimApe']
-    seg_apellido_usuario = request.POST['txtfSegApe']
-    correo = request.POST['txtfCorreo']
-    contraseña = request.POST['txtfCont']
-    ciudad = request.POST['txtfCiudad']
+    id_card = request.POST['txtfDoc']
+    type_card = request.POST['txtfDocType']
+    first_name_user = request.POST['txtfFirstUserName']
+    sec_name_user = request.POST['txtfSecUserName']
+    first_lastname_user = request.POST['txtfFirstUserLastname']
+    sec_lastname_user = request.POST['txtfSecUserLastname']
+    mail = request.POST['txtfMail']
+    password = request.POST['txtfPass']
+    city = request.POST['txtfCity']
 
-    usuario = Usuario.objects.create( #Usuario es la tabla que se supone esta en la base de datos
-        documento=documento, tipo_documento=tipo_documento,pri_nombre_usuario=pri_nombre_usuario,
-        seg_nombre_usuario=seg_nombre_usuario,pri_apellido_usuario=pri_apellido_usuario,
-        seg_apellido_usuario=seg_apellido_usuario,correo=correo,contraseña=contraseña,ciudad=ciudad)
+    usuario = User.objects.create( #User es la tabla que se supone esta en la base de datos
+        id_card=id_card, type_card=type_card,first_name_user=first_name_user,
+        sec_name_user=sec_name_user,first_lastname_user=first_lastname_user,
+        sec_lastname_user=sec_lastname_user,mail=mail,password=password,city=city)
 
     return redirect('/admin_view')
 
-def admin_delete(request,documento,tipo_documento):
-    usuario = Usuario.objects.get(documento=documento,tipo_documento=tipo_documento)
+def admin_delete(request,id_card,type_card):
+    usuario = User.objects.get(id_card=id_card,type_card=type_card)
     usuario.delete()
     return redirect('/admin_view')
-
