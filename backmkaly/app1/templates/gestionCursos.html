@@ -1,0 +1,102 @@
+{% extends "./base.html" %}
+
+{% block title %} Gestión de usuarios {% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <h2>Panel de Administrados</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="/admin_post/" method="POST">{% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" id="txtfUsername" name="txtfUsername" class="form-control" placeholder="Nombre de usuario"
+                             required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfDoc" name="txtfDoc" class="form-control" placeholder="Identificacion"
+                             required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfDocType" name="txtfDocType" class="form-control" placeholder="Tipo de identificacion" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfFirstUserName" name="txtfFirstUserName" class="form-control" placeholder="Primer nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfSecUserName" name="txtfSecUserName" class="form-control" placeholder="Segundo nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfFirstUserLastname" name="txtfFirstUserLastname" class="form-control" placeholder="Primer apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfSecUserLastname" name="txtfSecUserLastname" class="form-control" placeholder="Segundo apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfEmail" name="txtfEmail" class="form-control" placeholder="Correo" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfCity" name="txtfCity" class="form-control" placeholder="Ciudad" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="txtfHead" name="txtfHead" class="form-control" placeholder="Sede" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success btn-block text-white">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+        <h1>Listado de Usuarios</h1>
+        <div class="table-responsive py-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Identificacion</th>
+                        <th>Tipo de identificacion</th>
+                        <th>Primer nombre</th>
+                        <th>Segundo nombre</th>
+                        <th>Primer apellido</th>
+                        <th>Segundo apellido</th>
+                        <th>Correo</th>
+                        <th>Ciudad</th>
+                        <th>Sede</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in users %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{c.username}}</td>
+                        <td>{{c.id_card}}</td>
+                        <td>{{c.type_card}}</td>
+                        <td>{{c.first_name_user}}</td>
+                        <td>{{c.sec_name_user}}</td>
+                        <td>{{c.first_lastname_user}}</td>
+                        <td>{{c.sec_lastname_user}}</td>
+                        <td>{{c.email}}</td>
+                        <td>{{c.city}}</td>
+                        <td>{{c.headquarters}}</td>
+                        <td><a href="admin_edit/{{c.id_card}}" class="btn btn-info">Editar</a></td>
+                        <td><a href="admin_delete/{{c.id_card}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
