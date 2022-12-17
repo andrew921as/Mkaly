@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from backmkaly.app1.views import client_view, operator_view,manager_view, admin_view
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

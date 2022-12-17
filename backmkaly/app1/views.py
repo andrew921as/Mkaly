@@ -1,6 +1,10 @@
+import json
 from django.shortcuts import render, redirect
+from django.views.generic import ListView
 from django.http import HttpResponse
 from .models import User
+from django.core import serializers
+
 #from .models import 
 # Create your views here.
 
@@ -23,13 +27,59 @@ def manager_view(request):
 
 
 def admin_view(request):
-    userList = User.objects.all()
-    return render(request, "gestionCursos.html", {"users": userList})
+    user = User.objects.all()
+    return render(request, "gestionCursos.html", {"users": user})
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+"""
+class UserList(ListView):
+    model = User
+    template_name = "pruebaJson.html"
+    
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
+
+    def admin_get(self,request,*args,**kwargs):
+        if is_ajax(request):
+        #     
+        #     user_list = []
+        #     for user in self.get_queryset():
+        #         user_data = {}
+        #         user_data['username'] = user.username
+        #         user_data['id_card'] = user.id_card
+        #         user_data['type_card'] = user.type_card
+        #         user_data['first_name_user'] = user.first_name_user
+        #         user_data['sec_name_user'] = user.sec_name_user
+        #         user_data['first_lastname_user'] = user.first_lastname_user
+        #         user_data['sec_lastname_user'] = user.sec_lastname_user
+        #         user_data['email'] = user.email
+        #         user_data['city'] = user.city
+        #         user_data['headquarters'] = user.headquarters
+        #         user_list.append(user_data)
+        #     data = json.dumps(user_list)
+        #     
+            data = serializers.serialize('json',self.get_queryset())
+            print(data)
+            return HttpResponse(data,'application/json')
+        else:
+           return render(request, self.template_name)
+                
+"""
+def get_queryset():
+    user = User.objects.filter(is_active=True)
+    return user
+
+def admin_get(request,*args,**kwargs):        
+    data = serializers.serialize('json',get_queryset())        
+    return HttpResponse(data,'application/json')
 
 
 def admin_editing(request,id_card):
     user = User.objects.get(id_card=id_card)
-    return render(request, "edicionCurso.html", {"user":user})
+    return render(request, "edicionCurso.html", {"users":user})
 
 def admin_edit(request):
     username = request.POST['txtfUsername']
@@ -45,6 +95,7 @@ def admin_edit(request):
 
     user = User.objects.get(id_card=id_card)
     user.username = username
+    user.type_card = type_card
     user.first_name_user = first_name_user
     user.sec_name_user = sec_name_user
     user.first_lastname_user = first_lastname_user
