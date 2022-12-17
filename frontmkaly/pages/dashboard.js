@@ -4,6 +4,7 @@ import BlogCard from '../src/components/dashboard/BlogCard';
 import SalesOverview from '../src/components/dashboard/SalesOverview';
 import DailyActivity from '../src/components/dashboard/DailyActivity';
 import ProductPerfomance from '../src/components/dashboard/ProductPerfomance';
+import InvoiceCard from '../src/components/dashboard/InvoiceCard';
 import BaseCard from '../src/components/baseCard/BaseCard';
 import {OptionButton} from '../src/components';
 
@@ -28,7 +29,18 @@ const Dashboard = () => {
 };
 
 const ClientDashboard = () => {
-	return <p>Dashboard cliente</p>;
+	return (
+		<>
+			<Grid container spacing={0}>
+				<Grid item xs={12}>
+					<ProductPerfomance />
+				</Grid>
+				<Grid item xs={4}>
+					<InvoiceCard />
+				</Grid>
+			</Grid>
+		</>
+	);
 };
 
 // ADMIN
