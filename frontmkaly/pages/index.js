@@ -1,75 +1,95 @@
-import {Grid, Container, Box, Typography, Stack, TextField} from '@mui/material';
+import { useState } from 'react'
+import {Grid, 
+	Container, 
+	Box, 
+	Typography, 
+	Stack, 
+	TextField,
+	useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { Navbar } from '../src/layouts/navBar/navVar';
 import Image from 'next/image';
-import u from '../assets/images/backgrounds/u1.jpg';
-import una from '../assets/images/users/1.jpg';
+import selfP from '../assets/images/publicity/selfP1.jpg';
+import mailIcon from '../assets/Icons/landingpage-ico-mail.png';
 
 
 export default function Index() {
+	const theme = useTheme();
+  const isMatch = useMediaQuery(theme.breakpoints.down('md'))
 	return (
 		<Grid container spacing={0}>
 			<Navbar/>
-			<Stack spacing={5} sx={{paddingTop:3, width:'100%', backgroundColor:'#3C73AA'}}>
+			<Stack id='Start' spacing={5} sx={{ width:'100%', backgroundColor:'#77B6EA'}}>
 				<Image
-					src= {u}
+					src= {selfP} layout='responsive'
 				/>
 				<Stack 
-					direction={'row'}  
-					alignItems="center"		
+					direction={isMatch ? 'column' : 'row'}  
+					alignItems="center"	
+					spacing={isMatch ? 4 : 0}	
 				>
 					<Container
+					id='adverticement'
 					sx={{ 
 						backgroundColor:'#FDC500',
-						width:'30%',
-						height:'4em'
+						width: isMatch ? '90%' : '30%',
+						height:'4em',
+						borderRadius:2
 						
 					}}
 					>
 						<Typography 
 						maxWidth={'90%'}
-						sx={{textAlign:'center'}}
-						>Llegamos a nuevas zonas del pais
-								Tulua, Pradera y Miriti Paraná
+						sx={{textAlign:'center', paddingTop:'2%'}}
+						>we are expnading to new zones:
+								Tulua, Pradera and Miriti Paraná
 						</Typography>
 					</Container>
 
 					<Container
 					sx={{ 
 						backgroundColor:'#FDC500',
-						width:'30%',
+						width: isMatch ? '90%' : '30%',
 						height:'4em',
+						borderRadius:2
 					}}
 					>
 						<Typography 
 						maxWidth={'90%'}
-						sx={{textAlign:'center'}}
-						>Nuevos proyectos
+						sx={{textAlign:'center', paddingTop:'4%'}}
+						>New Projects
 						</Typography>
 					</Container>
 				</Stack>
 
 				<Box
-				sx={{width: '100%' }}>
+					id = 'contact-us'
+					sx={{width: '100%', backgroundColor:'#fbfbfb', paddingTop:3}}
+				>
 			
-					<Typography variant='h1' sx={{textAlign:'center'}}> CONTACTANOS</Typography>
+					<Typography variant='h1' sx={{textAlign:'center'}}> CONTACT US</Typography>
 					<Stack 
-						direction={'row'}  
+						direction={isMatch ? 'column' : 'row'}  
 						alignItems="center"	
 						justifyContent="flex-start"
-						sx={{paddingBottom:'10%', paddingTop:'5%', paddingLeft:'10%'}}
-						spacing={30}
+						sx={{paddingBottom:'5%', paddingTop:'5%', paddingLeft:'10%'}}
+						spacing={isMatch ? 10 : 30}
 					>	
-							<Image src= {una}/>
+							<Image src= {mailIcon}/>
 						<Stack direction={'column'} spacing={3} justifyContent="flex-end" sx={{width:'60%'}}>
-							<Stack direction={'row'} alignItems="center" spacing={2} justifyContent="flex-end">
-								<Typography> Correo electronico</Typography>
-								<TextField id="filled-basic" variant="filled" sx={{width:'70%', backgroundColor:'#D6F3F2'}}/>
-							</Stack>
-
-							<Stack direction={'row'} alignItems="center" spacing={2} justifyContent="flex-end">
-								<Typography> Usuario</Typography>
-								<TextField id="filled-basic" variant="filled" sx={{width:'70%', backgroundColor:'#D6F3F2' }}/>
-							</Stack>
+							<TextField id="email-basic" label="Email" variant="outlined" />
+							<TextField id="email-basic" label="Ubicación/ Barrio" variant="outlined" />
+						</Stack>
+					</Stack>
+					<Stack direction={'row'} justifyContent="space-evenly" fullwidth sx={{ paddingBottom:2}}>
+						<Stack direction="column" alignItems="flex-start"   spacing={0}>
+							<Typography>PHONE:</Typography>
+							<Typography>+57 315 868 0329</Typography>
+						</Stack>
+						<Stack direction="column" alignItems="flex-start"   spacing={0}>
+							<Typography> NATIONAL LINE: </Typography>
+							<Typography> 01 8000 34 44 44</Typography>
 						</Stack>
 					</Stack>
 				</Box>
