@@ -146,7 +146,7 @@ const OperatorDashboard = () => {
 			>
 				<BaseCard title="CLIENT MANAGEMENT">
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="REGISTER CLIENT" icon="client" />
+						<OptionButton title="REGISTER CLIENT" icon="client" link="/user-management" />
 						<OptionButton title="MODIFY CLIENT" icon="edit" />
 					</Stack>
 					<br />
