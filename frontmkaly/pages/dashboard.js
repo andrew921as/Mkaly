@@ -9,7 +9,7 @@ import BaseCard from '../src/components/baseCard/BaseCard';
 import {OptionButton} from '../src/components';
 
 const Dashboard = () => {
-	const [userRol, setUserRol] = useState('operator');
+	const [userRol, setUserRol] = useState('admin');
 
 	if (userRol === 'client') {
 		return <ClientDashboard />;
@@ -146,7 +146,7 @@ const OperatorDashboard = () => {
 			>
 				<BaseCard title="CLIENT MANAGEMENT">
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="REGISTER CLIENT" icon="client" />
+						<OptionButton title="REGISTER CLIENT" icon="client" link="/user-management" />
 						<OptionButton title="MODIFY CLIENT" icon="edit" />
 					</Stack>
 					<br />

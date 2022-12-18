@@ -8,9 +8,14 @@ const ClientMenuItems = [
 
 const AdminMenuItems = [
 	{
-		title: 'Inicio',
+		title: 'Dashboard',
 		icon: 'home',
 		href: '/dashboard',
+	},
+	{
+		title: 'User Management',
+		icon: 'home',
+		href: '/user-management',
 	},
 ];
 

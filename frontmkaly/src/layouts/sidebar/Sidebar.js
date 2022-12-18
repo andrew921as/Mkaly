@@ -28,7 +28,7 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
 			{/* <LogoIcon /> */}
 			<Box mt={2}>
 				<List>
-					{Menuitems.map((item, index) => (
+					{AdminMenuItems.map((item, index) => (
 						<List component="li" disablePadding key={item.title}>
 							<NextLink href={item.href}>
 								<ListItem
