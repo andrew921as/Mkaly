@@ -9,7 +9,7 @@ import BaseCard from '../src/components/baseCard/BaseCard';
 import {OptionButton} from '../src/components';
 
 const Dashboard = () => {
-	const [userRol, setUserRol] = useState('operator');
+	const [userRol, setUserRol] = useState('admin');
 
 	if (userRol === 'client') {
 		return <ClientDashboard />;
