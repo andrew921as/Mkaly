@@ -118,12 +118,12 @@ def admin_post(request):
     sec_lastname_user = request.POST['txtfSecUserLastname']
     email = request.POST['txtfEmail']
     city = request.POST['txtfCity']
-    headquarters = request.POST['txtfHead']
+    #headquarters = request.POST['txtfHead']
 
     #User es la tabla que se supone esta en la base de datos
     usuario = User.objects.create(username=username,id_card=id_card, type_card=type_card,first_name_user=first_name_user,
         sec_name_user=sec_name_user,first_lastname_user=first_lastname_user,
-        sec_lastname_user=sec_lastname_user,email=email,city=city,headquarters=headquarters)
+        sec_lastname_user=sec_lastname_user,email=email,city=city)
     return redirect('/admin_view')
 
 def admin_delete(request,id_card):
