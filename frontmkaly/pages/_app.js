@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {CacheProvider} from '@emotion/react';
 import theme from '../src/theme/theme';
 import createEmotionCache from '../src/createEmotionCache';
+import Login from './Login';
 import FullLayout from '../src/layouts/FullLayout';
 import '../styles/style.css';
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -25,9 +26,10 @@ export default function MyApp(props) {
 			</Head>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<FullLayout>
+				<Login />
+				{/* <FullLayout>
 					<Component {...pageProps} />
-				</FullLayout>
+				</FullLayout> */}
 			</ThemeProvider>
 		</CacheProvider>
 	);

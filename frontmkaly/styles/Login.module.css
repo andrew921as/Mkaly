@@ -1,0 +1,14 @@
+.container{
+    background-image: url('../assets/images/backgrounds/login_image.png');
+    background-position: cover;
+    height: 100vh;
+}
+
+
+
+
+@media (min-width: 1000px) {
+    .logo-Login{
+        width: 200px;
+    }
+}
