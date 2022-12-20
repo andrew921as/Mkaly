@@ -26,10 +26,10 @@ export default function MyApp(props) {
 			</Head>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Login />
-				{/* <FullLayout>
+				{/* <Login /> */}
+				<FullLayout>
 					<Component {...pageProps} />
-				</FullLayout> */}
+				</FullLayout>
 			</ThemeProvider>
 		</CacheProvider>
 	);
