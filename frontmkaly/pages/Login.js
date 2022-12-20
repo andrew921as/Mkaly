@@ -24,13 +24,13 @@ export default function Login() {
 	// const isMatchLaptop = useMediaQuery(theme.breakpoints.down('lg'))
 	return (
 		<div className={styles.container}>
-			{/* <Image
+			<Image
 					src={Login_background}
 					layout='fill'
 					objectFit='cover'
-				/> */}
+				/>
 
-			<Container maxWidth='lg' sx={{ display: 'flex', justifyContent: 'center', padding: isMatch ? '20% 1%' : '4% 0%', height: '100%' }}>
+			<Container maxWidth='lg' sx={{ display: 'flex', justifyContent: 'center', padding: isMatch ? '20% 1%' : '3% 0%', height: '100%' }}>
 				{isMatch ? (<></>) : (
 					<>
 						<Box sx={{ backgroundColor: 'rgba(250, 214, 67, 90%)', position: 'absolute', width: '55%', height: '55%', top: '20%', zIndex: 1, borderRadius: 3 }}>
@@ -55,7 +55,7 @@ export default function Login() {
 					</>)}
 				<Box
 					sx={{
-						width: isMatch ? '100%' : '40%',
+						minWidth: isMatch ? '100%' : '36%',
 						height: '90%',
 						backgroundColor: '#00408F',
 						paddingTop: isMatch ? '10%' : '7%',
@@ -71,7 +71,7 @@ export default function Login() {
 						direction='column'
 						justifyContent='center'
 						alignItems='center'
-						spacing={5}
+						spacing={4}
 						sx={{ position: 'relative', }}
 					>
 						<div>
