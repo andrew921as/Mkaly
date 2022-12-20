@@ -17,6 +17,11 @@ const AdminMenuItems = [
 		icon: 'home',
 		href: '/user-management',
 	},
+	{
+		title: 'Client Management',
+		icon: 'home',
+		href: '/client-management',
+	},
 ];
 
 const ManagerMenuItems = [
