@@ -7,8 +7,9 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import BaseCard from "../baseCard/BaseCard";
-
+/*
 const activities = [
+  
   {
     time: "09.50",
     color: "success.main",
@@ -35,10 +36,11 @@ const activities = [
     text: "Payment was made of $64.95 to Michael Anderson",
   },
 ];
+*/
 
-const DailyActivity = () => {
+const DailyActivity = ({title, activities}) => {
   return (
-    <BaseCard title="Daily Activity">
+    <BaseCard title= {title}>
       <Timeline
         sx={{
           p: 0,

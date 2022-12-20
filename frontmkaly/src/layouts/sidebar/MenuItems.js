@@ -8,9 +8,14 @@ const ClientMenuItems = [
 
 const AdminMenuItems = [
 	{
-		title: 'Inicio',
+		title: 'Dashboard',
 		icon: 'home',
 		href: '/dashboard',
+	},
+	{
+		title: 'User Management',
+		icon: 'home',
+		href: '/user-management',
 	},
 ];
 
@@ -32,7 +37,7 @@ const OperatorMenuItems = [
 
 const Menuitems = [
 	{
-		title: 'Inicio',
+		title: 'Dashboard',
 		icon: 'home',
 		href: '/dashboard',
 	},
