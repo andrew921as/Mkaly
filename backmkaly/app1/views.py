@@ -1,9 +1,16 @@
-import json
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
 from django.http import HttpResponse
-from .models import User
 from django.core import serializers
+from django.contrib.auth.hashers import make_password
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login
+from django.views import View
+from .models import User
+from django.http.response import JsonResponse
+from django.contrib import messages
+import json
+
 
 #from .models import 
 # Create your views here.
@@ -25,108 +32,145 @@ def manager_view(request):
     
     return HttpResponse("Gerente")
 
-
-def admin_view(request):
-    user = User.objects.all()
-    return render(request, "gestionCursos.html", {"users": user})
-
-
-def is_ajax(request):
-    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
-
-"""
-class UserList(ListView):
-    model = User
-    template_name = "pruebaJson.html"
     
-    def get_queryset(self):
-        return self.model.objects.filter(is_active=True)
+class AutenticateLogin(View):
 
-    def admin_get(self,request,*args,**kwargs):
-        if is_ajax(request):
-        #     
-        #     user_list = []
-        #     for user in self.get_queryset():
-        #         user_data = {}
-        #         user_data['username'] = user.username
-        #         user_data['id_card'] = user.id_card
-        #         user_data['type_card'] = user.type_card
-        #         user_data['first_name_user'] = user.first_name_user
-        #         user_data['sec_name_user'] = user.sec_name_user
-        #         user_data['first_lastname_user'] = user.first_lastname_user
-        #         user_data['sec_lastname_user'] = user.sec_lastname_user
-        #         user_data['email'] = user.email
-        #         user_data['city'] = user.city
-        #         user_data['headquarters'] = user.headquarters
-        #         user_list.append(user_data)
-        #     data = json.dumps(user_list)
-        #     
-            data = serializers.serialize('json',self.get_queryset())
-            print(data)
-            return HttpResponse(data,'application/json')
+    method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self,request):
+        pass
+
+    def post(self,request):
+        jd = json.loads(request.body)
+        username = jd['username']
+        password = jd['password']
+        user = authenticate(request,username=username,password=password)
+        if user is not None:
+            login(request, user)
+            datos={'The credentials seems good'}
+            return JsonResponse(datos)
         else:
-           return render(request, self.template_name)
-                
+            datos={'The credentials are incorrect'}
+            return JsonResponse(datos)
+
+    def put(self,request):
+        pass
+
+    def delete(self,request):
+        pass
+        
+
 """
-def get_queryset():
-    user = User.objects.filter(is_active=True)
-    return user
+class loginView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-def admin_get(request,*args,**kwargs):        
-    data = serializers.serialize('json',get_queryset())        
-    return HttpResponse(data,'application/json')
+    def post(self, request):
+        #username = request.POST['username']
+        #password = request.POST['password']
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
 
-
-def admin_editing(request,id_card):
-    user = User.objects.get(id_card=id_card)
-    return render(request, "edicionCurso.html", {"users":user})
-
-def admin_edit(request):
-    username = request.POST['txtfUsername']
-    id_card = request.POST['txtfDoc']
-    type_card = request.POST['txtfDocType']
-    first_name_user = request.POST['txtfFirstUserName']
-    sec_name_user = request.POST['txtfSecUserName']
-    first_lastname_user = request.POST['txtfFirstUserLastname']
-    sec_lastname_user = request.POST['txtfSecUserLastname']
-    email = request.POST['txtfEmail']
-    city = request.POST['txtfCity']
-    headquarters = request.POST['txtfHead']
-
-    user = User.objects.get(id_card=id_card)
-    user.username = username
-    user.type_card = type_card
-    user.first_name_user = first_name_user
-    user.sec_name_user = sec_name_user
-    user.first_lastname_user = first_lastname_user
-    user.sec_lastname_user = sec_lastname_user
-    user.email = email
-    user.city = city
-    user.headquarters = headquarters
-    user.save()
-
-    return redirect('/admin_view')
+        if user is not None:
+            login(request, user)
+            print("hola")
+            datos={'message':"Success"}
+            
+        else:   
+            print("mierda")
+            datos={'message':"Fail"}  
+        
+        return JsonResponse(datos)"""
+"""
     
+    def post(self,request):
+        jd = json.loads(request.body)
+        print(jd)
+        user = authenticate(request, username=jd['username'], password=jd['password'])
+        if( user is not None):
+            login(request, user)
+            datos={'message':"Success"}
+        else:
+            datos={'message':"Fail"}
 
-def admin_post(request):
-    username = request.POST['txtfUsername']
-    id_card = request.POST['txtfDoc']
-    type_card = request.POST['txtfDocType']
-    first_name_user = request.POST['txtfFirstUserName']
-    sec_name_user = request.POST['txtfSecUserName']
-    first_lastname_user = request.POST['txtfFirstUserLastname']
-    sec_lastname_user = request.POST['txtfSecUserLastname']
-    email = request.POST['txtfEmail']
-    city = request.POST['txtfCity']
-    #headquarters = request.POST['txtfHead']
+        return JsonResponse(datos)   """ 
 
-    #User es la tabla que se supone esta en la base de datos
-    usuario = User.objects.create(username=username,id_card=id_card, type_card=type_card,first_name_user=first_name_user,
-        sec_name_user=sec_name_user,first_lastname_user=first_lastname_user,
-        sec_lastname_user=sec_lastname_user,email=email,city=city)
-    return redirect('/admin_view')
+        
+    
+class AdminView(View):
 
-def admin_delete(request,id_card):
-    usuario = User.objects.get(id_card=id_card)
-    usuario.delete()
-    return redirect('/admin_view')
+    method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, id=0):     
+        if(id > 0):
+            users=list(User.objects.filter(id=id).values())
+            if len(users) > 0:
+                user=users[0]
+                datos={'message':"Success",'users':user}
+            else:
+                datos={'message':"User not found..."}
+            return JsonResponse(datos)
+        else:   
+            users = list(User.objects.values())  
+            if len(users) > 0:
+                datos={'message':"Success",'users':users}
+            else:
+                datos={'message':"Users not found..."}
+            return JsonResponse(datos)
+    
+    def post(self, request):
+        #print(request.body)
+        jd = json.loads(request.body)
+        #print(jd)
+        user = User.objects.create(password=jd['password'],is_superuser=jd['is_superuser'],username=jd['username'],id_card=jd['id_card'], type_card=jd['type_card'],first_name_user=jd['first_name_user'],
+            sec_name_user=jd['sec_name_user'],first_lastname_user=jd['first_lastname_user'],
+            sec_lastname_user=jd['sec_lastname_user'],email=jd['email'],city=jd['city'],is_active=jd['is_active'],is_admin=jd['is_admin'])
+        user.set_password(user.password) 
+        user.save()
+        datos={'message':"Success"}
+        return JsonResponse(datos)
+
+    
+    def put(self,request,id):
+        jd = json.loads(request.body)
+        users=list(User.objects.filter(id=id).values())
+        if len(users) > 0:
+            user = User.objects.get(id=id)
+            user.password = jd['password']
+            user.is_superuser = jd['is_superuser']
+            user.username = jd['username']
+            user.type_card = jd['type_card']
+            user.first_name_user = jd['first_name_user']
+            user.sec_name_user = jd['sec_name_user']
+            user.first_lastname_user = jd['first_lastname_user']
+            user.sec_lastname_user = jd['sec_lastname_user']
+            user.email = jd['email']
+            user.city = jd['city']
+            user.is_active = jd['is_active']
+            user.is_admin = jd['is_admin']
+            user.set_password(user.password)
+            user.save()
+            datos={'message':"Success"}
+        else:
+            datos={'message':"User not found..."}
+
+        
+        return JsonResponse(datos)
+            
+    """
+    def delete(self,request,id):
+        user=list(User.objects.filter(id=id).values())
+        if len(user) > 0:
+            User.objects.filter(id=id).delete()
+            datos={'message':"Success"}
+        else:
+            datos={'message':"Users not found..."}
+        return JsonResponse(datos)
+"""
+        
+
+

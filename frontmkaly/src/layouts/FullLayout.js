@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useRouter} from 'next/router';
 import {experimentalStyled, useMediaQuery, Container, Box} from '@mui/material';
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
@@ -26,6 +27,7 @@ const PageWrapper = experimentalStyled('div')(({theme}) => ({
 }));
 
 const FullLayout = ({children}) => {
+	const router = useRouter();
 	const [isSidebarOpen, setSidebarOpen] = useState(true);
 	const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 	const [user, setUser] = useState(true);
@@ -54,7 +56,7 @@ const FullLayout = ({children}) => {
 					}}
 				>
 					<Box sx={{minHeight: 'calc(100vh - 170px)'}}>{children}</Box>
-					<Footer />
+					{router.pathname !== '/login' && <Footer />}
 				</Container>
 			</PageWrapper>
 		</MainWrapper>
