@@ -30,7 +30,7 @@ const FullLayout = ({children}) => {
 	const router = useRouter();
 	const [isSidebarOpen, setSidebarOpen] = useState(true);
 	const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-	const [user, setUser] = useState(true);
+	const [user, setUser] = useState(null);
 	const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 	return (
 		<MainWrapper>
