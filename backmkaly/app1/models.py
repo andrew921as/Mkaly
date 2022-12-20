@@ -31,7 +31,7 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self,username,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,email,city, password ):
+    def create_superuser(self,username,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,email,city, password):
         user=self.create_user(
             email,
             username=username,
@@ -45,6 +45,7 @@ class UserManager(BaseUserManager):
             password=password
         )
         user.is_admin=True
+        user.is_superuser=True
         user.set_password(password)
         user.save()
         return user
