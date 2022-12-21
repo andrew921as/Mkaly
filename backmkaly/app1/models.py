@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 # Create your models here.
 class UserManager(BaseUserManager):
-    def create_user(self,email,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,city,username=None, password=None):
+    def create_user(self,email,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,city,role, username=None, password=None):
         if not email:
             raise ValueError('El usuario debe tener un correo electronico')
         if not id_card:
@@ -24,14 +24,14 @@ class UserManager(BaseUserManager):
             sec_name_user=sec_name_user,
             first_lastname_user= first_lastname_user,
             sec_lastname_user=sec_lastname_user,
-            city=city
-
+            city=city,
+            role=role
             )
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self,username,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,email,city, password):
+    def create_superuser(self,username,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,email,city, role, password):
         user=self.create_user(
             email,
             username=username,
@@ -42,7 +42,8 @@ class UserManager(BaseUserManager):
             sec_lastname_user=sec_lastname_user,
             first_lastname_user=first_lastname_user,
             city=city, 
-            password=password
+            role=role,
+            password=password,
         )
         user.is_admin=True
         user.is_superuser=True
@@ -64,10 +65,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     city= models.CharField("Ciudad", max_length=20, null=False)
     is_active= models.BooleanField(default=True)
     is_admin= models.BooleanField(default=False)
+    role= models.CharField('nombre rol',max_length=15, null=False)
     objects=UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email','first_name_user','sec_name_user','first_lastname_user','sec_lastname_user','id_card','type_card','city']
+    REQUIRED_FIELDS = ['email','first_name_user','sec_name_user','first_lastname_user','sec_lastname_user','id_card','type_card','city','role']
     
     class Meta: 
         verbose_name='User'
@@ -75,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ['first_lastname_user']
         
     def _str_(self):
-        return f'{self.first_name_user},{self.first_lastname_user},{self.sec_name_user},{self.sec_lastname_user},{self.username},{self.id_card},{self.type_card},{self.email},{self.city},{self.is_active},{self.is_admin}'
+        return f'{self.first_name_user},{self.first_lastname_user},{self.sec_name_user},{self.sec_lastname_user},{self.username},{self.id_card},{self.type_card},{self.email},{self.city},{self.is_active},{self.is_admin},{self.role}'
 
     def has_perm(self,perm, ob=None):
         return True

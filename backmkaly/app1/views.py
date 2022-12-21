@@ -81,7 +81,7 @@ class OperatorView(View):
         #print(jd)
         client = Client.objects.create(password=jd['password'],username=jd['username'],id_card=jd['id_card'], type_card=jd['type_card'],first_name_user=jd['first_name_user'],
             sec_name_user=jd['sec_name_user'],first_lastname_user=jd['first_lastname_user'],
-            sec_lastname_user=jd['sec_lastname_user'],email=jd['email'],city=jd['city'],is_active=jd['is_active'])
+            sec_lastname_user=jd['sec_lastname_user'],email=jd['email'],city=jd['city'],is_active=jd['is_active'], role=jd['role'])
         client.set_password(client.password) 
         client.save()
         datos={'message':"Success"}
@@ -103,6 +103,7 @@ class OperatorView(View):
             client.email = jd['email']
             client.city = jd['city']
             client.is_active = jd['is_active']
+            client.role = jd['role']
             client.set_password(client.password)
             client.save()
             datos={'message':"Success"}
@@ -143,7 +144,7 @@ class AdminView(View):
         #print(jd)
         user = User.objects.create(password=jd['password'],is_superuser=jd['is_superuser'],username=jd['username'],id_card=jd['id_card'], type_card=jd['type_card'],first_name_user=jd['first_name_user'],
             sec_name_user=jd['sec_name_user'],first_lastname_user=jd['first_lastname_user'],
-            sec_lastname_user=jd['sec_lastname_user'],email=jd['email'],city=jd['city'],is_active=jd['is_active'],is_admin=jd['is_admin'])
+            sec_lastname_user=jd['sec_lastname_user'],email=jd['email'],city=jd['city'],is_active=jd['is_active'],is_admin=jd['is_admin'],role=jd['role'])
         user.set_password(user.password) 
         user.save()
         datos={'message':"Success"}
@@ -167,6 +168,7 @@ class AdminView(View):
             user.city = jd['city']
             user.is_active = jd['is_active']
             user.is_admin = jd['is_admin']
+            user.role = jd['role']
             user.set_password(user.password)
             user.save()
             datos={'message':"Success"}
