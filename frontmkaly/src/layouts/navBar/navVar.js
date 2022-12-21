@@ -48,7 +48,9 @@ export const Navbar = () => {
 							}}
 						>
 							<MenuItem onClick={handleClose}>
-								<Button href="#Start">Start</Button>
+								<Link href="/">
+									<Button href="#Start">Start</Button>
+								</Link>
 							</MenuItem>
 							<MenuItem onClick={handleClose}>
 								<Button href="#adverticement">Adverticements</Button>
@@ -60,7 +62,7 @@ export const Navbar = () => {
 								<Button href="#Start">Consult bills</Button>
 							</MenuItem>
 							<MenuItem onClick={handleClose}>
-								<Link href="/login">
+								<Link href="/login-page">
 									<Button color="inherit">Login</Button>
 								</Link>
 							</MenuItem>
@@ -73,11 +75,13 @@ export const Navbar = () => {
 							MKALY
 						</Typography>
 						<Stack direction="row" spacing={2}>
-							<Button href="#Start"> Start</Button>
+							<Link href="/">
+								<Button href="#Start"> Start</Button>
+							</Link>
 							<Button href="#adverticement">Adverticements</Button>
 							<Button href="#contact-us">Contact</Button>
 							<Button>Consult bills</Button>
-							<Link href="/login">
+							<Link href="/login-page">
 								<Button color="inherit">Login</Button>
 							</Link>
 						</Stack>

@@ -3,17 +3,17 @@ import {useRouter} from 'next/router';
 import Image from 'next/image';
 import Login_background from '../assets/images/backgrounds/login_image.png';
 import Logo from '../assets/Icons/logo-Mkaly.png';
-import { Container, Paper, Box, Typography, Stack, TextField, Button, styled, useMediaQuery, useTheme } from '@mui/material';
+import {Container, Paper, Box, Typography, Stack, TextField, Button, styled, useMediaQuery, useTheme} from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import styles from '../styles/Login.module.css';
 import {UserContext} from '../src/context/UserContext';
+import {Navbar} from '../src/layouts/navBar/navVar';
 
 export default function Login() {
-
-	const xSmall = '400px' 
+	const xSmall = '400px';
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('sm'));
-	const isMatchXs = useMediaQuery(theme.breakpoints.down('xSmall'))
+	const isMatchXs = useMediaQuery(theme.breakpoints.down('xSmall'));
 
 	function getWindowSize() {
 		const {innerWidth, innerHeight} = window;
@@ -23,15 +23,15 @@ export default function Login() {
 	const [windowSize, setWindowSize] = useState(getWindowSize());
 
 	useEffect(() => {
-	  function handleWindowResize() {
-		setWindowSize(getWindowSize());
-	  }
-  
-	  window.addEventListener('resize', handleWindowResize);
-  
-	  return () => {
-		window.removeEventListener('resize', handleWindowResize);
-	  };
+		function handleWindowResize() {
+			setWindowSize(getWindowSize());
+		}
+
+		window.addEventListener('resize', handleWindowResize);
+
+		return () => {
+			window.removeEventListener('resize', handleWindowResize);
+		};
 	}, []);
 
 	const router = useRouter();
@@ -42,6 +42,7 @@ export default function Login() {
 	return (
 		<>
 			{/* <div className={styles.container}> */}
+			<Navbar />
 
 			<Container maxWidth="lg" sx={{display: 'flex', justifyContent: 'center'}}>
 				<Image
@@ -69,7 +70,7 @@ export default function Login() {
 								borderRadius: 3,
 							}}
 						>
-							<Stack fullwidth direction="column" justifyContent="center" alignItems="center" spacing={2} sx={{paddingLeft: '60%', height: '100%'}}>
+							<Stack direction="column" justifyContent="center" alignItems="center" spacing={2} sx={{paddingLeft: '60%', height: '100%'}}>
 								<FeatherIcon stroke="#00296B" icon="speaker" height="3em" width="3em" />
 								<Typography variant="h2">haven't registered yet?</Typography>
 								<Typography sx={{maxWidth: '70%'}}>Come to the nearest points and our operators will help you</Typography>
@@ -146,7 +147,6 @@ export default function Login() {
 							}}
 							size="medium"
 							variant="contained"
-							fullwidth
 							sx={{background: '#FDC500', color: '#000000', fontWeight: 'bold', width: '11rem'}}
 						>
 							<Typography sx={{fontWeight: 'bold'}}>Log In</Typography>
@@ -166,7 +166,7 @@ export default function Login() {
 										justifyContent: 'center',
 									}}
 								>
-									<Stack fullwidth direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{margin: '5%'}}>
+									<Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{margin: '5%'}}>
 										<Typography variant="h3" sx={{fontWeight: 'bold'}}>
 											Haven't registered yet?
 										</Typography>
@@ -190,5 +190,4 @@ export default function Login() {
 			{/* </div> */}
 		</>
 	);
-
 }
