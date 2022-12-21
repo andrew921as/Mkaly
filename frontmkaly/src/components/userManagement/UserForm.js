@@ -71,9 +71,11 @@ const UserForm = ({title, initialUserData}) => {
 	// Set initial user data
 	useEffect(() => {
 		if (initialUserData) {
-			setUserData(initialUserData);
+			setUserData({...initialUserData, password: '123'});
 		}
 	}, []);
+
+	console.log(userData);
 
 	return (
 		<div>
@@ -131,23 +133,26 @@ const UserForm = ({title, initialUserData}) => {
 						/>
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
-						<FormControl fullWidth variant="outlined">
-							<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-							<OutlinedInput
-								value={userData.password}
-								onChange={(e) => handleChangeUser(e.target.value, 'password')}
-								id="outlined-adornment-password"
-								type={showPassword ? 'text' : 'password'}
-								endAdornment={
-									<InputAdornment position="end">
-										<IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
-											{showPassword ? <p>♪</p> : <p>↕</p>}
-										</IconButton>
-									</InputAdornment>
-								}
-								label="Password"
-							/>
-						</FormControl>
+						{!initialUserData && (
+							<FormControl fullWidth variant="outlined">
+								<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+								<OutlinedInput
+									disabled={initialUserData ? true : false}
+									value={userData.password}
+									onChange={(e) => handleChangeUser(e.target.value, 'password')}
+									id="outlined-adornment-password"
+									type={showPassword ? 'text' : 'password'}
+									endAdornment={
+										<InputAdornment position="end">
+											<IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
+												{showPassword ? <p>♪</p> : <p>↕</p>}
+											</IconButton>
+										</InputAdornment>
+									}
+									label="Password"
+								/>
+							</FormControl>
+						)}
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
 						<TextField
@@ -202,7 +207,7 @@ const UserForm = ({title, initialUserData}) => {
 					<Grid item xs={5} sx={{m: 2}}>
 						<Autocomplete
 							value={userData.city}
-							onChange={(e) => handleChangeUser(e.target.value, 'city')}
+							onChange={(event, value) => handleChangeUser(value, 'city')}
 							disablePortal
 							id="city"
 							options={['Cali', 'Jamundi', 'Bogota', 'Cartagena']}

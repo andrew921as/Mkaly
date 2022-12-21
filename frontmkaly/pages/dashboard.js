@@ -16,11 +16,11 @@ const Dashboard = () => {
 
 	console.log(user);
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			router.push('/');
-		}
-	}, [user]);
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		router.push('/');
+	// 	}
+	// }, [user]);
 
 	if (user?.role === 'client') {
 		return <ClientDashboard />;

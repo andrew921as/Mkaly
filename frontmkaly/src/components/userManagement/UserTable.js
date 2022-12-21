@@ -51,11 +51,21 @@ const users = [
 
 const UsersTable = ({title}) => {
 	const [users, setUsers] = useState([]);
+	const [allUsers, setAllUsers] = useState([]);
+
+	// const handleSearchUser = async (data) => {
+	// 	const filteredUsers = users.filter((user) => {
+	// 		return user.username.includes(data.toLowerCase())
+	// 	})
+
+	// 	console.log(filteredUsers)
+	// }
 
 	useEffect(() => {
 		const fetchUsers = async () => {
 			const {data} = await getUsers();
 			setUsers(data.users);
+			setAllUsers(data.users);
 		};
 
 		fetchUsers();

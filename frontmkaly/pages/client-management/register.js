@@ -28,11 +28,11 @@ const RegisterClient = () => {
 
 	useEffect(() => {
 		if (!isUserAuthenticated()) {
-			router.push('/');
-		}
+			// router.push('/');
 
-		if (user.role !== 'operator') {
-			router.push('/dashboard');
+			if (user.role !== 'operator') {
+				router.push('/dashboard');
+			}
 		}
 	}, [user]);
 

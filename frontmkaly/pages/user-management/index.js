@@ -13,7 +13,9 @@ const UserManagement = () => {
 	useEffect(() => {
 		if (!isUserAuthenticated()) {
 			router.push('/');
-		} else if (user.role != 'admin') {
+		}
+
+		if (user.role != 'admin') {
 			router.push('/dashboard');
 		}
 	}, [user]);
