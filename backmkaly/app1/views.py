@@ -4,12 +4,15 @@ from django.core import serializers
 from django.contrib.auth.hashers import make_password
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views import View
-from .models import User
+from .models import User, Client
 from django.http.response import JsonResponse
 from django.contrib import messages
 import json
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 #from .models import 
@@ -23,85 +26,97 @@ def client_view(request):
     return HttpResponse("Cliente")
 
 
-def operator_view(request):
+##def operator_view(request):
     
-    return HttpResponse("Operador")
+  ##  return HttpResponse("Operador")
 
 
 def manager_view(request):
     
     return HttpResponse("Gerente")
 
-    
-class AutenticateLogin(View):
 
-    method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
 
-    def get(self,request):
-        pass
-
-    def post(self,request):
-        jd = json.loads(request.body)
-        username = jd['username']
-        password = jd['password']
-        user = authenticate(request,username=username,password=password)
-        if user is not None:
+@method_decorator(csrf_exempt)
+def autenticate_view(request):
+    jd = json.loads(request.body)
+    print (jd)
+    username = jd['username']
+    password = jd['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+            datos={'message':"Login valido"}
             login(request, user)
-            datos={'The credentials seems good'}
-            return JsonResponse(datos)
-        else:
-            datos={'The credentials are incorrect'}
-            return JsonResponse(datos)
+            return JsonResponse(datos)         
+    else:
+        datos={'message':"Credenciales erroneas"}
+        return JsonResponse(datos)
 
-    def put(self,request):
-        pass
+class OperatorView(View):
 
-    def delete(self,request):
-        pass
-        
-
-"""
-class loginView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request):
-        #username = request.POST['username']
-        #password = request.POST['password']
-        user = authenticate(username=request.POST['username'], password=request.POST['password'])
-
-        if user is not None:
-            login(request, user)
-            print("hola")
-            datos={'message':"Success"}
-            
+    def get(self, request, id=0):     
+        if(id > 0):
+            clients=list(Client.objects.filter(id=id).values())
+            if len(clients) > 0:
+                client=clients[0]
+                datos={'message':"Success",'users':client}
+            else:
+                datos={'message':"User not found..."}
+            return JsonResponse(datos)
         else:   
-            print("mierda")
-            datos={'message':"Fail"}  
-        
-        return JsonResponse(datos)"""
-"""
+            clients = list(Client.objects.values())  
+            if len(clients) > 0:
+                datos={'message':"Success",'users':clients}
+            else:
+                datos={'message':"Users not found..."}
+            return JsonResponse(datos)
     
-    def post(self,request):
+    def post(self, request):
+        #print(request.body)
         jd = json.loads(request.body)
-        print(jd)
-        user = authenticate(request, username=jd['username'], password=jd['password'])
-        if( user is not None):
-            login(request, user)
+        #print(jd)
+        client = Client.objects.create(password=jd['password'],username=jd['username'],id_card=jd['id_card'], type_card=jd['type_card'],first_name_user=jd['first_name_user'],
+            sec_name_user=jd['sec_name_user'],first_lastname_user=jd['first_lastname_user'],
+            sec_lastname_user=jd['sec_lastname_user'],email=jd['email'],city=jd['city'],is_active=jd['is_active'])
+        client.set_password(client.password) 
+        client.save()
+        datos={'message':"Success"}
+        return JsonResponse(datos)
+
+    
+    def put(self,request,id):
+        jd = json.loads(request.body)
+        clients=list(Client.objects.filter(id=id).values())
+        if len(clients) > 0:
+            client = Client.objects.get(id=id)
+            client.password = jd['password']
+            client.username = jd['username']
+            client.type_card = jd['type_card']
+            client.first_name_user = jd['first_name_user']
+            client.sec_name_user = jd['sec_name_user']
+            client.first_lastname_user = jd['first_lastname_user']
+            client.sec_lastname_user = jd['sec_lastname_user']
+            client.email = jd['email']
+            client.city = jd['city']
+            client.is_active = jd['is_active']
+            client.set_password(client.password)
+            client.save()
             datos={'message':"Success"}
         else:
-            datos={'message':"Fail"}
+            datos={'message':"User not found..."}
 
-        return JsonResponse(datos)   """ 
+        
+        return JsonResponse(datos)
 
         
     
 class AdminView(View):
 
-    method_decorator(csrf_exempt)
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
