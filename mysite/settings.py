@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'backmkaly.app1',
 ]
 
@@ -79,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'proyecto_desarrollo',
         'USER': 'postgres',
-        'PASSWORD': 'loquendo11',
+        'PASSWORD': '201504',
         'HOST': 'localhost',
         'DATABASE_PORT': 5432
     }
@@ -102,6 +103,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+        'django.contrib.auth.backends.ModelBackend'
 ]
 
 AUTH_USER_MODEL= "app1.User"
