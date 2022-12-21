@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useRouter} from 'next/router';
 import {experimentalStyled, useMediaQuery, Container, Box} from '@mui/material';
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
 import Footer from './footer/Footer';
+import {UserContext} from '../context/UserContext';
 
 const MainWrapper = experimentalStyled('div')(() => ({
 	display: 'flex',
@@ -30,11 +31,12 @@ const FullLayout = ({children}) => {
 	const router = useRouter();
 	const [isSidebarOpen, setSidebarOpen] = useState(true);
 	const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-	const [user, setUser] = useState(null);
+	const {isUserAuthenticated} = useContext(UserContext);
 	const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+
 	return (
 		<MainWrapper>
-			{user && (
+			{isUserAuthenticated() && (
 				<>
 					<Header
 						sx={{
@@ -52,7 +54,7 @@ const FullLayout = ({children}) => {
 					maxWidth={false}
 					sx={{
 						paddingTop: '20px',
-						paddingLeft: isSidebarOpen && lgUp && user ? '280px!important' : '',
+						paddingLeft: isSidebarOpen && lgUp && isUserAuthenticated() ? '280px!important' : '',
 					}}
 				>
 					<Box sx={{minHeight: 'calc(100vh - 170px)'}}>{children}</Box>
