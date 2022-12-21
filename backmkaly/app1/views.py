@@ -44,12 +44,15 @@ def autenticate_view(request):
     username = jd['username']
     password = jd['password']
     user = authenticate(username=username, password=password)
+    userData = list(User.objects.filter(username=user).values())
+   # print("USER", user)
+
     if user is not None:
-            datos={'message':"Login valido"}
+            datos={"ok": True, 'message':"Successful Login", "user": userData[0]}
             login(request, user)
             return JsonResponse(datos)         
     else:
-        datos={'message':"Credenciales erroneas"}
+        datos={"ok": False, 'message':"Wrong credentials"}
         return JsonResponse(datos)
 
 class OperatorView(View):
