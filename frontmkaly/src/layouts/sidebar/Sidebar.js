@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import {Box, Drawer, useMediaQuery, List, Link, Button, Typography, ListItem, Collapse, ListItemIcon, ListItemText} from '@mui/material';
@@ -7,9 +7,12 @@ import FeatherIcon from 'feather-icons-react';
 import {Menuitems, ClientMenuItems, ManagerMenuItems, OperatorMenuItems, AdminMenuItems} from './MenuItems';
 import Buynow from './Buynow';
 import {useRouter} from 'next/router';
+import {UserContext} from '../../context/UserContext';
 
 const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
+	const {user, setUser, isUserAuthenticated} = useContext(UserContext);
 	const [open, setOpen] = React.useState(true);
+	const [menuItems, setMenuItems] = useState([]);
 
 	const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
@@ -23,12 +26,36 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
 	let curl = useRouter();
 	const location = curl.pathname;
 
+	useEffect(() => {
+		if (!isUserAuthenticated()) {
+			curl.push('/');
+		} else {
+			switch (user.rol) {
+				case 'manager':
+					setMenuItems(ManagerMenuItems);
+					break;
+				case 'admin':
+					setMenuItems(AdminMenuItems);
+					break;
+				case 'operator':
+					setMenuItems(OperatorMenuItems);
+					break;
+				case 'client':
+					setMenuItems(ClientMenuItems);
+					break;
+				default:
+					setMenuItems([]);
+					break;
+			}
+		}
+	}, [user]);
+
 	const SidebarContent = (
 		<Box p={2} height="100%">
 			{/* <LogoIcon /> */}
 			<Box mt={2}>
 				<List>
-					{AdminMenuItems.map((item, index) => (
+					{menuItems.map((item, index) => (
 						<List component="li" disablePadding key={item.title}>
 							<NextLink href={item.href}>
 								<ListItem

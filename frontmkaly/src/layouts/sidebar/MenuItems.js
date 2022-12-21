@@ -1,6 +1,6 @@
 const ClientMenuItems = [
 	{
-		title: 'Inicio',
+		title: 'Dashboard',
 		icon: 'home',
 		href: '/dashboard',
 	},
@@ -17,16 +17,16 @@ const AdminMenuItems = [
 		icon: 'home',
 		href: '/user-management',
 	},
-	{
-		title: 'Client Management',
-		icon: 'home',
-		href: '/client-management',
-	},
+	// {
+	// 	title: 'Client Management',
+	// 	icon: 'home',
+	// 	href: '/client-management',
+	// },
 ];
 
 const ManagerMenuItems = [
 	{
-		title: 'Inicio',
+		title: 'Dashboard',
 		icon: 'home',
 		href: '/dashboard',
 	},
@@ -34,9 +34,14 @@ const ManagerMenuItems = [
 
 const OperatorMenuItems = [
 	{
-		title: 'Inicio',
+		title: 'Dashboard',
 		icon: 'home',
 		href: '/dashboard',
+	},
+	{
+		title: 'Client Management',
+		icon: 'home',
+		href: '/client-management',
 	},
 ];
 

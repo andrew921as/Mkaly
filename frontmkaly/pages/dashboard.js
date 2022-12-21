@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Box, Container, Grid, Stack} from '@mui/material';
 import BlogCard from '../src/components/dashboard/BlogCard';
 import SalesOverview from '../src/components/dashboard/SalesOverview';
@@ -7,25 +7,36 @@ import ProductPerfomance from '../src/components/dashboard/ProductPerfomance';
 import InvoiceCard from '../src/components/dashboard/InvoiceCard';
 import BaseCard from '../src/components/baseCard/BaseCard';
 import {OptionButton} from '../src/components';
+import {UserContext} from '../src/context/UserContext';
+import {useRouter} from 'next/router';
 
 const Dashboard = () => {
-	const [userRol, setUserRol] = useState('admin');
+	const router = useRouter();
+	const {user, isUserAuthenticated} = useContext(UserContext);
 
-	if (userRol === 'client') {
+	useEffect(() => {
+		if (!isUserAuthenticated()) {
+			router.push('/');
+		}
+	}, [user]);
+
+	if (user?.rol === 'client') {
 		return <ClientDashboard />;
 	}
 
-	if (userRol === 'admin') {
+	if (user?.rol === 'admin') {
 		return <AdminDashboard />;
 	}
 
-	if (userRol === 'manager') {
+	if (user?.rol === 'manager') {
 		return <ManagerDashboard />;
 	}
 
-	if (userRol === 'operator') {
+	if (user?.rol === 'operator') {
 		return <OperatorDashboard />;
 	}
+
+	return <></>;
 };
 
 const ClientDashboard = () => {

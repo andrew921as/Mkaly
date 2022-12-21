@@ -8,6 +8,7 @@ import mailIcon from '../assets/Icons/landingpage-ico-mail.png';
 export default function Index() {
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('md'));
+
 	return (
 		<Grid container spacing={0}>
 			<Navbar />
