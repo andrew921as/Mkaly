@@ -41,7 +41,7 @@ const ProfileDD = () => {
 								ml: 1,
 							}}
 						>
-							Julia
+							{user.username}
 						</Typography>
 						<FeatherIcon icon="chevron-down" width="20" height="20" />
 					</Box>

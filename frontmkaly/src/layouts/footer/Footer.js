@@ -8,7 +8,7 @@ const Footer = () => {
 			<Typography>
 				© {getYear(Date.now())} All rights reserved by{' '}
 				<Link href="#">
-					<a>MKaly</a>
+					<a>Energeia</a>
 				</Link>{' '}
 			</Typography>
 		</Box>

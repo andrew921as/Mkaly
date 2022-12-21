@@ -10,7 +10,7 @@ export default function Index() {
 	const isMatch = useMediaQuery(theme.breakpoints.down('md'));
 
 	return (
-		<Grid container spacing={0}>
+		<Grid container spacing={0} sx={{padding: 0}}>
 			<Navbar />
 			<Stack id="Start" spacing={5} sx={{width: '100%', backgroundColor: '#77B6EA'}}>
 				<Image src={selfP} layout="responsive" />
