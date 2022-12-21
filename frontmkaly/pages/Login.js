@@ -1,15 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {useRouter} from 'next/router';
 import Image from 'next/image';
 import Login_background from '../assets/images/backgrounds/login_image.png';
 import Logo from '../assets/Icons/logo-Mkaly.png';
 import {Container, Paper, Box, Typography, Stack, TextField, Button, styled, useMediaQuery, useTheme} from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 import styles from '../styles/Login.module.css';
+import {UserContext} from '../src/context/UserContext';
 
 export default function Login() {
+	const router = useRouter();
+	const {user, setUser} = useContext(UserContext);
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('sm'));
 	// const isMatchLaptop = useMediaQuery(theme.breakpoints.down('lg'))
+
+	console.log(user);
 	return (
 		<>
 			{/* <div className={styles.container}> */}
@@ -84,7 +90,16 @@ export default function Login() {
 							<TextField id="outlined-basic" label="" variant="outlined" size="small" sx={{borderRadius: 2, backgroundColor: '#CAF0F8'}} />
 						</Box>
 
-						<Button size="medium" variant="contained" fullwidth sx={{background: '#FDC500', color: '#000000', fontWeight: 'bold', width: '11rem'}}>
+						<Button
+							onClick={() => {
+								setUser({email: 'pepito@gmail.com', name: 'pepito', password: '123', rol: 'admin', id: '123'});
+								router.push('/dashboard');
+							}}
+							size="medium"
+							variant="contained"
+							fullwidth
+							sx={{background: '#FDC500', color: '#000000', fontWeight: 'bold', width: '11rem'}}
+						>
 							<Typography>Log In</Typography>
 						</Button>
 						{isMatch ? (

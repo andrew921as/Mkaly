@@ -1,9 +1,22 @@
-import React from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {Box, Container, Grid, Stack} from '@mui/material';
 import BaseCard from '../../src/components/baseCard/BaseCard';
 import {OptionButton} from '../../src/components';
 
+import {UserContext} from '../../src/context/UserContext';
+import {useRouter} from 'next/router';
+
 const UserManagement = () => {
+	const router = useRouter();
+	const {user, isUserAuthenticated} = useContext(UserContext);
+
+	useEffect(() => {
+		if (!isUserAuthenticated()) {
+			router.push('/');
+		} else if (user.rol != 'admin') {
+			router.push('/dashboard');
+		}
+	}, [user]);
 	return (
 		<>
 			<Box
