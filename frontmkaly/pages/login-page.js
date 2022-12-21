@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {React, useState, useEffect, useContext} from 'react';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
 import Login_background from '../assets/images/backgrounds/login_image.png';
@@ -7,18 +7,42 @@ import {Container, Paper, Box, Typography, Stack, TextField, Button, styled, use
 import FeatherIcon from 'feather-icons-react';
 import styles from '../styles/Login.module.css';
 import {UserContext} from '../src/context/UserContext';
+import {Navbar} from '../src/layouts/navBar/navVar';
 
 export default function Login() {
-	const router = useRouter();
-	const {user, setUser} = useContext(UserContext);
+	const xSmall = '400px';
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('sm'));
+	const isMatchXs = useMediaQuery(theme.breakpoints.down('xSmall'));
+
+	function getWindowSize() {
+		const {innerWidth, innerHeight} = window;
+		return {innerWidth, innerHeight};
+	}
+
+	const [windowSize, setWindowSize] = useState(getWindowSize());
+
+	useEffect(() => {
+		function handleWindowResize() {
+			setWindowSize(getWindowSize());
+		}
+
+		window.addEventListener('resize', handleWindowResize);
+
+		return () => {
+			window.removeEventListener('resize', handleWindowResize);
+		};
+	}, []);
+
+	const router = useRouter();
+	const {user, setUser} = useContext(UserContext);
 	// const isMatchLaptop = useMediaQuery(theme.breakpoints.down('lg'))
 
 	console.log(user);
 	return (
 		<>
 			{/* <div className={styles.container}> */}
+			<Navbar />
 
 			<Container maxWidth="lg" sx={{display: 'flex', justifyContent: 'center'}}>
 				<Image
@@ -26,14 +50,27 @@ export default function Login() {
 					layout="fill"
 					// objectFit='cover'
 				/>
+
 				{isMatch ? (
 					<></>
 				) : (
 					<>
 						<Box
-							sx={{backgroundColor: 'rgba(250, 214, 67, 90%)', position: 'absolute', width: '55%', height: '55%', top: '20%', zIndex: 1, borderRadius: 3}}
+							sx={{
+								backgroundColor: 'rgba(250, 214, 67, 90%)',
+								position: 'absolute',
+								width: '55%',
+								height: '45%',
+								top: '0',
+								bottom: '0',
+								right: '0',
+								left: '0',
+								margin: 'auto',
+								zIndex: 1,
+								borderRadius: 3,
+							}}
 						>
-							<Stack fullwidth direction="column" justifyContent="center" alignItems="center" spacing={2} sx={{paddingLeft: '60%', height: '100%'}}>
+							<Stack direction="column" justifyContent="center" alignItems="center" spacing={2} sx={{paddingLeft: '60%', height: '100%'}}>
 								<FeatherIcon stroke="#00296B" icon="speaker" height="3em" width="3em" />
 								<Typography variant="h2">haven't registered yet?</Typography>
 								<Typography sx={{maxWidth: '70%'}}>Come to the nearest points and our operators will help you</Typography>
@@ -50,22 +87,35 @@ export default function Login() {
 				)}
 				<Box
 					sx={{
-						minWidth: isMatch ? '100%' : '36%',
-						height: '90%',
+						//	minWidth: isMatch ? '100%' : '36%',
+						width: isMatch ? '100%' : '23%',
+						height: isMatch ? '100%' : '75%',
 						backgroundColor: '#00408F',
-						paddingTop: isMatch ? '10%' : '7%',
-						paddingBottom: isMatch ? '0%' : '7%',
+						//	paddingTop: isMatch ? '10%' : '7%',
+						//	paddingBottom: isMatch ? '0%' : '7%',
+						padding: isMatch ? '10px' : '0%',
 						borderRadius: 3,
 						zIndex: 2,
-						position: 'relative',
-						left: isMatch ? '' : '-12%',
-						minHeight: '600px',
+						position: 'absolute',
+						top: '0',
+						bottom: '0',
+						right: '0',
+						left: isMatch ? '0' : '-15%',
+						//	minHeight: '600px',
+						margin: 'auto',
+						display: 'flex',
+						justifyContent: 'center',
 					}}
 				>
-					<Stack direction="column" justifyContent="center" alignItems="center" spacing={4} sx={{position: 'relative'}}>
-						<div>
-							<Image className="logo-Login" width={150} height={100} src={Logo} />
-						</div>
+					<Stack direction="column" justifyContent="center" alignItems="center" spacing={4.5} sx={{position: 'relative'}}>
+						{windowSize.innerWidth > 400 ? (
+							<div>
+								<Image className="logo-Login" width={190} height={125} src={Logo} />
+							</div>
+						) : (
+							''
+						)}
+
 						<Typography
 							sx={{
 								fontSize: {lg: '20px', md: '20px', sm: '20px', xs: '20px'},
@@ -97,27 +147,28 @@ export default function Login() {
 							}}
 							size="medium"
 							variant="contained"
-							fullwidth
 							sx={{background: '#FDC500', color: '#000000', fontWeight: 'bold', width: '11rem'}}
 						>
-							<Typography>Log In</Typography>
+							<Typography sx={{fontWeight: 'bold'}}>Log In</Typography>
 						</Button>
 						{isMatch ? (
 							<>
 								<Box
 									sx={{
 										width: '105%',
-										height: '30%',
+										height: '25%',
 										backgroundColor: '#FAD643',
 										borderRadius: 3,
 										zIndex: 2,
 										textAlign: 'center',
 										margin: '10%',
+										display: 'flex',
+										justifyContent: 'center',
 									}}
 								>
-									<Stack fullwidth direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{margin: '5%'}}>
+									<Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{margin: '5%'}}>
 										<Typography variant="h3" sx={{fontWeight: 'bold'}}>
-											Haven't registered?
+											Haven't registered yet?
 										</Typography>
 										<Typography>Come to the nearest points and our operators will help you</Typography>
 										<Typography>

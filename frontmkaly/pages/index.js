@@ -61,7 +61,7 @@ export default function Index() {
 							<TextField id="email-basic" label="Ubicación/ Barrio" variant="outlined" />
 						</Stack>
 					</Stack>
-					<Stack direction={'row'} justifyContent="space-evenly" fullwidth sx={{paddingBottom: 2}}>
+					<Stack direction={'row'} justifyContent="space-evenly" sx={{paddingBottom: 2}}>
 						<Stack direction="column" alignItems="flex-start" spacing={0}>
 							<Typography>PHONE:</Typography>
 							<Typography>+57 315 868 0329</Typography>
