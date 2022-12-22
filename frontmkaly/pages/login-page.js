@@ -10,17 +10,30 @@ import {UserContext} from '../src/context/UserContext';
 import {Navbar} from '../src/layouts/navBar/navVar';
 
 export default function Login() {
+	const router = useRouter();
+	const {user, setUser, login} = useContext(UserContext);
+	const [userData, setUserData] = useState({username: '', password: ''});
+	const [warning, setWarning] = useState(null);
 	const xSmall = '400px';
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('sm'));
 	const isMatchXs = useMediaQuery(theme.breakpoints.down('xSmall'));
+	const [windowSize, setWindowSize] = useState(getWindowSize());
+
+	const handleLogin = async () => {
+		const res = await login(userData.username, userData.password);
+
+		if (res.ok) {
+			router.push('/dashboard');
+		} else {
+			setWarning(res.message);
+		}
+	};
 
 	function getWindowSize() {
 		const {innerWidth, innerHeight} = window;
 		return {innerWidth, innerHeight};
 	}
-
-	const [windowSize, setWindowSize] = useState(getWindowSize());
 
 	useEffect(() => {
 		function handleWindowResize() {
@@ -34,11 +47,6 @@ export default function Login() {
 		};
 	}, []);
 
-	const router = useRouter();
-	const {user, setUser} = useContext(UserContext);
-	// const isMatchLaptop = useMediaQuery(theme.breakpoints.down('lg'))
-
-	console.log(user);
 	return (
 		<>
 			{/* <div className={styles.container}> */}
@@ -130,20 +138,36 @@ export default function Login() {
 								<FeatherIcon stroke="#fff" icon="user" />
 								<Typography sx={{color: '#FFF'}}> User Name</Typography>
 							</Stack>
-							<TextField id="outlined-basic" label="" variant="outlined" size="small" sx={{borderRadius: 2, backgroundColor: '#CAF0F8', width: '100%'}} />
+							<TextField
+								onChange={(e) => setUserData({...userData, username: e.target.value})}
+								id="outlined-basic"
+								label=""
+								variant="outlined"
+								size="small"
+								sx={{borderRadius: 2, backgroundColor: '#CAF0F8', width: '100%'}}
+							/>
 						</Box>
 						<Box>
 							<Stack direction={'row'} spacing={1} sx={{paddingBottom: 1}}>
 								<FeatherIcon stroke="#fff" icon="lock" />
 								<Typography sx={{color: '#FFF'}}> Password</Typography>
 							</Stack>
-							<TextField id="outlined-basic" label="" variant="outlined" size="small" sx={{borderRadius: 2, backgroundColor: '#CAF0F8'}} />
+							<TextField
+								onChange={(e) => setUserData({...userData, password: e.target.value})}
+								id="outlined-basic"
+								label=""
+								variant="outlined"
+								size="small"
+								sx={{borderRadius: 2, backgroundColor: '#CAF0F8'}}
+								type="password"
+							/>
 						</Box>
 
 						<Button
 							onClick={() => {
-								setUser({email: 'pepito@gmail.com', name: 'pepito', password: '123', rol: 'admin', id: '123'});
-								router.push('/dashboard');
+								handleLogin();
+								// setUser({email: 'pepito@gmail.com', name: 'pepito', password: '123', rol: 'admin', id: '123'});
+								// router.push('/dashboard');
 							}}
 							size="medium"
 							variant="contained"
@@ -151,6 +175,8 @@ export default function Login() {
 						>
 							<Typography sx={{fontWeight: 'bold'}}>Log In</Typography>
 						</Button>
+
+						{warning && <Typography sx={{fontWeight: 'bold', color: 'red'}}>{warning}</Typography>}
 						{isMatch ? (
 							<>
 								<Box

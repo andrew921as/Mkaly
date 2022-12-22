@@ -14,25 +14,27 @@ const Dashboard = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			router.push('/');
-		}
-	}, [user]);
+	console.log(user);
 
-	if (user?.rol === 'client') {
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		router.push('/');
+	// 	}
+	// }, [user]);
+
+	if (user?.role === 'client') {
 		return <ClientDashboard />;
 	}
 
-	if (user?.rol === 'admin') {
+	if (user?.role === 'admin') {
 		return <AdminDashboard />;
 	}
 
-	if (user?.rol === 'manager') {
+	if (user?.role === 'manager') {
 		return <ManagerDashboard />;
 	}
 
-	if (user?.rol === 'operator') {
+	if (user?.role === 'operator') {
 		return <OperatorDashboard />;
 	}
 
@@ -157,14 +159,14 @@ const OperatorDashboard = () => {
 			>
 				<BaseCard title="CLIENT MANAGEMENT">
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="REGISTER CLIENT" icon="client" link="/user-management" />
-						<OptionButton title="MODIFY CLIENT" icon="edit" />
+						<OptionButton title="REGISTER CLIENT" icon="client" link="/client-management/register" />
+						<OptionButton title="MODIFY CLIENT" icon="edit" link="/client-management/edit" />
 					</Stack>
 					<br />
 					<br />
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="SEARCH CLIENT" icon="search" />
-						<OptionButton title="REGISTER PAYMENTS" icon="payment" />
+						<OptionButton title="SEARCH CLIENT" icon="search" link="/client-management/search" />
+						<OptionButton title="REGISTER PAYMENTS" icon="payment" link="/client-management/register" />
 					</Stack>
 				</BaseCard>
 			</Box>

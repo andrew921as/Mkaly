@@ -30,7 +30,7 @@ client
 	useEffect(() => {
 		if (!isUserAuthenticated()) {
 			router.push('/');
-		} else if (user.rol != 'operator') {
+		} else if (user.role != 'operator') {
 			router.push('/dashboard');
 		}
 	}, [user]);

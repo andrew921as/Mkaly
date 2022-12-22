@@ -33,15 +33,15 @@ const ManagerMenuItems = [
 ];
 
 const OperatorMenuItems = [
-	{
-		title: 'Dashboard',
-		icon: 'home',
-		href: '/dashboard',
-	},
+	// {
+	// 	title: 'Dashboard',
+	// 	icon: 'home',
+	// 	href: '/dashboard',
+	// },
 	{
 		title: 'Client Management',
 		icon: 'home',
-		href: '/client-management',
+		href: '/dashboard',
 	},
 ];
 

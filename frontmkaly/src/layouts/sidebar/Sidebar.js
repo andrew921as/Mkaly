@@ -30,7 +30,7 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
 		if (!isUserAuthenticated()) {
 			curl.push('/');
 		} else {
-			switch (user.rol) {
+			switch (user.role) {
 				case 'manager':
 					setMenuItems(ManagerMenuItems);
 					break;

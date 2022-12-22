@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Typography, Box, Table, TableBody, TableCell, TableHead, TableRow, FormControl, InputLabel, InputAdornment, Input} from '@mui/material';
 import BaseCard from '../baseCard/BaseCard';
+import {getUsers} from '../../functions/requests';
 
 const users = [
 	{
@@ -49,6 +50,27 @@ const users = [
 ];
 
 const UsersTable = ({title}) => {
+	const [users, setUsers] = useState([]);
+	const [allUsers, setAllUsers] = useState([]);
+
+	// const handleSearchUser = async (data) => {
+	// 	const filteredUsers = users.filter((user) => {
+	// 		return user.username.includes(data.toLowerCase())
+	// 	})
+
+	// 	console.log(filteredUsers)
+	// }
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			const {data} = await getUsers();
+			setUsers(data.users);
+			setAllUsers(data.users);
+		};
+
+		fetchUsers();
+	}, []);
+
 	return (
 		<BaseCard title={title}>
 			<FormControl variant="standard">
@@ -103,6 +125,11 @@ const UsersTable = ({title}) => {
 								Email
 							</Typography>
 						</TableCell>
+						<TableCell>
+							<Typography color="textSecondary" variant="h6">
+								Role
+							</Typography>
+						</TableCell>
 						{/* <TableCell align="right">
               <Typography color="textSecondary" variant="h6">
                 Budget
@@ -139,7 +166,7 @@ const UsersTable = ({title}) => {
 													fontWeight: '600',
 												}}
 											>
-												{user.firstName}
+												{user.first_name_user} {user.sec_name_user}
 											</Typography>
 											{/* <Typography
 												color="textSecondary"
@@ -154,7 +181,7 @@ const UsersTable = ({title}) => {
 								</TableCell>
 								<TableCell>
 									<Typography color="textSecondary" variant="h6">
-										{user.lastName}
+										{user.first_lastname_user} {user.sec_lastname_user}
 									</Typography>
 								</TableCell>
 								{/* <TableCell>
@@ -171,6 +198,9 @@ const UsersTable = ({title}) => {
 								</TableCell> */}
 								<TableCell>
 									<Typography variant="h6">{user.email}</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="h6">{user.role}</Typography>
 								</TableCell>
 							</TableRow>
 						);

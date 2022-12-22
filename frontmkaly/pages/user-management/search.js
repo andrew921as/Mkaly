@@ -12,7 +12,7 @@ const SearchUser = () => {
 	useEffect(() => {
 		if (!isUserAuthenticated()) {
 			router.push('/');
-		} else if (user.rol != 'admin') {
+		} else if (user.role != 'admin') {
 			router.push('/dashboard');
 		}
 	}, [user]);
