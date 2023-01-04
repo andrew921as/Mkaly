@@ -125,17 +125,6 @@ const ClientForm = ({title, initialUserData}) => {
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
 						<TextField
-							value={userData.phone_number}
-							onChange={(e) => handleChangeUser(e.target.value, 'phone_number')}
-							id="phone_number"
-							label="Phone Number"
-							type="number"
-							variant="outlined"
-							fullWidth
-						/>
-					</Grid>
-					<Grid item xs={5} sx={{m: 2}}>
-						<TextField
 							value={userData.email}
 							onChange={(e) => handleChangeUser(e.target.value, 'email')}
 							id="email"
@@ -154,8 +143,9 @@ const ClientForm = ({title, initialUserData}) => {
 							fullWidth
 						/>
 					</Grid>
-					<Grid item xs={5} sx={{m: 2}}>
-						{!initialUserData && (
+
+					{!initialUserData && (
+						<Grid item xs={5} sx={{m: 2}}>
 							<FormControl fullWidth variant="outlined">
 								<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
 								<OutlinedInput
@@ -174,8 +164,37 @@ const ClientForm = ({title, initialUserData}) => {
 									label="Password"
 								/>
 							</FormControl>
-						)}
+						</Grid>
+					)}
+
+					<Grid item xs={5} sx={{m: 2}}>
+						<TextField
+							value={userData.phone_number}
+							onChange={(e) => handleChangeUser(e.target.value, 'phone_number')}
+							id="phone_number"
+							label="Phone Number"
+							type="number"
+							variant="outlined"
+							fullWidth
+						/>
 					</Grid>
+
+					<Grid item xs={5} sx={{m: 2}}>
+						<FormControl fullWidth>
+							<InputLabel id="clientType">Type Of Client</InputLabel>
+							<Select
+								labelId="clientType"
+								id="clientType"
+								value={userData.client_type}
+								label="Client Type"
+								onChange={(e) => handleChangeUser(e.target.value, 'client_type')}
+							>
+								<MenuItem value="natural">Natural</MenuItem>
+								<MenuItem value="business">Business</MenuItem>
+							</Select>
+						</FormControl>
+					</Grid>
+
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth>
 							<InputLabel id="type_id">Type of Document</InputLabel>
