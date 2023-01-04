@@ -494,8 +494,8 @@ def total_Payment(id,stratum,type_client):
     dic = ast.literal_eval(response.text)
 
     consumo = dic['energy consumption']
-    iva = 0.019
-    energyPayment = (calculateFee(stratum,type_client) * consumo) - (calculateFee(stratum,type_client)*subsidy(stratum))
+    iva = 0.19
+    energyPayment = (calculateFee(stratum,type_client,consumo) * consumo)
     energyPaymentIVA = energyPayment + (energyPayment*iva)
     totalPayment = energyPaymentIVA + street_lighting_value(type_client)
      
@@ -505,38 +505,73 @@ def total_Payment(id,stratum,type_client):
 
 
 def calculateFee(stratum,type_client,consumo): 
+    # CS : subsistence consumption , E: Stratum, C: Comercial or Contribution
+    feeE1 = 0.7
+    feeE2 = 0.4
+    feeE3 = 0.15
+
+    contributionE5 = 0.2
+    contributionE6 = 0.2
+    contributionC = 0.2
+
+    CSE1 = 330.66
+    CSE2 = 413.12
+    CSE3 = 673.77
+    CSE4 = 792.56
+    CSE5 = 951.07
+    CSE6 = 951.07
+    CSC = 765.65
+
+    CSCC = CSC + (CSC*contributionC)
+
+    feePreCSE1 = CSE1 - (feeE1*CSE1)
+    feePreCSE2 = CSE2 - (feeE2*CSE2)
+    feePreCSE3 = CSE3 - (feeE3*CSE3)
+    feePreCSE4 = CSE4
+
+    feeCE5 = CSE5 + (contributionE5*CSE5)
+    feeCE6 = CSE6 + (contributionE6*CSE6)
+
+    feeSubCSE1 = feePreCSE1 + (consumo - 130)*CSE1
+    feeSubCSE2 = feePreCSE2 + (consumo - 130)*CSE2
+    feeSubCSE3 = feePreCSE3 + (consumo - 130)*CSE3
+    feeSubCSE4 = feePreCSE4 + (consumo - 130)*CSE4
+    
+
+
     if (type_client == "natural"):
         if (consumo <= 130):
             if(stratum == 1):
-                fee = 842.85
+                fee = feePreCSE1
             elif(stratum == 2):
-                fee = 1817.38
+                fee = feePreCSE2
             elif(stratum == 3):
-                fee = 2607.55
+                fee = feePreCSE3
             elif(stratum == 4):
-                fee = 2633.89
+                fee = feePreCSE4
             elif(stratum == 5):
-                fee = 3977.18
+                fee = feeCE5
             elif(stratum == 6):
-                fee = 4240.56
+                fee = feeCE6
         else:
             if(stratum == 1):
-                fee = 842.85
+                fee = feeSubCSE1
             elif(stratum == 2):
-                fee = 1817.38
+                fee = feeSubCSE2
             elif(stratum == 3):
-                fee = 2607.55
+                fee = feeSubCSE3
             elif(stratum == 4):
-                fee = 2633.89
+                fee = feeSubCSE4
             elif(stratum == 5):
-                fee = 3977.18
+                fee = feeCE5
             elif(stratum == 6):
-                fee = 4240.56
+                fee = feeCE6
     elif (type_client == "legal"):
-        fee = 3950.84
+        fee = CSCC
 
     return fee
-    
+
+"""  
 def subsidy(stratum):
     if (stratum == 1):
         subsidy = 0.7
@@ -546,14 +581,14 @@ def subsidy(stratum):
         subsidy == 0.15
         
     return subsidy
-
+"""
 
 
 def street_lighting_value(type_client):
     if (type_client == "natural"):
-        street_lighting = 14000
+        street_lighting = 21590.86
     elif (type_client == "legal"):
-        street_lighting = 20000
+        street_lighting = 30000
 
     return street_lighting
 

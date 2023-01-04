@@ -130,6 +130,12 @@ class Contract (models.Model):
         on_delete=models.CASCADE
     )
 
+class Publicity (models.Model):
+    month_publicity = models.CharField('Mes', unique=False, max_length=20, null=True)
+    type_publicity = models.CharField('Tipo de publicidad', unique=False, max_length=20, null=True)
+    image_publicity = models.ImageField(default='.\static\media\images_pdf\logo.png', null=True)
+    
+    
 class Bill (models.Model):
     bill_number = models.CharField('Numero de factura', unique=True, max_length=40, null=False)
     electronic_payment_number = models.CharField('Numero de pago electronico', unique=True, max_length=40, null=True, blank=True)
@@ -150,6 +156,10 @@ class Bill (models.Model):
         Contract,
         on_delete=models.CASCADE
     )
+    publicity = models.ForeignKey(
+        Publicity,
+        on_delete=models.CASCADE
+    )
 
 class Payment (models.Model):
     payment_method = models.CharField('Metodo de pago', unique=True, max_length=20, null=False)
@@ -158,3 +168,4 @@ class Payment (models.Model):
         Bill, 
         on_delete=models.CASCADE
     ) 
+
