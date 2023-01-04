@@ -53,7 +53,10 @@ export const Navbar = () => {
 								</Link>
 							</MenuItem>
 							<MenuItem onClick={handleClose}>
-								<Button href="#adverticement">Adverticements</Button>
+								<Button href="#AboutUs">About us</Button>
+							</MenuItem>
+							<MenuItem onClick={handleClose}>
+								<Button href="#newProjects">New Projects</Button>
 							</MenuItem>
 							<MenuItem onClick={handleClose}>
 								<Button href="#contact-us">Contact</Button>
@@ -78,7 +81,8 @@ export const Navbar = () => {
 							<Link href="/">
 								<Button href="#Start"> Start</Button>
 							</Link>
-							<Button href="#adverticement">Adverticements</Button>
+							<Button href="#AboutUs">About us</Button>
+							<Button href="#newProjects">New Projects</Button>
 							<Button href="#contact-us">Contact</Button>
 							<Button>Consult bills</Button>
 							<Link href="/login-page">
