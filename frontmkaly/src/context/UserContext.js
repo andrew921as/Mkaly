@@ -46,12 +46,17 @@ export const UserProvider = ({children}) => {
 
 		if (data.ok) {
 			setUser(data.user);
+			localStorage.setItem('user', data.user);
 			return data;
 		} else {
 			return data;
 		}
 
 		// setUser({...initialUserState, email, password});
+	};
+
+	const initiateUser = (user) => {
+		setUser(user);
 	};
 
 	const logout = () => {
@@ -62,7 +67,7 @@ export const UserProvider = ({children}) => {
 		<Provider
 			value={{
 				user,
-				setUser,
+				initiateUser,
 				isUserAuthenticated,
 				logout,
 				login,

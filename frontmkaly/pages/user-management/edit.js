@@ -54,7 +54,7 @@ const EditUser = () => {
 
 	return (
 		<div>
-			<h1>Edit User Profile</h1>
+			<h1 className="font-black text-4xl ml-16">Edit User Profile</h1>
 			<Grid container align="center">
 				<Grid item xs={12} sx={{m: 2}}>
 					Write down the Id number of the user you are willing to edit

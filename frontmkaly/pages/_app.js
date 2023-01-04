@@ -18,7 +18,7 @@ const clientSideEmotionCache = createEmotionCache();
 
 export default function MyApp(props) {
 	const router = useRouter();
-	const {user, isUserAuthenticated} = React.useContext(UserContext);
+	const {user, initiateUser, isUserAuthenticated} = React.useContext(UserContext);
 	const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
 	// States
 	// const [user, setUser] = useState(null);
@@ -28,6 +28,13 @@ export default function MyApp(props) {
 			router.push('/');
 		}
 	}, [user]);
+
+	React.useEffect(() => {
+		const loggedInUser = localStorage.getItem('user');
+		if (loggedInUser) {
+			console.log(loggedInUser['phone']);
+		}
+	}, []);
 
 	return (
 		<CacheProvider value={emotionCache}>

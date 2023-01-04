@@ -1,4 +1,4 @@
-import {React, useState, useEffect, useContext} from 'react';
+import {React, useState, useEffect, useRef, useContext} from 'react';
 import {useRouter} from 'next/router';
 import Image from 'next/image';
 import Login_background from '../assets/images/backgrounds/login_image.png';
@@ -8,12 +8,20 @@ import FeatherIcon from 'feather-icons-react';
 import styles from '../styles/Login.module.css';
 import {UserContext} from '../src/context/UserContext';
 import {Navbar} from '../src/layouts/navBar/navVar';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Login() {
 	const router = useRouter();
 	const {user, setUser, login} = useContext(UserContext);
+
+	//Refs
+	const captcha = useRef(null);
+
+	// States
 	const [userData, setUserData] = useState({username: '', password: ''});
 	const [warning, setWarning] = useState(null);
+	const [validCaptcha, setValidCaptcha] = useState(null);
+
 	const xSmall = '400px';
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('sm'));
@@ -21,6 +29,11 @@ export default function Login() {
 	const [windowSize, setWindowSize] = useState(getWindowSize());
 
 	const handleLogin = async () => {
+		if (!captcha.current.getValue()) {
+			setWarning('Please do the captcha');
+			return;
+		}
+
 		const res = await login(userData.username, userData.password);
 
 		if (res.ok) {
@@ -34,6 +47,15 @@ export default function Login() {
 		const {innerWidth, innerHeight} = window;
 		return {innerWidth, innerHeight};
 	}
+
+	/**
+	 * Verifies captcha
+	 */
+	const handleCaptcha = () => {
+		if (captcha.current.getValue()) {
+			console.log('You are not cromed');
+		}
+	};
 
 	useEffect(() => {
 		function handleWindowResize() {
@@ -162,6 +184,11 @@ export default function Login() {
 								type="password"
 							/>
 						</Box>
+
+						{/* 6LeD3M8jAAAAAGoZqCSD7goIK5GM6zwqjYZ72e-9 */}
+						{/* 6LeD3M8jAAAAAIYUbFNoNmMDPvZZpld7jApZStBe */}
+
+						<ReCAPTCHA ref={captcha} sitekey="6LcO7c8jAAAAAL22zlVwnEBB6tw6WT5LXZ4DVmlT" onChange={handleCaptcha} />
 
 						<Button
 							onClick={() => {
