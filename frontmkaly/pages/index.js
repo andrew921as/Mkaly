@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, Container, Box, Typography, Stack, TextField, useMediaQuery, useTheme, Button} from '@mui/material';
+import { Grid, Container, Box, Typography, Stack, TextField, useMediaQuery, useTheme, Button } from '@mui/material';
 import { Navbar } from '../src/layouts/navBar/navVar';
 import Image from 'next/image';
 import house3D from '../assets/images/logos/casa3D.png';
@@ -13,26 +13,20 @@ export default function Index() {
 	const isMatch = useMediaQuery(theme.breakpoints.down('md'));
 
 	return (
-		<Grid container spacing={0} sx={{ padding: 0,}}>
+		<Grid container spacing={0} sx={{ padding: 0, }}>
 			<Navbar />
-			<Stack id="Start" spacing={5} sx={{ width: '100%'}}>
-				<Box sx={{ display: 'inline-block' }}>
-					<div class="grid grid-rows-2 grid-flow-col gap-4">
-						<div class="col-span-1 "><Typography sx={{ fontSize: 60, textAlign: 'center' }}> <b>Welcome to MKALY</b> <p> A helping hand</p></Typography></div>
-						<div class="row-span-3 "><Image src={selfP} layout="responsive" height={20} width={15} /></div>
+			<Stack id="Start" spacing={0} sx={{ width: '100%' }}>
+				<Box sx={{ display: 'inline-block', position: 'relative' }}>
+					<div class="flex justify-center md:m-0 mb-10">
+						<div class="flex justify-center"><Typography sx={{ fontSize: 60, textAlign: 'center', marginTop: '15%' }}><b>Welcome to MKALY</b> <br /><p> A helping hand</p> </Typography></div>
+						{isMatch ? '' : <div className='z-10'><Image src={selfP} height={600} width={600} /></div>}
 					</div>
-					<Box sx={{backgroundColor: '#00408F', borderRadius: 5, zIndex:-10,}}>
-						<Container
-							sx={{
-								width: isMatch ? '90%' : '50%',
-							}}
-						>
-							<Typography maxWidth={'80%'} sx={{ textAlign: 'center', paddingTop: '4%', fontSize: 25, color: '#FFF'}}>
-								Our company is ready to provide you with the best service and prices
-							</Typography>
-							<Button variant='contained' sx={{backgroundColor:'#FDD85D', width:'20%'}}>Call now</Button>
-						</Container>
-					</Box>
+					<div className='bg-[#00408F] w-full h-[30%] md:absolute top-[50%]  flex justify-left p-[2%] px-[16%]'>
+						<div className='flex flex-col justify-center items-center gap-5'>
+							<div><p className='text-xl md:text-2xl text-white max-w-md text-center'>Our company is ready to provide you with the best service and prices</p></div>
+							<Button variant='contained' sx={{ backgroundColor: '#FDD85D', width: '65%', color: 'black', fontSize: {md:'25px', xs: '20px'}, borderRadius: '20px' }}>Call now</Button>
+						</div>
+					</div>
 				</Box>
 				<div id='AboutUs'></div>
 				{/* About us section ------------------------------------------------------------------------------------*/}
@@ -96,30 +90,30 @@ export default function Index() {
 					</Box>
 
 					{/** raya aqui debe de ir una raya horizontal*/}
-					<Box sx={{ width:isMatch ? '90%' : 2, backgroundColor:'#000000', height: isMatch ? 2 : '100%', margin:10}}></Box>
+					<Box sx={{ width: isMatch ? '90%' : 2, backgroundColor: '#000000', height: isMatch ? 2 : '100%', margin: 10 }}></Box>
 
 					<Stack
-					sx={{
-						width: isMatch ? '90%' : '45%',
-					}}
+						sx={{
+							width: isMatch ? '90%' : '45%',
+						}}
 					>
 						<Box
 							sx={{
 								width: isMatch ? '90%' : '90%',
-								backgroundColor: 'rgba(250, 214, 67, 50%)', 
+								backgroundColor: 'rgba(250, 214, 67, 50%)',
 								borderRadius: 5,
-								display:'flex',
-								alignItems:'center',
+								display: 'flex',
+								alignItems: 'center',
 								padding: 2,
 							}}
 						>
 							<div className='w-1/2'>
-								<Image src={tower}/>
+								<Image src={tower} />
 							</div>
 							<Typography
 								sx={{
 									fontSize: 25,
-									margin:5
+									margin: 5
 								}}
 							>
 								We are expanding to new zones: Tulua, Pradera and Miriti Paraná
@@ -132,35 +126,35 @@ export default function Index() {
 							mt={5}
 							sx={{
 								width: isMatch ? '90%' : '90%',
-								backgroundColor: 'rgba(250, 214, 67, 50%)', 
+								backgroundColor: 'rgba(250, 214, 67, 50%)',
 								borderRadius: 5,
-								display:'flex',
-								alignItems:'center',
-								padding:2,
+								display: 'flex',
+								alignItems: 'center',
+								padding: 2,
 
 							}}
 						>
 							<div className='w-1/2	'>
 								<Image src={windSolar} />
 							</div>
-							
+
 							<Typography
-							sx={{
-								fontSize: 25,
-								margin:5
-							}}
+								sx={{
+									fontSize: 25,
+									margin: 5
+								}}
 							>
-								Becoming clean,new solar panels and wind power 
+								Becoming clean,new solar panels and wind power
 							</Typography>
 						</Box>
 					</Stack>
 				</Stack>
 
 				{/* This is the contact us section--------------------------------------------------------------------------------------------------------------------- */}
-				
-				<Box id="contact-us" sx={{ width: '100%', backgroundColor: 'rgba(119, 182, 234, 50%)', paddingTop: 3,borderRadius:5}}>
-				{/* <Box id="contact-us" sx={{ width: '100%', backgroundColor: 'rgba(253, 216, 93)', paddingTop: 3,borderRadius:5}}> */}
-					<Typography variant="h1" sx={{  fontSize: 60,textAlign: 'center'  }}>
+
+				<Box id="contact-us" sx={{ width: '100%', backgroundColor: 'rgba(119, 182, 234, 50%)', paddingTop: 3, borderRadius: 5 }}>
+					{/* <Box id="contact-us" sx={{ width: '100%', backgroundColor: 'rgba(253, 216, 93)', paddingTop: 3,borderRadius:5}}> */}
+					<Typography variant="h1" sx={{ fontSize: 60, textAlign: 'center' }}>
 						{' '}
 						<b>CONTACT US</b>
 					</Typography>
@@ -173,9 +167,9 @@ export default function Index() {
 					>
 						<Image src={mailIcon} />
 						<Stack direction={'column'} spacing={3} justifyContent="flex-start" sx={{ width: '60%' }}>
-							<TextField id="email-basic" label="Email" variant="outlined" sx={{backgroundColor:'#fff', borderRadius:1, width:'80%'}}/>
-							<TextField id="email-basic" label="Ubicación/ Barrio" variant="outlined" sx={{backgroundColor:'#fff', borderRadius:1, width:'80%'}}/>
-							<Button variant='contained' align="center" sx={{backgroundColor:'#00408F', width:'80%'}}>Send</Button>
+							<TextField id="email-basic" label="Email" variant="outlined" sx={{ backgroundColor: '#fff', borderRadius: 1, width: '80%' }} />
+							<TextField id="email-basic" label="Ubicación/ Barrio" variant="outlined" sx={{ backgroundColor: '#fff', borderRadius: 1, width: '80%' }} />
+							<Button variant='contained' align="center" sx={{ backgroundColor: '#00408F', width: '80%' }}>Send</Button>
 						</Stack>
 					</Stack>
 					<Stack direction={'row'} justifyContent="space-evenly" sx={{ paddingBottom: 2 }}>
