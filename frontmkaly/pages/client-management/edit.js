@@ -48,13 +48,13 @@ client
 		}
 	};
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			router.push('/');
-		} else if (user.role != 'operator') {
-			router.push('/dashboard');
-		}
-	}, [user]);
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		router.push('/');
+	// 	} else if (user.role != 'operator') {
+	// 		router.push('/dashboard');
+	// 	}
+	// }, [user]);
 
 	if (userData) {
 		return <ClientForm title="Edit Client Profile" initialUserData={userData} />;

@@ -26,15 +26,15 @@ const RegisterClient = () => {
 
 	console.log(user);
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			// router.push('/');
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		// router.push('/');
 
-			if (user.role !== 'operator') {
-				router.push('/dashboard');
-			}
-		}
-	}, [user]);
+	// 		if (user.role !== 'operator') {
+	// 			router.push('/dashboard');
+	// 		}
+	// 	}
+	// }, [user]);
 
 	return <ClientForm title="Client Registration" />;
 };

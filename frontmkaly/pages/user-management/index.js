@@ -10,15 +10,15 @@ const UserManagement = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			router.push('/');
-		}
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		router.push('/');
+	// 	}
 
-		if (user.role != 'admin') {
-			router.push('/dashboard');
-		}
-	}, [user]);
+	// 	if (user.role != 'admin') {
+	// 		router.push('/dashboard');
+	// 	}
+	// }, [user]);
 	return (
 		<>
 			<Box

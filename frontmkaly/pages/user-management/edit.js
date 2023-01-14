@@ -40,13 +40,13 @@ const EditUser = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			router.push('/');
-		} else if (user.role != 'admin') {
-			router.push('/dashboard');
-		}
-	}, [user]);
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		router.push('/');
+	// 	} else if (user.role != 'admin') {
+	// 		router.push('/dashboard');
+	// 	}
+	// }, [user]);
 
 	if (userData) {
 		return <UserForm title="Edit User Profile" initialUserData={userData} />;
