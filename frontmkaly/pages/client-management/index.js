@@ -9,13 +9,13 @@ const ClientManagement = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			router.push('/');
-		} else if (user.role != 'operator' || user.role != 'admin') {
-			router.push('/dashboard');
-		}
-	}, [user]);
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		router.push('/');
+	// 	} else if (user.role != 'operator' || user.role != 'admin') {
+	// 		router.push('/dashboard');
+	// 	}
+	// }, [user]);
 
 	return (
 		<>

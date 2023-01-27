@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {experimentalStyled, useMediaQuery, Container, Box} from '@mui/material';
 import Header from './header/Header';
@@ -31,8 +31,34 @@ const FullLayout = ({children}) => {
 	const router = useRouter();
 	const [isSidebarOpen, setSidebarOpen] = useState(true);
 	const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-	const {isUserAuthenticated} = useContext(UserContext);
 	const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+
+	// Auth
+	const {user, initiateUser, isUserAuthenticated} = useContext(UserContext);
+
+	useEffect(() => {
+		if (isUserAuthenticated()) {
+			router.push('/dashboard');
+		}
+	}, [user]);
+
+	useEffect(() => {
+		const loggedInUser = JSON.parse(localStorage.getItem('user'));
+		if (loggedInUser) {
+			//console.log('Saved user', loggedInUser);
+			initiateUser(loggedInUser);
+		} else {
+			router.push('/');
+		}
+
+		// if (!isUserAuthenticated()) {
+		// 	router.push('/');
+		// } else {
+		// 	router.push('/dashboard');
+		// }
+
+		console.log('LOGGED', user);
+	}, []);
 
 	return (
 		<MainWrapper>
