@@ -17,7 +17,10 @@ import {
 	Alert,
 } from '@mui/material';
 import {registerUser, updateUser} from '../../functions/requests';
-
+import { useRouter } from 'next/router';
+//Diccionaries
+import en from '../../../public/languages/en';
+import es from '../../../public/languages/es';
 const UserForm = ({title, initialUserData}) => {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [isSuccess, setIsSuccess] = useState(null);
@@ -43,6 +46,10 @@ const UserForm = ({title, initialUserData}) => {
 		is_admin: false,
 	});
 
+	const router = useRouter()
+	const {locale}= router
+	const t = locale === 'en' ? en : es
+
 	const handleChangeUser = (value, type) => setUserData({...userData, [type]: value});
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -55,9 +62,9 @@ const UserForm = ({title, initialUserData}) => {
 		try {
 			const res = await registerUser(userData);
 			console.log(res);
-			setIsSuccess('User was created successfully');
+			setIsSuccess(t.UserForm.handleRegisterUser.Success);
 		} catch (err) {
-			setIsWarning('There was an error, try again later.');
+			setIsWarning(t.UserForm.handleRegisterUser.Warning);
 		}
 	};
 
@@ -65,9 +72,9 @@ const UserForm = ({title, initialUserData}) => {
 		try {
 			const res = await updateUser(userData.id, userData);
 			console.log(res);
-			setIsSuccess('User was updated successfully');
+			setIsSuccess(t.UserForm.handleUpdateUser.Success);
 		} catch (err) {
-			setIsWarning('There was an error, try again later.');
+			setIsWarning(t.UserForm.handleRegisterUser.Warning);
 		}
 	};
 
@@ -90,7 +97,7 @@ const UserForm = ({title, initialUserData}) => {
 							value={userData.first_name_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'first_name_user')}
 							id="first_name"
-							label="First Name"
+							label={t.Form.first_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -100,7 +107,7 @@ const UserForm = ({title, initialUserData}) => {
 							value={userData.sec_name_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'sec_name_user')}
 							id="second_name"
-							label="Second Name"
+							label={t.Form.second_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -110,7 +117,7 @@ const UserForm = ({title, initialUserData}) => {
 							value={userData.first_lastname_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'first_lastname_user')}
 							id="first_last_name"
-							label="First Last Name"
+							label={t.Form.first_last_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -120,7 +127,7 @@ const UserForm = ({title, initialUserData}) => {
 							value={userData.sec_lastname_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'sec_lastname_user')}
 							id="second_last_name"
-							label="Second Last Name"
+							label={t.Form.second_last_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -131,7 +138,7 @@ const UserForm = ({title, initialUserData}) => {
 							value={userData.email}
 							onChange={(e) => handleChangeUser(e.target.value, 'email')}
 							id="email"
-							label="Email"
+							label={t.Form.Email}
 							variant="outlined"
 							fullWidth
 						/>
@@ -141,7 +148,7 @@ const UserForm = ({title, initialUserData}) => {
 							value={userData.username}
 							onChange={(e) => handleChangeUser(e.target.value, 'username')}
 							id="username"
-							label="Username"
+							label={t.Form.userName}
 							variant="outlined"
 							fullWidth
 						/>
@@ -150,7 +157,7 @@ const UserForm = ({title, initialUserData}) => {
 					{!initialUserData && (
 						<Grid item xs={5} sx={{m: 2}}>
 							<FormControl fullWidth variant="outlined">
-								<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+								<InputLabel htmlFor="outlined-adornment-password">{t.Form.password}</InputLabel>
 								<OutlinedInput
 									disabled={initialUserData ? true : false}
 									value={userData.password}
@@ -164,16 +171,18 @@ const UserForm = ({title, initialUserData}) => {
 											</IconButton>
 										</InputAdornment>
 									}
-									label="Password"
+									label={t.Form.password}
 								/>
 							</FormControl>
-						</Grid>
-					)}
+            </Grid>
+						)}
+					
+					
 
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth>
 							<InputLabel id="userRol">User Rol</InputLabel>
-							<Select labelId="userRol" id="userRol" value={userData.role} label="User Rol" onChange={(e) => handleChangeUser(e.target.value, 'role')}>
+							<Select labelId="userRol" id="userRol" value={userData.role} label={t.Form.Rol.Title} onChange={(e) => handleChangeUser(e.target.value, 'role')}>
 								<MenuItem value="admin">Admin</MenuItem>
 								<MenuItem value="manager">Manager</MenuItem>
 								<MenuItem value="operator">Operator</MenuItem>
@@ -242,7 +251,7 @@ const UserForm = ({title, initialUserData}) => {
 								onChange={(e) => handleChangeUser(e.target.value, 'type_card')}
 								labelId="type_id"
 								id="type_id"
-								label="Type of Document"
+								label={t.Form.documentType}
 							>
 								<MenuItem value="cc">C.C.</MenuItem>
 								<MenuItem value="ce">C.E.</MenuItem>
@@ -258,7 +267,7 @@ const UserForm = ({title, initialUserData}) => {
 							value={userData.id_card}
 							onChange={(e) => handleChangeUser(e.target.value, 'id_card')}
 							id="id_number"
-							label="ID Number"
+							label={t.Form.IDNumber}
 							type="number"
 							variant="outlined"
 							fullWidth
@@ -272,7 +281,7 @@ const UserForm = ({title, initialUserData}) => {
 							id="city"
 							options={['Cali', 'Jamundi', 'Bogota', 'Cartagena']}
 							fullWidth
-							renderInput={(params) => <TextField {...params} label="City" />}
+							renderInput={(params) => <TextField {...params} label={t.Form.City} />}
 						/>
 					</Grid>
 					<Grid item xs={12} sx={{m: 2}} align="center">
