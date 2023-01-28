@@ -48,10 +48,27 @@ export default{
 		Email:"Email",
 		Rol:{
 			Title: "Rol de usuario",
+			admin: "administrador",
+			manager : "gerente",
+			operator: "operador",
+			client: "cliente"
 		},
 		documentType:"Tipo de documento",
 		IDNumber:"Numero de identificacion",
 		City:"Ciudad",
+		PhoneN:"Numero de telefono",
+		ClientType:{
+			Title:"Tipo de cliente",
+			Natural:"Natural",
+			Bussiness:"Empresarial"
+		},
+		HeadQuarters:{
+			Title:"Sedes",
+			North:"Norte",
+			West:"Oeste",
+			Est:"Este",
+			South:"Sur",
+		}
 	},
 	UserForm:{
 		handleRegisterUser:{

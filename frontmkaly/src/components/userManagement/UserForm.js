@@ -183,10 +183,10 @@ const UserForm = ({title, initialUserData}) => {
 						<FormControl fullWidth>
 							<InputLabel id="userRol">User Rol</InputLabel>
 							<Select labelId="userRol" id="userRol" value={userData.role} label={t.Form.Rol.Title} onChange={(e) => handleChangeUser(e.target.value, 'role')}>
-								<MenuItem value="admin">Admin</MenuItem>
-								<MenuItem value="manager">Manager</MenuItem>
-								<MenuItem value="operator">Operator</MenuItem>
-								<MenuItem value="client">Client</MenuItem>
+								<MenuItem value="admin">{t.Form.Rol.admin}</MenuItem>
+								<MenuItem value="manager">{t.Form.Rol.manager}</MenuItem>
+								<MenuItem value="operator">{t.Form.Rol.operator}</MenuItem>
+								<MenuItem value="client">{t.Form.Rol.client}</MenuItem>
 							</Select>
 						</FormControl>
 					</Grid>
@@ -198,7 +198,7 @@ const UserForm = ({title, initialUserData}) => {
 									value={userData.phone_number}
 									onChange={(e) => handleChangeUser(e.target.value, 'phone_number')}
 									id="phone_number"
-									label="Phone Number"
+									label={t.Form.PhoneN}
 									type="number"
 									variant="outlined"
 									fullWidth
@@ -212,11 +212,11 @@ const UserForm = ({title, initialUserData}) => {
 										labelId="clientType"
 										id="clientType"
 										value={userData.client_type}
-										label="Client Type"
+										label={t.Form.ClientType.Title}
 										onChange={(e) => handleChangeUser(e.target.value, 'client_type')}
 									>
-										<MenuItem value="natural">Natural</MenuItem>
-										<MenuItem value="business">Business</MenuItem>
+										<MenuItem value="natural">{t.Form.ClientType.Natural}</MenuItem>
+										<MenuItem value="business">{t.Form.ClientType.Bussiness}</MenuItem>
 									</Select>
 								</FormControl>
 							</Grid>
@@ -226,18 +226,18 @@ const UserForm = ({title, initialUserData}) => {
 					{userData.role !== 'client' && (
 						<Grid item xs={5} sx={{m: 2}}>
 							<FormControl fullWidth>
-								<InputLabel id="headquarters">Headquarters</InputLabel>
+								<InputLabel id="headquarters">{t.Form.HeadQuarters.Title}</InputLabel>
 								<Select
 									labelId="headquarters"
 									id="headquarters"
 									value={userData.headquarters}
-									label="Headquarters"
+									label={t.Form.HeadQuarters.Title}
 									onChange={(e) => handleChangeUser(e.target.value, 'headquarters')}
 								>
-									<MenuItem value="north">North</MenuItem>
-									<MenuItem value="west">West</MenuItem>
-									<MenuItem value="est">Est</MenuItem>
-									<MenuItem value="south">South</MenuItem>
+									<MenuItem value="north">{t.Form.HeadQuarters.North}</MenuItem>
+									<MenuItem value="west">{t.Form.HeadQuarters.West}</MenuItem>
+									<MenuItem value="est">{t.Form.HeadQuarters.Est}</MenuItem>
+									<MenuItem value="south">{t.Form.HeadQuarters.South}</MenuItem>
 								</Select>
 							</FormControl>
 						</Grid>
@@ -245,7 +245,7 @@ const UserForm = ({title, initialUserData}) => {
 
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth>
-							<InputLabel id="type_id">Type of Document</InputLabel>
+							<InputLabel id="type_id">{t.Form.documentType}</InputLabel>
 							<Select
 								value={userData.type_card}
 								onChange={(e) => handleChangeUser(e.target.value, 'type_card')}

@@ -37,7 +37,7 @@ export default{
 	},
 	Form:{
 		userName:"User Name",
-		password:"Password",
+		password:"password",
 		first_name:"First Name",
 		second_name:"Second Name",
 		first_last_name:"First Last Name",
@@ -45,7 +45,27 @@ export default{
 		Email:"Email",
 		Rol:{
 			Title: "User Role",
+			Admin: "admin",
+			Manager : "manager",
+			Operator: "operator",
+			Client: "client"
 		},
+		documentType:"Type of Document",
+		IDNumber:"ID Number",
+		City:"City",
+		PhoneN:"Phone number",
+		ClientType:{
+			Title:"Client Type",
+			Natural:"Natural",
+			Bussiness:"Business"
+		},
+		HeadQuarters:{
+			Title:"Headquarters",
+			North:"North",
+			West:"West",
+			Est:"Est",
+			South:"South",
+		}
 	},
 	UserForm:{
 		handleRegisterUser:{
