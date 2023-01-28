@@ -2,7 +2,7 @@ import React,{ useState } from 'react';
 import { useRouter } from 'next/router';
 import { Grid, Container, Box, Typography, Stack, TextField, useMediaQuery, useTheme, Button } from '@mui/material';
 import { Navbar } from '../src/layouts/navBar/navVar';
-//Diccionarios
+//Diccionaries
 import en from '../public/languages/en';
 import es from '../public/languages/es';
 //Componentes

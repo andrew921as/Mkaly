@@ -35,5 +35,32 @@ export default{
 		Expansion:"We are expanding to new zones: Tulua, Pradera and Miriti Paraná",
 		Energy:"Becoming clean,new solar panels and wind power",
 	},
-	
+	Form:{
+		userName:"User Name",
+		password:"Password",
+		first_name:"First Name",
+		second_name:"Second Name",
+		first_last_name:"First Last Name",
+		second_last_name:"Second Last Name",
+		Email:"Email",
+		Rol:{
+			Title: "User Role",
+		},
+	},
+	UserForm:{
+		handleRegisterUser:{
+			Success:'User was created successfully',
+			Warning:'There was an error, try again later.',
+		},
+		handleUpdateUser:{
+			Success:'User was updated successfully',	
+		},
+	},
+	LoginP:{
+		NoRegis:"haven't registered yet?",
+		NoRegisP1:"Come to the nearest points and our operators will help you",
+		NoRegisP2:"Or get in touch with us through our main line: ",
+		Title:"LOGIN",
+		LoginB:"Log In"
+	}
 }

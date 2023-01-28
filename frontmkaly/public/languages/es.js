@@ -38,4 +38,35 @@ export default{
 		Expansion:"Nos estamos expandiendo a dos nuevas zonas: Tulua, Pradera y Miriti Paraná",
 		Energy:"Suminstrando energía limpia, nuevos paneles solares y aerogeneradores",
 	},
+	Form:{
+		userName:"Nombre de Usuario",
+		password:"Contraseña",
+		first_name:"Primer Nombre",
+		second_name:"Segundo nombre",
+		first_last_name:"Primer Apellido",
+		second_last_name:"Segundo Apellido",
+		Email:"Email",
+		Rol:{
+			Title: "Rol de usuario",
+		},
+		documentType:"Tipo de documento",
+		IDNumber:"Numero de identificacion",
+		City:"Ciudad",
+	},
+	UserForm:{
+		handleRegisterUser:{
+			Success:'El usuario fue creado correctamente',
+			Warning:'Hubo un error, Intenta mas tarde.',
+		},
+		handleUpdateUser:{
+			Success:'El usuario fue actualizado correctamente',
+		},
+	},
+	LoginP:{
+		NoRegis:"Aun no estas registrado?",
+		NoRegisP1:"Acercate al punto de atencion mas cercano y un operador te atendera",
+		NoRegisP2:"O contactanos por nuestra linea principal: ",
+		Title:"Iniciar sesion",
+		LoginB:"Iniciar sesion"
+	}
 }
