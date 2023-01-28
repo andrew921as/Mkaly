@@ -152,6 +152,7 @@ class OperatorEdit(View):
             operator = Operator.objects.get(id=id)
             operator.password = jd['password']
             operator.username = jd['username']
+            operator.image = jd['image']
             operator.set_password(operator.password)
             operator.save()
             datos ={'message':"Operator successfully changed"}
@@ -310,6 +311,7 @@ class AdminView(View):
                 user.is_active = jd['is_active']
                 user.role = jd['role']
                 user.headquarters='Sur'
+                user.image = jd['image']
                 user.set_password(user.password)
                 user.save()
                 datos={'message':"Success"}
@@ -380,6 +382,7 @@ class ClientEdit(View):
             client = Client.objects.get(id=id)
             client.password = jd['password']
             client.username = jd['username']
+            client.image = jd['image']
             client.set_password(client.password)
             client.save()
             datos ={'message':"Client successfully changed"}
@@ -420,6 +423,7 @@ class ManagerEdit(View):
             manager = Manager.objects.get(id=id)
             manager.password = jd['password']
             manager.username = jd['username']
+            manager.image = jd['image']
             manager.set_password(manager.password)
             manager.save()
             datos ={'message':"Manager successfully changed"}
@@ -443,14 +447,15 @@ def pdf_view(request):
 
 def send_pdf_view(request):
     pdf=create_pdf(request)
-    subject = 'Hola'
-    contact_message = "Pruebaaaa"
-    from_email = settings.EMAIL_HOST_USER
-    to_email = [from_email, 'camyj2010@gmail.com']
-    EmailMsg=EmailMessage(subject,contact_message,from_email,to_email)
-    EmailMsg.attach('factura.pdf',pdf,'application/pdf')
-    EmailMsg.send()
-    return HttpResponse("email enviado.")
+    return FileResponse(pdf, as_attachment=True, filename='hello.pdf')
+    # subject = 'Hola'
+    # contact_message = "Pruebaaaa"
+    # from_email = settings.EMAIL_HOST_USER
+    # to_email = [from_email, 'camyj2010@gmail.com']
+    # EmailMsg=EmailMessage(subject,contact_message,from_email,to_email)
+    # EmailMsg.attach('factura.pdf',pdf,'application/pdf')
+    # EmailMsg.send()
+    # return HttpResponse("email enviado.")
 
 def create_pdf(request):
     buffer = io.BytesIO()
@@ -506,7 +511,6 @@ def total_Payment(id,stratum,type_client):
      
     return totalPayment
     
-
 
 
 def calculateFee(stratum,type_client,consumo): 
