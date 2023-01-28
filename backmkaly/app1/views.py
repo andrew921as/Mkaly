@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
-from .models import User, Client, Admin, Manager, Operator, Contract, Bill, Legal_entity,Natural_person
+from .models import User, Client, Admin, Manager, Operator, Contract, Bill, Legal_entity,Natural_person, Publicity
 from django.http.response import JsonResponse
 import json, requests, ast , io ,os
 from django.http import FileResponse
@@ -428,7 +428,12 @@ class ManagerEdit(View):
             datos={'massage':"manager not found"}
 
         return JsonResponse(datos)
+
+class Landing_publicity(View):
     
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)  
 
 
 
