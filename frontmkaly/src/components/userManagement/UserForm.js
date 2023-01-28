@@ -38,6 +38,9 @@ const UserForm = ({title, initialUserData}) => {
 		type_card: '',
 		id_card: 0,
 		city: '',
+		phone_number: '',
+		client_type: '',
+		headquarters: '',
 		is_active: true,
 		is_superuser: false,
 		is_admin: false,
@@ -85,8 +88,8 @@ const UserForm = ({title, initialUserData}) => {
 	console.log(userData);
 
 	return (
-		<div>
-			<h1>{title}</h1>
+		<>
+			<h1 className="font-black text-4xl ml-16">{title}</h1>
 			<form>
 				<Grid container justifyContent="space-evenly" alignItems="center">
 					<Grid item xs={5} sx={{m: 2}}>
@@ -129,6 +132,7 @@ const UserForm = ({title, initialUserData}) => {
 							fullWidth
 						/>
 					</Grid>
+
 					<Grid item xs={5} sx={{m: 2}}>
 						<TextField
 							value={userData.email}
@@ -140,7 +144,18 @@ const UserForm = ({title, initialUserData}) => {
 						/>
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
-						{!initialUserData && (
+						<TextField
+							value={userData.username}
+							onChange={(e) => handleChangeUser(e.target.value, 'username')}
+							id="username"
+							label={t.Form.userName}
+							variant="outlined"
+							fullWidth
+						/>
+					</Grid>
+
+					{!initialUserData && (
+						<Grid item xs={5} sx={{m: 2}}>
 							<FormControl fullWidth variant="outlined">
 								<InputLabel htmlFor="outlined-adornment-password">{t.Form.password}</InputLabel>
 								<OutlinedInput
@@ -159,18 +174,11 @@ const UserForm = ({title, initialUserData}) => {
 									label={t.Form.password}
 								/>
 							</FormControl>
+            </Grid>
 						)}
-					</Grid>
-					<Grid item xs={5} sx={{m: 2}}>
-						<TextField
-							value={userData.username}
-							onChange={(e) => handleChangeUser(e.target.value, 'username')}
-							id="username"
-							label={t.Form.userName}
-							variant="outlined"
-							fullWidth
-						/>
-					</Grid>
+					
+					
+
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth>
 							<InputLabel id="userRol">User Rol</InputLabel>
@@ -182,6 +190,59 @@ const UserForm = ({title, initialUserData}) => {
 							</Select>
 						</FormControl>
 					</Grid>
+
+					{userData.role === 'client' && (
+						<>
+							<Grid item xs={5} sx={{m: 2}}>
+								<TextField
+									value={userData.phone_number}
+									onChange={(e) => handleChangeUser(e.target.value, 'phone_number')}
+									id="phone_number"
+									label="Phone Number"
+									type="number"
+									variant="outlined"
+									fullWidth
+								/>
+							</Grid>
+
+							<Grid item xs={5} sx={{m: 2}}>
+								<FormControl fullWidth>
+									<InputLabel id="clientType">Type Of Client</InputLabel>
+									<Select
+										labelId="clientType"
+										id="clientType"
+										value={userData.client_type}
+										label="Client Type"
+										onChange={(e) => handleChangeUser(e.target.value, 'client_type')}
+									>
+										<MenuItem value="natural">Natural</MenuItem>
+										<MenuItem value="business">Business</MenuItem>
+									</Select>
+								</FormControl>
+							</Grid>
+						</>
+					)}
+
+					{userData.role !== 'client' && (
+						<Grid item xs={5} sx={{m: 2}}>
+							<FormControl fullWidth>
+								<InputLabel id="headquarters">Headquarters</InputLabel>
+								<Select
+									labelId="headquarters"
+									id="headquarters"
+									value={userData.headquarters}
+									label="Headquarters"
+									onChange={(e) => handleChangeUser(e.target.value, 'headquarters')}
+								>
+									<MenuItem value="north">North</MenuItem>
+									<MenuItem value="west">West</MenuItem>
+									<MenuItem value="est">Est</MenuItem>
+									<MenuItem value="south">South</MenuItem>
+								</Select>
+							</FormControl>
+						</Grid>
+					)}
+
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth>
 							<InputLabel id="type_id">Type of Document</InputLabel>
@@ -207,6 +268,7 @@ const UserForm = ({title, initialUserData}) => {
 							onChange={(e) => handleChangeUser(e.target.value, 'id_card')}
 							id="id_number"
 							label={t.Form.IDNumber}
+							type="number"
 							variant="outlined"
 							fullWidth
 						/>
@@ -231,7 +293,7 @@ const UserForm = ({title, initialUserData}) => {
 					</Grid>
 				</Grid>
 			</form>
-		</div>
+		</>
 	);
 };
 

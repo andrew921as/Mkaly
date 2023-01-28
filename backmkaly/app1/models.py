@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 # Create your models here.
 class UserManager(BaseUserManager):
-    def create_user(self,email,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,city,role, username=None, password=None):
+    def create_user(self,email,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,city,role,image=None, username=None, password=None,is_superuser=False):
         if not email:
             raise ValueError('El usuario debe tener un correo electronico')
         if not id_card:
@@ -25,13 +25,14 @@ class UserManager(BaseUserManager):
             first_lastname_user= first_lastname_user,
             sec_lastname_user=sec_lastname_user,
             city=city,
-            role=role
+            role=role,
+            image=image
             )
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self,username,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,email,city, role, password):
+    def create_superuser(self,username,id_card,type_card,first_name_user,sec_name_user,first_lastname_user,sec_lastname_user,email,city, role, password, image=None):
         user=self.create_user(
             email,
             username=username,
@@ -43,10 +44,12 @@ class UserManager(BaseUserManager):
             first_lastname_user=first_lastname_user,
             city=city, 
             role=role,
-            password=password,
+            image=image,
+            password=password
         )
-        user.is_admin=True
+        
         user.is_superuser=True
+        user.is_admin=True
         user.set_password(password)
         user.save()
         return user
@@ -64,8 +67,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     #imagen = models.ImageField('Imagen de Perfil', upload_to='perfil/',height_field=None , width_field=None, max_length=200, blank=True, null=True)
     city= models.CharField("Ciudad", max_length=20, null=False)
     is_active= models.BooleanField(default=True)
-    is_admin= models.BooleanField(default=False)
+    is_admin=models.BooleanField(default=True)
     role= models.CharField('nombre rol',max_length=15, null=False)
+    image = models.FileField('imagen', upload_to='imagenes_ussuarios', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
     objects=UserManager()
 
     USERNAME_FIELD = 'username'
@@ -77,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ordering = ['first_lastname_user']
         
     def _str_(self):
-        return f'{self.first_name_user},{self.first_lastname_user},{self.sec_name_user},{self.sec_lastname_user},{self.username},{self.id_card},{self.type_card},{self.email},{self.city},{self.is_active},{self.is_admin},{self.role}'
+        return f'{self.first_name_user},{self.first_lastname_user},{self.sec_name_user},{self.sec_lastname_user},{self.username},{self.id_card},{self.type_card},{self.email},{self.city},{self.is_active},{self.role}'
 
     def has_perm(self,perm, ob=None):
         return True
@@ -96,15 +100,14 @@ class Admin(User):
     headquarters= models.CharField('sede de la empresa',max_length=15, null=True)
 
 class Client(User):
+    type_client=models.CharField('Tipo de cliente',max_length=30, null=True)
+
+class Natural_person(Client):
     Phone= models.CharField('Telefono del cliente',max_length=15, null=True)  
 
+class Legal_entity(Client):
+    Phone= models.CharField('Telefono del cliente',max_length=15, null=True)  
 
-class natural_person(Client):
-    residential_rate=models.IntegerField('tasa residencial', null=True)
-
-class legal_entity(Client):
-    commercial_rate=models.IntegerField('tasa residencial', null=True)
-      
 class Operator(User):
     headquarters= models.CharField('sede de la empresa',max_length=15)  
 
@@ -129,7 +132,13 @@ class Contract (models.Model):
         on_delete=models.CASCADE
     )
 
-class bill (models.Model):
+class Publicity (models.Model):
+    month_publicity = models.CharField('Mes', unique=False, max_length=20, null=True)
+    type_publicity = models.CharField('Tipo de publicidad', unique=False, max_length=20, null=True)
+    image_publicity = models.CharField( null=True, max_length=300)
+    
+    
+class Bill (models.Model):
     bill_number = models.CharField('Numero de factura', unique=True, max_length=40, null=False)
     electronic_payment_number = models.CharField('Numero de pago electronico', unique=True, max_length=40, null=True, blank=True)
     expedition_date = models.DateField('Fecha de expedicion',null=False)
@@ -139,26 +148,26 @@ class bill (models.Model):
     billing_month = models.CharField('Mes de la factura', unique=True, max_length=20, null=False)
     billing_status = models.CharField('Estado de la factura', unique=True, max_length=20, null=True, blank=True)
     details = models.TextField('Detalles de la factura', unique=True, max_length=200, null=True, blank=True)
-    previous_reading = models.IntegerField('Lectura Previa', null=False)
     month_consumption = models.IntegerField('Consumo del mes', null=False)
-    number_measurer = models.CharField('Numero de contrato', unique=True, max_length=20, null=False)
-    concepts = models.TextField('Numero de contrato', unique=True, max_length=200, null=False)
-    public_lighting_payment = models.IntegerField('Pago por alumbrado publico', null=False)
-    basic_charge = models.IntegerField('Cargo basico', null=False)
-    other_charges = models.IntegerField('Consumo del mes ', null=True, blank=True)
-    total_consumption=models.IntegerField('Total a pagar', null=False)
-    iva = models.IntegerField('Iva Vigente',null=False)
+    concepts = models.TextField('conceptos', unique=True, max_length=200, null=False)
+    other_charges = models.IntegerField('Otros cargos ', null=True, blank=True)
+    total_consumption=models.IntegerField('Total a pagar por consumo', null=False)
     default_interest= models.IntegerField('Intereses de mora', null=True, blank=True)
     total_payout = models.IntegerField('Total a pagar',null=False)
     contract = models.ForeignKey(
         Contract,
         on_delete=models.CASCADE
     )
+    publicity = models.ForeignKey(
+        Publicity,
+        on_delete=models.CASCADE
+    )
 
-class payment (models.Model):
+class Payment (models.Model):
     payment_method = models.CharField('Metodo de pago', unique=True, max_length=20, null=False)
     payment_place = models.CharField('Lugar de pago', unique=True, max_length=20, null=False)
     bill = models.OneToOneField (
-        bill, 
+        Bill, 
         on_delete=models.CASCADE
     ) 
+

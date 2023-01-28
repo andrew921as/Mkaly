@@ -46,6 +46,7 @@ export const UserProvider = ({children}) => {
 
 		if (data.ok) {
 			setUser(data.user);
+			localStorage.setItem('user', JSON.stringify(data.user));
 			return data;
 		} else {
 			return data;
@@ -54,7 +55,14 @@ export const UserProvider = ({children}) => {
 		// setUser({...initialUserState, email, password});
 	};
 
+	const initiateUser = async (initialUser) => {
+		localStorage.setItem('user', JSON.stringify(initialUser));
+		setUser(initialUser);
+		return;
+	};
+
 	const logout = () => {
+		localStorage.removeItem('user');
 		setUser(initialUserState);
 	};
 
@@ -62,7 +70,7 @@ export const UserProvider = ({children}) => {
 		<Provider
 			value={{
 				user,
-				setUser,
+				initiateUser,
 				isUserAuthenticated,
 				logout,
 				login,

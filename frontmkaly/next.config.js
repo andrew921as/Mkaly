@@ -5,6 +5,10 @@ const nextConfig = {
     locales: ['en', 'es'],
     defaultLocale: 'en'
   }
-}
+	images: {
+		domains: ['assets.example.com', 'res.cloudinary.com'],
+	},
+};
 
-module.exports = nextConfig
+
+module.exports = nextConfig;

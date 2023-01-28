@@ -6,16 +6,16 @@ import {UserContext} from '../../src/context/UserContext';
 import {useRouter} from 'next/router';
 
 const SearchUser = () => {
-	const router = useRouter();
-	const {user, isUserAuthenticated} = useContext(UserContext);
+	// const router = useRouter();
+	// const {user, isUserAuthenticated} = useContext(UserContext);
 
-	useEffect(() => {
-		if (!isUserAuthenticated()) {
-			router.push('/');
-		} else if (user.role != 'admin') {
-			router.push('/dashboard');
-		}
-	}, [user]);
+	// useEffect(() => {
+	// 	if (!isUserAuthenticated()) {
+	// 		router.push('/');
+	// 	} else if (user.role != 'admin') {
+	// 		router.push('/dashboard');
+	// 	}
+	// }, [user]);
 
 	return (
 		<Grid container spacing={0}>

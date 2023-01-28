@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import cloudinary_storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'backmkaly.app1',
     'corsheaders',
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
 MIDDLEWARE = [
@@ -112,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-        'django.contrib.auth.backends.ModelBackend'
+        'django.contrib.auth.backends.ModelBackend',
 ]
 
 AUTH_USER_MODEL= "app1.User"
@@ -134,9 +138,35 @@ USE_L10N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+absolute_path = os.path.dirname(__file__)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'backmkaly/app1/static/media/images')
+#MEDIA_ROOT = os.path.join(absolute_path, '..backmkaly.app1.static', 'media')
+
+#STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'static-only')
+
+#STATICFILES_DIRS = (
+#    os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'static'),
+#)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'mkalyempresa@gmail.com'
+EMAIL_HOST_PASSWORD = 'pifprzorsekppwzd'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+CLOUDINARY_STORAGE={
+    'CLOUD_NAME': 'dvm5lesco',
+    'API_KEY': '442981974754588',
+    'API_SECRET': '1wFfwa-szxeBtnIPFDpHG2hp-84'
+}
+DEFAULT_FILE_STORAGE='cloudinary_storage.storage.MediaCloudinaryStorage'

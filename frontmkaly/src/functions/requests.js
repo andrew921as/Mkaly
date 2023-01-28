@@ -4,7 +4,7 @@ const API = 'http://localhost:8000';
 // POST REQUESTS
 export const loginRequest = async (username, password) => {
 	try {
-		const res = await axios.post(`${API}/autenticate_view/`, {username, password});
+		const res = await axios.post(`${API}/autenticate_view/`, {email: username, password});
 		// const res = await axios.get(`${API}/admin_view/`);
 		return res;
 	} catch (err) {
@@ -28,6 +28,42 @@ export const registerUser = async (data) => {
 export const updateUser = async (userId, data) => {
 	try {
 		const userD = await axios.put(`${API}/admin_view/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const updateUserAdmin = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/admin_edit/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const updateUserClient = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/client_edit/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const updateUserOperator = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/operator_edit/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const updateUserManager = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/manager_edit/${userId}`, data);
 		return userD;
 	} catch (e) {
 		throw e;
