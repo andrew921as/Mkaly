@@ -70,8 +70,20 @@ const UsersTable = ({title}) => {
 
 	const fetchUsers = async () => {
 		const {data} = await getUsers();
-		setUsers(data.users);
-		setAllUsers(data.users);
+		const sortedUsers = data.users.sort((a, b) => {
+			let fa = a.first_name_user.toLowerCase(),
+				fb = b.first_name_user.toLowerCase();
+
+			if (fa < fb) {
+				return -1;
+			}
+			if (fa > fb) {
+				return 1;
+			}
+			return 0;
+		});
+		setUsers(sortedUsers);
+		setAllUsers(sortedUsers);
 	};
 
 	const handleSearchUser = async (data) => {

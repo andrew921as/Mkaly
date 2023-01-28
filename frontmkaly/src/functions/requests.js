@@ -34,6 +34,42 @@ export const updateUser = async (userId, data) => {
 	}
 };
 
+export const updateUserAdmin = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/admin_edit/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const updateUserClient = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/client_edit/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const updateUserOperator = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/operator_edit/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const updateUserManager = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/manager_edit/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
 // GET REQUESTS
 
 export const getUser = async (userId) => {

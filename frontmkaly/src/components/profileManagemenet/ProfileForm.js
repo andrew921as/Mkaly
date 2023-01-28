@@ -15,23 +15,25 @@ import {
 	Select,
 	Button,
 	Alert,
+	CircularProgress,
 } from '@mui/material';
-import {registerUser, updateUser} from '../../functions/requests';
+import {registerUser, updateUserAdmin, updateUserOperator, updateUserManager, updateUserClient} from '../../functions/requests';
 import {UserContext} from '../../context/UserContext';
 import userimg from '../../../assets/images/users/user2.jpg';
 import Image from 'next/image';
 import axios from 'axios';
 
 const ProfileForm = ({title}) => {
-	const {user, setUser, logout} = useContext(UserContext);
+	const {user, setUser, initiateUser, logout} = useContext(UserContext);
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [isSuccess, setIsSuccess] = useState(null);
 	const [isWarning, setIsWarning] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 	const [selectedImage, setSelectedImage] = useState(null);
 
 	const [userData, setUserData] = React.useState({
-		password: '',
 		username: user.username,
+		image: user.image,
 	});
 
 	const handleChangeUser = (value, type) => setUserData({...userData, [type]: value});
@@ -44,17 +46,46 @@ const ProfileForm = ({title}) => {
 
 	const handleUpdateUser = async () => {
 		try {
-			let imageUrl = await uploadImage();
-			// const res = await updateUser(userData.id, userData);
-			// console.log(res);
+			console.log(userData);
+			let image = await uploadImage();
+			setUserData({...userData, image});
+
+			let res = null;
+
+			if (user.role === 'admin') {
+				res = await updateUserAdmin(user.id, {...userData, image});
+			}
+
+			if (user.role === 'client') {
+				res = await updateUserClient(user.id, {...userData, image});
+			}
+
+			if (user.role === 'manager') {
+				res = await updateUserOperator(user.id, {...userData, image});
+			}
+
+			if (user.role === 'operator') {
+				res = await updateUserManager(user.id, {...userData, image});
+			}
+
+			setIsLoading(false);
+			initiateUser({...user, ...userData});
+			console.log(res);
 			setIsSuccess('User was updated successfully');
 		} catch (err) {
 			setIsWarning('There was an error, try again later.');
+			setIsLoading(false);
 		}
 	};
 
 	const uploadImage = async () => {
+		setIsLoading(true);
 		const formData = new FormData();
+
+		if (!selectedImage) {
+			return user.image;
+		}
+
 		formData.append('file', selectedImage);
 		formData.append('upload_preset', 'pf0gmt8s');
 
@@ -63,8 +94,13 @@ const ProfileForm = ({title}) => {
 			return response.data.url;
 		} catch (err) {
 			console.error('There was an error');
+			setIsLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		console.log(userData);
+	}, [userData]);
 
 	return (
 		<>
@@ -102,7 +138,7 @@ const ProfileForm = ({title}) => {
 					</Grid>
 
 					<Grid item xs={12} sx={{m: 2, flexDirection: 'column'}} align="center">
-						<Image src={userimg} alt={userimg} width="128" height="128" className="roundedCircle" />
+						<Image src={user.image} alt={userimg} width="128" height="128" className="roundedCircle" />
 					</Grid>
 
 					<Grid item xs={12} sx={{m: 10, marginTop: 0, flexDirection: 'column'}} align="center">
@@ -121,9 +157,13 @@ const ProfileForm = ({title}) => {
 					</Grid>
 
 					<Grid item xs={12} sx={{m: 2}} align="center">
-						<Button size="large" variant="contained" onClick={() => handleUpdateUser()}>
-							Update
-						</Button>
+						{isLoading ? (
+							<CircularProgress />
+						) : (
+							<Button size="large" variant="contained" onClick={() => handleUpdateUser()}>
+								Update
+							</Button>
+						)}
 						{isSuccess && <Alert severity="success">{isSuccess}</Alert>}
 						{isWarning && <Alert severity="error">{isWarning}</Alert>}
 					</Grid>
