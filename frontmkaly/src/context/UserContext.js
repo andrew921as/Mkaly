@@ -56,6 +56,7 @@ export const UserProvider = ({children}) => {
 	};
 
 	const initiateUser = async (initialUser) => {
+		localStorage.setItem('user', JSON.stringify(initialUser));
 		setUser(initialUser);
 		return;
 	};
