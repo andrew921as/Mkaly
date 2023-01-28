@@ -4,7 +4,7 @@ const API = 'http://localhost:8000';
 // POST REQUESTS
 export const loginRequest = async (username, password) => {
 	try {
-		const res = await axios.post(`${API}/autenticate_view/`, {username, password});
+		const res = await axios.post(`${API}/autenticate_view/`, {email: username, password});
 		// const res = await axios.get(`${API}/admin_view/`);
 		return res;
 	} catch (err) {

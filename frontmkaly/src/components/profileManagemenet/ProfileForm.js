@@ -20,12 +20,14 @@ import {registerUser, updateUser} from '../../functions/requests';
 import {UserContext} from '../../context/UserContext';
 import userimg from '../../../assets/images/users/user2.jpg';
 import Image from 'next/image';
+import axios from 'axios';
 
 const ProfileForm = ({title}) => {
 	const {user, setUser, logout} = useContext(UserContext);
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [isSuccess, setIsSuccess] = useState(null);
 	const [isWarning, setIsWarning] = useState(null);
+	const [selectedImage, setSelectedImage] = useState(null);
 
 	const [userData, setUserData] = React.useState({
 		password: '',
@@ -42,11 +44,25 @@ const ProfileForm = ({title}) => {
 
 	const handleUpdateUser = async () => {
 		try {
-			const res = await updateUser(userData.id, userData);
-			console.log(res);
+			let imageUrl = await uploadImage();
+			// const res = await updateUser(userData.id, userData);
+			// console.log(res);
 			setIsSuccess('User was updated successfully');
 		} catch (err) {
 			setIsWarning('There was an error, try again later.');
+		}
+	};
+
+	const uploadImage = async () => {
+		const formData = new FormData();
+		formData.append('file', selectedImage);
+		formData.append('upload_preset', 'pf0gmt8s');
+
+		try {
+			let response = await axios.post('https://api.cloudinary.com/v1_1/dvm5lesco/image/upload', formData);
+			return response.data.url;
+		} catch (err) {
+			console.error('There was an error');
 		}
 	};
 
@@ -92,7 +108,15 @@ const ProfileForm = ({title}) => {
 					<Grid item xs={12} sx={{m: 10, marginTop: 0, flexDirection: 'column'}} align="center">
 						<Button variant="outlined" component="label">
 							Upload Profile Picture
-							<input hidden accept="image/*" multiple type="file" />
+							<input
+								hidden
+								accept="image/*"
+								multiple
+								type="file"
+								onChange={(e) => {
+									setSelectedImage(e.target.files[0]);
+								}}
+							/>
 						</Button>
 					</Grid>
 
