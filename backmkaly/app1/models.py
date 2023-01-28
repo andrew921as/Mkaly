@@ -49,6 +49,7 @@ class UserManager(BaseUserManager):
         )
         
         user.is_superuser=True
+        user.is_admin=True
         user.set_password(password)
         user.save()
         return user
@@ -66,8 +67,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     #imagen = models.ImageField('Imagen de Perfil', upload_to='perfil/',height_field=None , width_field=None, max_length=200, blank=True, null=True)
     city= models.CharField("Ciudad", max_length=20, null=False)
     is_active= models.BooleanField(default=True)
+    is_admin=models.BooleanField(default=True)
     role= models.CharField('nombre rol',max_length=15, null=False)
-    image = models.ImageField(default='.\static\media\images_pdf\logo.png', null=True)
+    image = models.FileField('imagen', upload_to='imagenes_ussuarios', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
     objects=UserManager()
 
     USERNAME_FIELD = 'username'
@@ -133,7 +135,7 @@ class Contract (models.Model):
 class Publicity (models.Model):
     month_publicity = models.CharField('Mes', unique=False, max_length=20, null=True)
     type_publicity = models.CharField('Tipo de publicidad', unique=False, max_length=20, null=True)
-    image_publicity = models.ImageField(default='.\static\media\images_pdf\logo.png', null=True)
+    image_publicity = models.CharField( null=True, max_length=300)
     
     
 class Bill (models.Model):
