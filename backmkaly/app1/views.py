@@ -43,12 +43,18 @@ def autenticate_view(request):
     email = jd['email']
     password = jd['password']
    
+    #username= User.objects.get(email=email).username
+
+ #  if username is None:
+  #      datos={"ok": False, 'message':"Wrong credentials"}
+  #      return JsonResponse(datos)
+
     try:
-        username= User.objects.get(email=email).username
+       username= User.objects.get(email=email).username
         
     except ObjectDoesNotExist:
-        datos={"ok": False, 'message':"Wrong credentials"}
-        return JsonResponse(datos)
+       datos={"ok": False, 'message':"Wrong credentials"}
+       return JsonResponse(datos)
     user = authenticate(username=username, password=password)
     userData = list(User.objects.filter(username=user).values()) 
     
@@ -363,9 +369,9 @@ class AdminEdit(View):
 
     def put(self,request,id):
         jd = json.loads(request.body)
-        admins = list(Operator.objects.filter(id=id).values())
+        admins = list(Admin.objects.filter(id=id).values())
         if (len(admins) > 0):
-            admin = Operator.objects.get(id=id)
+            admin = Admin.objects.get(id=id)
             if 'password' in jd:
                 admin.password = jd['password']
                 admin.set_password(admin.password)
@@ -486,7 +492,7 @@ class ManagerEdit(View):
 
     def put(self,request,id):
         jd = json.loads(request.body)
-        managers = list(Operator.objects.filter(id=id).values())
+        managers = list(Manager.objects.filter(id=id).values())
         if (len(managers) > 0):
             manager = Manager.objects.get(id=id)
             if 'password' in jd:

@@ -22,7 +22,8 @@ urlpatterns = [
     #path('autenticate_view/', views.authenticate),
     path('pdf_view/', views.send_pdf_view),
     path('logout_view/', views.logout_view),
-    path('autenticate_view/', views.OperatorView.as_view()),
+    path('autenticate_view/', views.autenticate_view),
+    #path('autenticate_view/', views.OperatorView.as_view()),
     path('create_contract/<int:id>', views.CreateContract.as_view(), name = 'create_contract'),
     #path('create_bill/<int:id>', views.CreateBill.as_view(), name = 'create_bill')
    # path('admin_editing/<id_card>', views.admin_editing),
