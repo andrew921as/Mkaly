@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     #imagen = models.ImageField('Imagen de Perfil', upload_to='perfil/',height_field=None , width_field=None, max_length=200, blank=True, null=True)
     city= models.CharField("Ciudad", max_length=20, null=False)
     is_active= models.BooleanField(default=True)
-    is_admin=models.BooleanField(default=True)
+    is_admin=models.BooleanField(default=False)
     role= models.CharField('nombre rol',max_length=15, null=False)
     image = models.FileField('imagen', upload_to='imagenes_ussuarios', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
     objects=UserManager()
@@ -123,7 +123,7 @@ class Contract (models.Model):
     type_of_avenue = models.CharField('Tipo de avenida', max_length=15, null=False)
     first_number  = models.CharField('Primer numero', max_length=15, null=False)
     second_number = models.CharField('Segundo numero', max_length=15, null=False)
-    stratum_social = models.CharField('Estrato social', max_length=15, null=False)
+    stratum_social = models.IntegerField('Estrato social', null=False)
     n_electric_transformer = models.CharField('Numero de transformador', max_length=15, null=False)
     transformer_property = models.CharField('Propiedades del transformador', max_length=20, null=False)
     type_of_conection = models.CharField('Tipo de conexion', max_length=20, null=False)
@@ -135,7 +135,7 @@ class Contract (models.Model):
 class Publicity (models.Model):
     month_publicity = models.CharField('Mes', unique=False, max_length=20, null=True)
     type_publicity = models.CharField('Tipo de publicidad', unique=False, max_length=20, null=True)
-    image_publicity = models.CharField( null=True, max_length=300)
+    image_publicity =  models.FileField('imagen publicidad', upload_to='imagenes_publicida', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
     
     
 class Bill (models.Model):
@@ -145,15 +145,13 @@ class Bill (models.Model):
     expiration_date = models.DateField('Fecha de vencimiento',null=False)
     billing_period = models.DateField('Periodo de la factura',null=False)
     billing_days = models.IntegerField('Dias de la factura',null=False)
-    billing_month = models.CharField('Mes de la factura', unique=True, max_length=20, null=False)
-    billing_status = models.CharField('Estado de la factura', unique=True, max_length=20, null=True, blank=True)
-    details = models.TextField('Detalles de la factura', unique=True, max_length=200, null=True, blank=True)
-    month_consumption = models.IntegerField('Consumo del mes', null=False)
-    concepts = models.TextField('conceptos', unique=True, max_length=200, null=False)
+    billing_month = models.CharField('Mes de la factura', max_length=20, null=False)
+    billing_status = models.CharField('Estado de la factura', max_length=20, null=True, blank=True, default='pendiente')
+    month_consumption = models.FloatField('Consumo del mes', null=False)
     other_charges = models.IntegerField('Otros cargos ', null=True, blank=True)
-    total_consumption=models.IntegerField('Total a pagar por consumo', null=False)
-    default_interest= models.IntegerField('Intereses de mora', null=True, blank=True)
-    total_payout = models.IntegerField('Total a pagar',null=False)
+    total_consumption=models.FloatField('Total a pagar por consumo', null=False)
+    default_interest= models.FloatField('IVA', null=True, blank=True)
+    total_payout = models.FloatField('Total a pagar',null=False)
     contract = models.ForeignKey(
         Contract,
         on_delete=models.CASCADE
