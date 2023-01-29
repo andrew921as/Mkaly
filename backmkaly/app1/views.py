@@ -1,9 +1,10 @@
-from django.shortcuts import render
+#from django.shortcuts import renderFileResponse
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
+from django.core.files import File
 from .models import User, Client, Admin, Manager, Operator, Contract, Bill, Legal_entity,Natural_person, Publicity
 from django.http.response import JsonResponse
 import json, requests, ast , io ,os
@@ -16,18 +17,23 @@ from reportlab.lib.pagesizes import letter, A4
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect
+#from django.shortcuts import redirect
 from datetime import date 
 from dateutil.relativedelta import relativedelta
+from io import BytesIO
 import threading
 import time
+import random
+
+
 
 #from .models import 
 # Create your views here.
 
+"""
 def home(request):
     return render(request, "front pagina de inicio")
-
+"""
 
 
 ##def operator_view(request):
@@ -557,7 +563,7 @@ class CreateContract(View):
         
         contracts=list(Contract.objects.filter(contract_number=jd["contract_number"]).values())
         contractt=contracts[0]
-        generateBills(contractt["id"],client["id"],contractt['stratum_social'],client["type_client"],10)
+        generateBills(contractt["id"],client["id"],contractt['stratum_social'],client["type_client"])
         datos={'message':"Success"}
         return JsonResponse(datos)
 """
@@ -655,54 +661,59 @@ def dateBefore(date):
     
     return fechita
 
-def generateBills(idContract,idClient,stratum,type_client,billNumber,billPeriod=date.today()):  
+def generateBills(idContract,idClient,stratum,type_client,billPeriod=date.today()):  
     expedition = expeditionDate(date.today())
     interval = 30
     interval_convert = relativedelta(days=interval)
     expiration = expedition + interval_convert
-    nosabemos = 12315
+    nosabemos = 12347
     previous_month = expedition - relativedelta(days=3)
     bill_month = previous_month.strftime("%B")
     function_total = total_Payment(idClient,stratum,type_client)
-   
+    billNumber = random.getrandbits(10)
+    
     bill = Bill.objects.create(bill_number=billNumber,electronic_payment_number=nosabemos,expedition_date= expedition,
     expiration_date=expiration, billing_period=billPeriod,billing_days=interval,billing_month=bill_month,
     month_consumption=function_total[0],other_charges=street_lighting_value(type_client),
     total_consumption=function_total[2],default_interest=function_total[1],
     total_payout=function_total[3],contract_id=idContract,publicity_id=1) #aca no pongo status porque hay un default
-    print (function_total)
-    print (type(idClient))
-    print(type(stratum))
-    print(type(type_client))
     bill.save()
+    bill = Bill.objects.get(bill_number=billNumber)
+    pdf = create_pdf()
+    bill.pdf_bill.save("factura.pdf", File(BytesIO(pdf)))
     
     
 
-def generateBillsPerMonth(idContract,idClient,stratum,type_client,billNumber,firstTime):
-    today = date.today()
-    generate_bill_date = today.day
-    if(generate_bill_date == 2):
-        generateBills(idContract,idClient,stratum,type_client,billNumber+1,dateBefore(date.today()))
-   
+
+
+def generateBillsPerMonth(idContract,idClient,stratum,type_client,billPeriod):
+        generateBills(idContract,idClient,stratum,type_client,dateBefore(date.today()))
+
+def allTheClients():
+    client = list(Client.objects.values())
+    contract = list(Contract.objects.values())
+
+    for i in range(len(client)):
+        for j in range(len(contract)):
+            if (client[i]["id"] == contract[j]["client_id"]):
+                generateBillsPerMonth(contract[j]["id"],client[i]["id"],contract[j]["stratum"],client[i]["type_client"])
 # Tarea a ejecutarse cada determinado tiempo.
 def timer():
-    clients = list(Client.objects.values())
-    
     while True:
-        generateBillsPerMonth()
-        time.sleep(10000)   # 3 segundos.
+        time.sleep(30*86400)
+        allTheClients()
+       # 3 segundos.
 # Iniciar la ejecución en segundo plano.
 t = threading.Thread(target=timer)
-#t.start()
+t.start()
 
 
 def pdf_view(request):
-    pdf=create_pdf(request)
+    pdf=create_pdf()
     return FileResponse(pdf, as_attachment=True, filename='factura.pdf')
 
 def send_pdf_view(request):
-    pdf=create_pdf(request)
-    #return FileResponse(pdf, as_attachment=True, filename='hello.pdf')
+    pdf=create_pdf()
     subject = 'Hola'
     contact_message = "Pruebaaaa"
     from_email = settings.EMAIL_HOST_USER
@@ -712,7 +723,7 @@ def send_pdf_view(request):
     EmailMsg.send()
     return HttpResponse("email enviado.")
 
-def create_pdf(request):
+def create_pdf():
     buffer = io.BytesIO()
 
     # Create the PDF object, using the buffer as its "file."
@@ -845,7 +856,7 @@ def create_pdf(request):
     p.line(100,220,100,238)
     p.drawString(20,225,"We declare that above mentioned")
     p.drawString(20,230,"information is true.")
-    p.drawString(20,235,"(This is system generated invoive)")
+    p.drawString(20,235,"(This is system generated invoice)")
     p.drawRightString(180,235,"Authorised Signatory")
     p.showPage()
     p.save()

@@ -135,7 +135,7 @@ class Contract (models.Model):
 class Publicity (models.Model):
     month_publicity = models.CharField('Mes', unique=False, max_length=20, null=True)
     type_publicity = models.CharField('Tipo de publicidad', unique=False, max_length=20, null=True)
-    image_publicity =  models.FileField('imagen publicidad', upload_to='imagenes_publicida', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
+    image_publicity =  models.FileField('imagen publicidad', upload_to='imagenes_publicidad', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
     
     
 class Bill (models.Model):
@@ -152,6 +152,7 @@ class Bill (models.Model):
     total_consumption=models.FloatField('Total a pagar por consumo', null=False)
     default_interest= models.FloatField('IVA', null=True, blank=True)
     total_payout = models.FloatField('Total a pagar',null=False)
+    pdf_bill =  models.FileField('pdf factura', upload_to='pdfs/',max_length=4000, null = True, blank=True)
     contract = models.ForeignKey(
         Contract,
         on_delete=models.CASCADE
