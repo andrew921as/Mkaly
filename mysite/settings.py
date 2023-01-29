@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import cloudinary_storage
+from django.core.files.storage import FileSystemStorage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'proyecto_desarrollo',
         'USER': 'postgres',
-        'PASSWORD': 'loquendo11',
+        'PASSWORD': '201504',
         'HOST': 'localhost',
         'DATABASE_PORT': 5432
     }
@@ -142,7 +143,8 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 absolute_path = os.path.dirname(__file__)
-MEDIA_ROOT = os.path.join(BASE_DIR, 'backmkaly/app1/static/media/images')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/app1/static/media/images')
+fs = FileSystemStorage(location=os.path.join(BASE_DIR, 'backmkaly/app1/static/media'))
 #MEDIA_ROOT = os.path.join(absolute_path, '..backmkaly.app1.static', 'media')
 
 #STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'static-only')

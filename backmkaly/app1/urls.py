@@ -14,7 +14,7 @@ urlpatterns = [
     path('operator_view/', views.OperatorView.as_view(), name = 'clients_list'),
     path('operator_view/<int:id>', views.OperatorView.as_view(), name = 'singular_client'),
     path('operator_edit/<int:id>', views.OperatorEdit.as_view(), name = 'edit_operator'),
-    path('client_view/<int:client_id>', views.ClientView.as_view(), name = 'singular_contract'),
+    path('client_view/<int:client_id>/<int:contract_id>', views.ClientView.as_view(), name = 'singular_contract'),
     path('client_edit/<int:id>', views.ClientEdit.as_view(), name = 'edit_client'),
     path('manager_view/', views.ManagerView.as_view(), name = 'analitics'),
     path('manager_edit/<int:id>', views.ManagerEdit.as_view(), name = 'edit_manager'),
@@ -24,6 +24,7 @@ urlpatterns = [
     path('logout_view/', views.logout_view),
     path('autenticate_view/', views.autenticate_view),
     path('create_contract/<int:id>', views.CreateContract.as_view(), name = 'create_contract'),
+    path('client_pay/<int:bill_id>', views.ClientPay.as_view(), name = 'client_pay'),
     #path('create_bill/<int:id>', views.CreateBill.as_view(), name = 'create_bill')
    # path('admin_editing/<id_card>', views.admin_editing),
     #path('admin_edit/', views.admin_edit),

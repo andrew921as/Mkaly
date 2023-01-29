@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin 
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.core.files.storage import FileSystemStorage 
+from pathlib import Path
+import os
 
 
 
@@ -140,7 +143,7 @@ class Publicity (models.Model):
     
 class Bill (models.Model):
     bill_number = models.CharField('Numero de factura', unique=True, max_length=40, null=False)
-    electronic_payment_number = models.CharField('Numero de pago electronico', unique=True, max_length=40, null=True, blank=True)
+    electronic_payment_number = models.CharField('Numero de pago electronico', max_length=40, null=True, blank=True)
     expedition_date = models.DateField('Fecha de expedicion',null=False)
     expiration_date = models.DateField('Fecha de vencimiento',null=False)
     billing_period = models.DateField('Periodo de la factura',null=False)
@@ -148,11 +151,14 @@ class Bill (models.Model):
     billing_month = models.CharField('Mes de la factura', max_length=20, null=False)
     billing_status = models.CharField('Estado de la factura', max_length=20, null=True, blank=True, default='pendiente')
     month_consumption = models.FloatField('Consumo del mes', null=False)
+    public_light = models.FloatField('Valor de la luz publica', null=False, default=0)
     other_charges = models.IntegerField('Otros cargos ', null=True, blank=True)
     total_consumption=models.FloatField('Total a pagar por consumo', null=False)
     default_interest= models.FloatField('IVA', null=True, blank=True)
     total_payout = models.FloatField('Total a pagar',null=False)
-    pdf_bill =  models.FileField('pdf factura', upload_to='pdfs/',max_length=4000, null = True, blank=True)
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    fs = FileSystemStorage(location=os.path.join(BASE_DIR, 'app1/static/media'))
+    pdf_bill =  models.FileField('pdf factura', upload_to='pdf',max_length=4000, null = True, blank=True, storage=fs)
     contract = models.ForeignKey(
         Contract,
         on_delete=models.CASCADE
