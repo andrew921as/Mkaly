@@ -20,6 +20,7 @@ const UserInfo = () => {
 	const router = useRouter();
 	const {userId} = router.query;
 	const [user, setUser] = useState([]);
+	const [markersCoords, setMarkersCoords] = useState([[3.4446307, -76.5430657]]);
 	const [isLoading, setIsLoading] = useState(false);
 	const {locale} = router;
 	const t = locale === 'en' ? en : es;
@@ -40,6 +41,26 @@ const UserInfo = () => {
 		// 	});
 	};
 
+	const axios = require('axios');
+
+	const getCoords = async (saddress) => {
+		try {
+			const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${saddress}&format=json`);
+			if (response.data.length > 0) {
+				const location = response.data[0];
+				// console.log(`C# ${location.lat} ${location.lon}  ---> ${location.display_name}`);
+				setMarkersCoords([...markersCoords, [location.lat, location.lon]]);
+				return [location.lat, location.lon];
+			} else {
+				console.log('No se pudo encontrar la ubicación especificada.');
+				return null;
+			}
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	};
+
 	const fetchUser = async () => {
 		const {data} = await getUser(userId);
 		setIsLoading(false);
@@ -49,7 +70,10 @@ const UserInfo = () => {
 	useEffect(() => {
 		setIsLoading(true);
 		fetchUser();
-		decodeAddress(encodeURIComponent('Calle 3 oeste, San Cayetano, Cali, Colombia'));
+		// decodeAddress(encodeURIComponent('Calle 3 oeste, San Cayetano, Cali, Colombia'));
+		getCoords('calle 19, villagorgona, candelaria, colombia').then((coords) => {
+			console.log(coords);
+		});
 	}, []);
 
 	if (isLoading) {
@@ -58,39 +82,48 @@ const UserInfo = () => {
 
 	return (
 		<div className="w-full h-full overflow-hidden">
-			<h1 className="font-black text-4xl ml-16">
+			<h1 className="font-black text-4xl sm:ml-16">
+				<span className="cursor-pointer" onClick={() => router.back()}>
+					⬅️
+				</span>
 				{user.first_name_user} {user.sec_name_user} {user.first_lastname_user} {user.sec_lastname_user}
 			</h1>
-			<p>
-				<b>Email:</b> {user.email}
-			</p>
-			<p>
-				<b>Username:</b> {user.username}
-			</p>
-			<p>
-				<b>Id card:</b> {user.id_card}
-			</p>
-			<p>
-				<b>City:</b> {user.city}
-			</p>
-			<p>
-				<b>Active:</b> {user.is_active}
-			</p>
-			<p>
-				<b>Role:</b> {user.role}
-			</p>
-			<div className="overflow-hidden rounded-3xl w-[500px] h-[500px]">
-				<MapContainer center={[3.4446307, -76.5430657]} zoom={14} scrollWheelZoom={true}>
-					<TileLayer
-						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-					/>
-					<Marker position={[3.4446307, -76.5430657]}>
-						<Popup>
-							A pretty CSS3 popup. <br /> Easily customizable.
-						</Popup>
-					</Marker>
-				</MapContainer>
+			<div className="text-lg flex flex-col sm:flex-row mt-16 items-center justify-around bg-primary">
+				<div className="mb-16 sm:mb-0">
+					<p>
+						<b>{t.InfoUser.email}:</b> {user.email}
+					</p>
+					<p>
+						<b>{t.InfoUser.username}:</b> {user.username}
+					</p>
+					<p>
+						<b>{t.InfoUser.idCard}:</b> {user.id_card}
+					</p>
+					<p>
+						<b>{t.InfoUser.city}:</b> {user.city}
+					</p>
+					<p>
+						<b>{t.InfoUser.active}:</b> {user.is_active ? 'true' : 'false'}
+					</p>
+					<p>
+						<b>{t.InfoUser.role}:</b> {user.role}
+					</p>
+				</div>
+
+				<div className="overflow-hidden rounded-3xl w-full h-[500px] sm:w-[500px] sm:h-[500px]">
+					<MapContainer center={[3.4446307, -76.5430657]} zoom={14} scrollWheelZoom={true}>
+						<TileLayer
+							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+						/>
+
+						{markersCoords.map((coord) => (
+							<Marker position={coord}>
+								<Popup>Property of {user.first_name_user}.</Popup>
+							</Marker>
+						))}
+					</MapContainer>
+				</div>
 			</div>
 
 			{/* <Map center={[52.6376, -1.135171]} zoom={12}>

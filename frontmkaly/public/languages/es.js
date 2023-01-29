@@ -71,4 +71,12 @@ export default {
 		Title: 'Iniciar sesión',
 		LoginB: 'Iniciar sesión',
 	},
+	InfoUser: {
+		email: 'Email',
+		username: 'Nombre de usuario',
+		idCard: 'Número de identificación',
+		city: 'Ciudad',
+		active: 'Activo',
+		role: 'Rol',
+	},
 };

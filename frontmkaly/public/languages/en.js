@@ -65,5 +65,12 @@ export default {
 		Title: 'LOGIN',
 		LoginB: 'Log In',
 	},
-	
+	InfoUser: {
+		email: 'Email',
+		username: 'Username',
+		idCard: 'Id Card',
+		city: 'City',
+		active: 'Active',
+		role: 'Role',
+	},
 };
