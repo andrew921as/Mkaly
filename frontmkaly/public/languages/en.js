@@ -1,3 +1,4 @@
+
 export default{
 	LandingP:{
 		Title: "Welcome to MKALY",
@@ -37,7 +38,7 @@ export default{
 	},
 	Form:{
 		userName:"User Name",
-		password:"password",
+		password:"Password",
 		first_name:"First Name",
 		second_name:"Second Name",
 		first_last_name:"First Last Name",
@@ -65,7 +66,8 @@ export default{
 			West:"West",
 			Est:"Est",
 			South:"South",
-		}
+		},
+		RegisterB:"Register",
 	},
 	UserForm:{
 		handleRegisterUser:{
@@ -82,5 +84,74 @@ export default{
 		NoRegisP2:"Or get in touch with us through our main line: ",
 		Title:"LOGIN",
 		LoginB:"Log In"
-	}
+	},
+	InvoiceCa:{
+		UpTo:"UP TO DAY",
+		Value:"Value : $20.000",
+		Pay:"PAY"
+	},
+	ProfileD:{
+		Hi:"Hi,",
+		EditPro:"Edit Profile",
+		ChangeLan: "Change Language",
+		ButtonLogO:"Logout"
+	},
+	EditProfil:{
+		Title:"Edit Profile",
+		upProPic:"Upload Profile Picture",
+		update:"Update"
+	},
+	Dashboar:{
+		operatorD:{
+			title:"CLIENT MANAGEMENT",
+			registerCli:"REGISTER CLIENT",
+			modifyCli:"MODIFY CLIENT",
+			searchCli:"SEARCH CLIENT",
+			registerPay:"REGISTER PAYMENTS",
+		},
+		managerD:{
+			sales:"Sales",
+			clientSta:"Clients State",
+			activeSuspend:"Active/Suspended services",
+			onlineFace:"Online vs Face-to-face Payments",
+			clientSservices:{
+				clientDebt:"In debt",
+				clientUpto:"Up to date",
+				clientSus:"Suspended",
+				clientActive:"Active",
+			},
+		},
+		adminD:{
+			sales:"Sales",
+			usersSimus:"Users simultaneously logged on",
+			users:{
+				Title:"Users",
+				Admins: "Admins",
+				Managers: "Managers",
+				Operators: "Operators",
+				Clients: "Clients"
+			}
+		}
+	},
+	EditClient:{
+		Title:"Edit Client Profile",
+		description:"Write down the Id number of the client you are willing to edit",
+		search:"Search",
+		warningNotCli:"The user you are trying to edit is not a client.",
+		warningNotFou:"User not found.",
+
+	},
+	userManageP:{
+		Title:"USER MANAGEMENT",
+		registeU:"REGISTER USER",
+		modifyU:"MODIFY USER",
+		searchU:"SEARCH USER",
+	},
+	userRegistration:"User Registration",
+	EditUser:{
+		Title:"Edit User Profile",
+		description:"Write down the Id number of the user you are willing to edit",
+		idNumber:"ID Number",
+		warningNotFou:"User not found.",
+	},
 }

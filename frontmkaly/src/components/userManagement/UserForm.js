@@ -286,7 +286,7 @@ const UserForm = ({title, initialUserData}) => {
 					</Grid>
 					<Grid item xs={12} sx={{m: 2}} align="center">
 						<Button size="large" variant="contained" onClick={() => (initialUserData ? handleUpdateUser() : handleRegisterUser())}>
-							{initialUserData ? 'Update' : 'Register'}
+							{initialUserData ? t.EditProfil.update : t.Form.RegisterB}
 						</Button>
 						{isSuccess && <Alert severity="success">{isSuccess}</Alert>}
 						{isWarning && <Alert severity="error">{isWarning}</Alert>}

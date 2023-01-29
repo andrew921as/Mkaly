@@ -17,11 +17,15 @@ import {
 	Alert,
 	CircularProgress,
 } from '@mui/material';
+import { useRouter } from 'next/router';
 import {registerUser, updateUserAdmin, updateUserOperator, updateUserManager, updateUserClient} from '../../functions/requests';
 import {UserContext} from '../../context/UserContext';
 import userimg from '../../../assets/images/users/user2.jpg';
 import Image from 'next/image';
 import axios from 'axios';
+
+import en from '../../../public/languages/en';
+import es from '../../../public/languages/es';
 
 const ProfileForm = ({title}) => {
 	const {user, setUser, initiateUser, logout} = useContext(UserContext);
@@ -35,6 +39,10 @@ const ProfileForm = ({title}) => {
 		username: user.username,
 		image: user.image,
 	});
+
+	const router = useRouter()
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 
 	const handleChangeUser = (value, type) => setUserData({...userData, [type]: value});
 
@@ -112,14 +120,14 @@ const ProfileForm = ({title}) => {
 							value={userData.username}
 							onChange={(e) => handleChangeUser(e.target.value, 'username')}
 							id="username"
-							label="Username"
+							label={t.Form.userName}
 							variant="outlined"
 							fullWidth
 						/>
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth variant="outlined">
-							<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+							<InputLabel htmlFor="outlined-adornment-password">{t.Form.password}</InputLabel>
 							<OutlinedInput
 								value={userData.password}
 								onChange={(e) => handleChangeUser(e.target.value, 'password')}
@@ -143,7 +151,7 @@ const ProfileForm = ({title}) => {
 
 					<Grid item xs={12} sx={{m: 10, marginTop: 0, flexDirection: 'column'}} align="center">
 						<Button variant="outlined" component="label">
-							Upload Profile Picture
+							{t.EditProfil.upProPic}
 							<input
 								hidden
 								accept="image/*"
@@ -161,7 +169,7 @@ const ProfileForm = ({title}) => {
 							<CircularProgress />
 						) : (
 							<Button size="large" variant="contained" onClick={() => handleUpdateUser()}>
-								Update
+								{t.EditProfil.update}
 							</Button>
 						)}
 						{isSuccess && <Alert severity="success">{isSuccess}</Alert>}

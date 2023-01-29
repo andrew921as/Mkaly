@@ -1,4 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
+import { useRouter } from 'next/router';
 import {
 	Box,
 	Container,
@@ -18,9 +19,14 @@ import {
 import {UserForm} from '../../src/components';
 
 import {UserContext} from '../../src/context/UserContext';
-import {useRouter} from 'next/router';
+
+import en from '../../public/languages/en';
+import es from '../../public/languages/es';
 
 const RegisterUser = () => {
+	const router = useRouter()
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 	// const router = useRouter();
 	// const {user, isUserAuthenticated} = useContext(UserContext);
 
@@ -32,7 +38,7 @@ const RegisterUser = () => {
 	// 	}
 	// }, [user]);
 
-	return <UserForm title="User Registration" />;
+	return <UserForm title={t.userRegistration} />;
 };
 
 export default RegisterUser;
