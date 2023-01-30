@@ -18,6 +18,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 
 
+
 #from .models import 
 # Create your views here.
 
@@ -608,7 +609,4 @@ def street_lighting_value(type_client):
 def logout_view(request):
     logout(request)
     return HttpResponse("SE_ESTRESO_CAMILA")
-
-
-
 

@@ -62,5 +62,19 @@ export default{
 		NoRegisP2:"Or get in touch with us through our main line: ",
 		Title:"LOGIN",
 		LoginB:"Log In"
-	}
+	},
+	client_management:{
+		payment :{
+			FactureNumber: "Invoice number",
+			TitleRegPago: 'Register your payment',
+			ButtonPay: 'Submit',
+			TitleMessage: 'Important',
+			MessageImp : "Remember that you can only make payments for the past due months online. You also have the option to visit one of our branches or contact our call center."
+		}
+	},
+	user_management:{
+		payment :{
+			TitleRegPago: 'Register payment',
+		}
+	},
 }

@@ -4,6 +4,11 @@ const ClientMenuItems = [
 		icon: 'home',
 		href: '/dashboard',
 	},
+	{
+		title: 'Registrar Pago',
+		icon: 'credit-card',
+		href: '/client-management/payment',
+	},
 ];
 
 const AdminMenuItems = [
@@ -33,15 +38,20 @@ const ManagerMenuItems = [
 ];
 
 const OperatorMenuItems = [
-	// {
-	// 	title: 'Dashboard',
-	// 	icon: 'home',
-	// 	href: '/dashboard',
-	// },
+	{
+		title: 'Dashboard',
+		icon: 'home',
+		href: '/dashboard',
+	},
 	{
 		title: 'Client Management',
 		icon: 'home',
 		href: '/dashboard',
+	},
+	{
+		title: 'Registrar pago',
+		icon: 'dollar-sign',
+		href: '/user-management/payment',
 	},
 ];
 
