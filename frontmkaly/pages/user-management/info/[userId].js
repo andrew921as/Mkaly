@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 
 import {getUser} from '../../../src/functions/requests';
-import {CircularProgress} from '@mui/material';
+import {Button, CircularProgress} from '@mui/material';
 
 // Diccionaries
 import es from '../../../public/languages/es';
@@ -108,6 +108,9 @@ const UserInfo = () => {
 					<p>
 						<b>{t.InfoUser.role}:</b> {user.role}
 					</p>
+					<Button onClick={() => router.push(`/user-management/contracts/${userId}`)} sx={{color: 'white'}} color="blue" size="large" variant="contained">
+						{t.InfoUser.buttonCreateContract}
+					</Button>
 				</div>
 
 				<div className="overflow-hidden rounded-3xl w-full h-[500px] sm:w-[500px] sm:h-[500px]">

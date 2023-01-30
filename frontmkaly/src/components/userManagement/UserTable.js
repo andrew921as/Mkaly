@@ -72,6 +72,11 @@ const UsersTable = ({title}) => {
 
 	const fetchUsers = async () => {
 		const {data} = await getUsers();
+
+		if (!data.users) {
+			return;
+		}
+
 		const sortedUsers = data.users.sort((a, b) => {
 			let fa = a.first_name_user.toLowerCase(),
 				fb = b.first_name_user.toLowerCase();
