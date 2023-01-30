@@ -1,7 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {Typography, Box, Table, TableBody, TableCell, TableHead, TableRow, FormControl, InputLabel, InputAdornment, Input} from '@mui/material';
+import {useRouter} from 'next/router';
+import {
+	Typography,
+	Box,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow,
+	FormControl,
+	InputLabel,
+	InputAdornment,
+	Input,
+	Button,
+} from '@mui/material';
 import BaseCard from '../baseCard/BaseCard';
-import {getUsers} from '../../functions/requests';
+
+// API
+import {getUsers, updateUser} from '../../functions/requests';
 
 const users = [
 	{
@@ -50,24 +66,49 @@ const users = [
 ];
 
 const UsersTable = ({title}) => {
+	const router = useRouter();
 	const [users, setUsers] = useState([]);
 	const [allUsers, setAllUsers] = useState([]);
 
-	// const handleSearchUser = async (data) => {
-	// 	const filteredUsers = users.filter((user) => {
-	// 		return user.username.includes(data.toLowerCase())
-	// 	})
+	const fetchUsers = async () => {
+		const {data} = await getUsers();
+		const sortedUsers = data.users.sort((a, b) => {
+			let fa = a.first_name_user.toLowerCase(),
+				fb = b.first_name_user.toLowerCase();
 
-	// 	console.log(filteredUsers)
-	// }
+			if (fa < fb) {
+				return -1;
+			}
+			if (fa > fb) {
+				return 1;
+			}
+			return 0;
+		});
+		setUsers(sortedUsers);
+		setAllUsers(sortedUsers);
+	};
+
+	const handleSearchUser = async (data) => {
+		const filteredUsers = allUsers.filter((user) => {
+			return user.username.includes(data.toLowerCase());
+		});
+
+		setUsers(filteredUsers);
+	};
+
+	const handleUpdateUser = async (userData) => {
+		try {
+			const res = await updateUser(userData.id, userData);
+			console.log(res);
+
+			await fetchUsers();
+			// setIsSuccess('User was updated successfully');
+		} catch (err) {
+			console.log('There was an error, try again later.');
+		}
+	};
 
 	useEffect(() => {
-		const fetchUsers = async () => {
-			const {data} = await getUsers();
-			setUsers(data.users);
-			setAllUsers(data.users);
-		};
-
 		fetchUsers();
 	}, []);
 
@@ -77,6 +118,7 @@ const UsersTable = ({title}) => {
 				<InputLabel htmlFor="search-user">Search user</InputLabel>
 				<Input
 					id="search-user"
+					onChange={(e) => handleSearchUser(e.target.value)}
 					startAdornment={
 						<InputAdornment position="start">
 							<p>🔎</p>
@@ -130,6 +172,16 @@ const UsersTable = ({title}) => {
 								Role
 							</Typography>
 						</TableCell>
+						<TableCell>
+							<Typography color="textSecondary" variant="h6">
+								Status
+							</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography color="textSecondary" variant="h6">
+								Activate/Deactivate
+							</Typography>
+						</TableCell>
 						{/* <TableCell align="right">
               <Typography color="textSecondary" variant="h6">
                 Budget
@@ -140,8 +192,9 @@ const UsersTable = ({title}) => {
 				<TableBody>
 					{users.map((user, index) => {
 						const position = index + 1;
+						console.log(user);
 						return (
-							<TableRow key={user.id}>
+							<TableRow key={user.id} sx={{cursor: 'pointer'}} onClick={() => router.push('/user-management/info/' + user.id)}>
 								<TableCell>
 									<Typography
 										sx={{
@@ -201,6 +254,28 @@ const UsersTable = ({title}) => {
 								</TableCell>
 								<TableCell>
 									<Typography variant="h6">{user.role}</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="h6">{user.is_active ? '🟢' : '🔴'}</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="h6">
+										{user.is_active ? (
+											<Button
+												size="large"
+												sx={{color: '#CD0404'}}
+												color="error"
+												variant="outlined"
+												onClick={() => handleUpdateUser({...user, is_active: false})}
+											>
+												Deactivate
+											</Button>
+										) : (
+											<Button size="large" variant="contained" onClick={() => handleUpdateUser({...user, is_active: true})}>
+												Activate
+											</Button>
+										)}
+									</Typography>
 								</TableCell>
 							</TableRow>
 						);

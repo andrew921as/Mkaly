@@ -52,7 +52,7 @@ const ProfileDD = () => {
 		<>
 			<Button aria-label="menu" color="inherit" aria-controls="profile-menu" aria-haspopup="true" onClick={handleClick4}>
 				<Box display="flex" alignItems="center">
-					<Image src={userimg} alt={userimg} width="30" height="30" className="roundedCircle" />
+					<Image src={user.image} alt={userimg} width="30" height="30" className="roundedCircle" />
 					<Box
 						sx={{
 							display: {

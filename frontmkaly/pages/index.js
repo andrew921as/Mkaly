@@ -1,77 +1,60 @@
-import {useState} from 'react';
-import {Grid, Container, Box, Typography, Stack, TextField, useMediaQuery, useTheme} from '@mui/material';
-import {Navbar} from '../src/layouts/navBar/navVar';
+import React,{ useState } from 'react';
+import { useRouter } from 'next/router';
+import { Grid, Container, Box, Typography, Stack, TextField, useMediaQuery, useTheme, Button } from '@mui/material';
+import { Navbar } from '../src/layouts/navBar/navVar';
+//Diccionaries
+import en from '../public/languages/en';
+import es from '../public/languages/es';
+//Componentes
 import Image from 'next/image';
-import selfP from '../assets/images/publicity/selfP1.png';
-import mailIcon from '../assets/Icons/landingpage-ico-mail.png';
+import selfP from '../assets/images/publicity/happyFamily.png';
+import Animation from '../src/components/Animation.js';
+import ContacUs from '../src/components/landingP/ContactUs'
+import NewProject from '../src/components/landingP/NewProject';
+import AboutUs from '../src/components/landingP/AboutUs';
 
 export default function Index() {
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('md'));
+	const router = useRouter()
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 
 	return (
-		<Grid container spacing={0} sx={{padding: 0}}>
+		<Grid container spacing={0} sx={{ padding: 0, }}>
 			<Navbar />
-			<Stack id="Start" spacing={5} sx={{width: '100%', backgroundColor: '#77B6EA'}}>
-				<Image src={selfP} layout="responsive" />
-				<Stack direction={isMatch ? 'column' : 'row'} alignItems="center" spacing={isMatch ? 4 : 0}>
-					<Container
-						id="adverticement"
-						sx={{
-							backgroundColor: '#FDC500',
-							width: isMatch ? '90%' : '30%',
-							height: '4em',
-							borderRadius: 2,
-						}}
-					>
-						<Typography maxWidth={'90%'} sx={{textAlign: 'center', paddingTop: '2%'}}>
-							we are expnading to new zones: Tulua, Pradera and Miriti Paraná
-						</Typography>
-					</Container>
-
-					<Container
-						sx={{
-							backgroundColor: '#FDC500',
-							width: isMatch ? '90%' : '30%',
-							height: '4em',
-							borderRadius: 2,
-						}}
-					>
-						<Typography maxWidth={'90%'} sx={{textAlign: 'center', paddingTop: '4%'}}>
-							New Projects
-						</Typography>
-					</Container>
-				</Stack>
-
-				<Box id="contact-us" sx={{width: '100%', backgroundColor: '#fbfbfb', paddingTop: 3}}>
-					<Typography variant="h1" sx={{textAlign: 'center'}}>
-						{' '}
-						CONTACT US
-					</Typography>
-					<Stack
-						direction={isMatch ? 'column' : 'row'}
-						alignItems="center"
-						justifyContent="flex-start"
-						sx={{paddingBottom: '5%', paddingTop: '5%', paddingLeft: '10%'}}
-						spacing={isMatch ? 10 : 30}
-					>
-						<Image src={mailIcon} />
-						<Stack direction={'column'} spacing={3} justifyContent="flex-end" sx={{width: '60%'}}>
-							<TextField id="email-basic" label="Email" variant="outlined" />
-							<TextField id="email-basic" label="Ubicación/ Barrio" variant="outlined" />
-						</Stack>
-					</Stack>
-					<Stack direction={'row'} justifyContent="space-evenly" sx={{paddingBottom: 2}}>
-						<Stack direction="column" alignItems="flex-start" spacing={0}>
-							<Typography>PHONE:</Typography>
-							<Typography>+57 315 868 0329</Typography>
-						</Stack>
-						<Stack direction="column" alignItems="flex-start" spacing={0}>
-							<Typography> NATIONAL LINE: </Typography>
-							<Typography> 01 8000 34 44 44</Typography>
-						</Stack>
-					</Stack>
+			<Stack id="Start" spacing={0} sx={{ width: '100%' }}>
+				<Box sx={{ display: 'inline-block', position: 'relative' }}>
+					<div class="flex justify-center md:m-0 mb-10">
+						<div class="flex justify-center"><Typography sx={{ fontSize: 60, textAlign: 'center', marginTop: '15%' }}><b>{t.LandingP.Title}</b> <br /><p> {t.LandingP.Subtitle}</p> </Typography></div>
+						{isMatch ? '' : <div className='z-10'><Image src={selfP} height={600} width={600} /></div>}
+					</div>
+					<div className='bg-[#00408F] w-full h-[30%] md:absolute top-[50%]  flex justify-left p-[2%] px-[16%]'>
+						<div className='flex flex-col justify-center items-center gap-5'>
+							<div><p className='text-xl md:text-2xl text-white max-w-md text-center'>{t.LandingP.Description}</p></div>
+							<Button variant='contained' sx={{ backgroundColor: '#FDD85D', width: '65%', color: 'black', fontSize: {md:'25px', xs: '20px'}, borderRadius: '20px' }}>{t.LandingP.CallButton}</Button>
+						</div>
+					</div>
 				</Box>
+				{/* About us section ------------------------------------------------------------------------------------*/}
+				<div id='AboutUs'></div>
+				<br/>
+				<Animation>
+					<AboutUs/>
+				</Animation>
+				{/* This is the new projects section--------------------------------------------------------------------------------------------------------------------- */}
+				<div id='newProjects'></div>
+				<Animation>
+					<NewProject/>
+				</Animation>
+
+				{/* This is the contact us section--------------------------------------------------------------------------------------------------------------------- */}
+				<div id='contact-us'></div>
+				{
+				<Animation>
+					<ContacUs/>
+				</Animation>
+				}
 			</Stack>
 		</Grid>
 	);

@@ -8,10 +8,16 @@ import FeatherIcon from 'feather-icons-react';
 import styles from '../styles/Login.module.css';
 import {UserContext} from '../src/context/UserContext';
 import {Navbar} from '../src/layouts/navBar/navVar';
+//Diccionaries
+import en from '../public/languages/en';
+import es from '../public/languages/es';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Login() {
 	const router = useRouter();
+	const {locale}= router
+	const t = locale === 'en' ? en : es
+
 	const {user, setUser, login} = useContext(UserContext);
 
 	//Refs
@@ -102,10 +108,10 @@ export default function Login() {
 						>
 							<Stack direction="column" justifyContent="center" alignItems="center" spacing={2} sx={{paddingLeft: '60%', height: '100%'}}>
 								<FeatherIcon stroke="#00296B" icon="speaker" height="3em" width="3em" />
-								<Typography variant="h2">haven't registered yet?</Typography>
-								<Typography sx={{maxWidth: '70%'}}>Come to the nearest points and our operators will help you</Typography>
+								<Typography variant="h2">{t.LoginP.NoRegis}</Typography>
+								<Typography sx={{maxWidth: '70%'}}>{t.LoginP.NoRegisP1}</Typography>
 								<Typography sx={{maxWidth: '70%', textAlign: 'center'}}>
-									Or get in touch with us through our main line:
+								{t.LoginP.NoRegisP2}
 									<a href="tel://+573158680329" style={{textDecoration: 'none', color: '#000000'}}>
 										{' '}
 										+57 315 868 0329
@@ -153,12 +159,12 @@ export default function Login() {
 								fontWeight: 'bold',
 							}}
 						>
-							LOGIN
+							{t.LoginP.Title}
 						</Typography>
 						<Box>
 							<Stack direction={'row'} spacing={1} sx={{paddingBottom: 1}}>
 								<FeatherIcon stroke="#fff" icon="user" />
-								<Typography sx={{color: '#FFF'}}> User Name</Typography>
+								<Typography sx={{color: '#FFF'}}> {t.Form.userName}</Typography>
 							</Stack>
 							<TextField
 								onChange={(e) => setUserData({...userData, username: e.target.value})}
@@ -172,7 +178,7 @@ export default function Login() {
 						<Box>
 							<Stack direction={'row'} spacing={1} sx={{paddingBottom: 1}}>
 								<FeatherIcon stroke="#fff" icon="lock" />
-								<Typography sx={{color: '#FFF'}}> Password</Typography>
+								<Typography sx={{color: '#FFF'}}> {t.Form.password}</Typography>
 							</Stack>
 							<TextField
 								onChange={(e) => setUserData({...userData, password: e.target.value})}
@@ -200,7 +206,7 @@ export default function Login() {
 							variant="contained"
 							sx={{background: '#FDC500', color: '#000000', fontWeight: 'bold', width: '11rem'}}
 						>
-							<Typography sx={{fontWeight: 'bold'}}>Log In</Typography>
+							<Typography sx={{fontWeight: 'bold'}}>{t.LoginP.LoginB}</Typography>
 						</Button>
 
 						{warning && <Typography sx={{fontWeight: 'bold', color: 'red'}}>{warning}</Typography>}
@@ -221,11 +227,11 @@ export default function Login() {
 								>
 									<Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{margin: '5%'}}>
 										<Typography variant="h3" sx={{fontWeight: 'bold'}}>
-											Haven't registered yet?
+										{t.LoginP.NoRegis}
 										</Typography>
-										<Typography>Come to the nearest points and our operators will help you</Typography>
+										<Typography>{t.LoginP.NoRegisP1}</Typography>
 										<Typography>
-											Or get in touch with us through our main line:
+													{t.LoginP.NoRegisP2}
 											<a href="tel://+573158680329" style={{textDecoration: 'none', color: '#000000'}}>
 												{' '}
 												+57 315 868 0329
