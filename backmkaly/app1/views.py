@@ -434,6 +434,25 @@ class ClientView(View):
                     datos={'message': "Bill not found"}
         return JsonResponse(datos)
 
+class SearchBill(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request,bill_id):     
+        bills = list(Bill.objects.filter(id=bill_id).values())
+        #print(contracts[0].id + "---------------------------------------------------------------------------------------------------")
+        if ( len(bill) > 0):
+            bill=bills[0]
+           # bill=bills[0]
+           #(date.today().day > bills[i]["expedition_date"].day) and 
+            #(date.today().month < bills[i]["expedition_date"].month) and
+            datos={'message':"Success",'Bill':bill}
+        else:
+            datos={'message':"Bill not found..."}
+        return JsonResponse(datos)
+
 class ClientEdit(View):
 
     @method_decorator(csrf_exempt)
