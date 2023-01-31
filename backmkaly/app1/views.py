@@ -1,9 +1,12 @@
-from django.shortcuts import render
+#from django.shortcuts import renderFileResponse
 from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
+from django.core.files import File
+from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
 from .models import User, Client, Admin, Manager, Operator, Contract, Bill, Legal_entity,Natural_person, Publicity
 from django.http.response import JsonResponse
 import json, requests, ast , io ,os
@@ -16,18 +19,23 @@ from reportlab.lib.pagesizes import letter, A4
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect
+#from django.shortcuts import redirect
 from datetime import date 
 from dateutil.relativedelta import relativedelta
+from io import BytesIO
 import threading
 import time
+import random
+
+
 
 #from .models import 
 # Create your views here.
 
+"""
 def home(request):
     return render(request, "front pagina de inicio")
-
+"""
 
 
 ##def operator_view(request):
@@ -397,45 +405,33 @@ class ClientView(View):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request, client_id):     
+    def get(self, request,client_id, contract_id):     
         contracts = list(Contract.objects.filter(client_id=client_id).values())
-        self_contract = Contract.objects.get(client_id=client_id)
-        bills = list(Bill.objects.filter(contract_id=self_contract.id).values())
-        
+        bills = list(Bill.objects.filter(contract_id=contract_id).values())
         #print(contracts[0].id + "---------------------------------------------------------------------------------------------------")
         if ( len(bills) > 0):
-            contract=contracts[0]
-            bill=bills[0]
-            datos={'message':"Success",'Contract':contract,'Bill':bill}
+           # contract=contracts[0]
+           # bill=bills[0]
+           #(date.today().day > bills[i]["expedition_date"].day) and 
+            #(date.today().month < bills[i]["expedition_date"].month) and
+           datos={'message':"Success",'Contract':contracts,'Bill':bills}
         else:
-            datos={'message':"Contract not found..."}
+            datos={'message':"Bills not found..."}
         return JsonResponse(datos)
-         
-    
-    def put(self,request,id):
-        jd = json.loads(request.body)
-        contracts=list(Contract.objects.filter(id=id).values())
-        if len(contracts) > 0:
-            contract = Contract.objects.get(id=id)
-            contract.contract_number = jd['contract_number']
-            contract.start_contract = jd['username']
-            contract.service = jd['type_card']
-            contract.service_description = jd['first_name_user']
-            contract.postal_code = jd['sec_name_user']
-            contract.city = jd['first_lastname_user']
-            contract.neighborhood = jd['sec_lastname_user']
-            contract.type_of_avenue = jd['email']
-            contract.first_number = jd['city']
-            contract.second_nummber = jd['is_active']
-            contract.stratum_social = jd['role']
-            contract.n_electric_transformer = jd['n_electric_transformer']
-            contract.transformer_property = jd['role']
-            contract.type_of_conection = jd['role']
-            contract.client = jd['client']
-            datos={'message':"Success"}
-        else:
-            datos={'message':"Contract not found..."}
 
+    def put(self,request,client_id,contract_id):
+        bills = list(Bill.objects.filter(contract_id=contract_id).values())
+        if (len(bills) > 0):
+            for i in range (len(bills)):
+                if( (bills[i]["billing_status"] == "pendiente")):
+                    bill = Bill.objects.get(id=bills[i]["id"])
+                    bill.billing_status = "mora"
+                    bill.other_charges = bill.total_payout * 0.1
+                    bill.total_payout = bill.total_payout + (bill.total_payout * 0.1)
+                    bill.save()
+                    datos={'message':"Success"}
+                else:
+                    datos={'message': "Bill not found"}
         return JsonResponse(datos)
 
 class ClientEdit(View):
@@ -465,6 +461,25 @@ class ClientEdit(View):
             datos={'massage':"Client not found"}
 
         return JsonResponse(datos)
+
+class ClientPay(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def put(self,request,bill_id):
+        bills = list(Bill.objects.filter(id=bill_id).values())
+        if (len(bills) > 0):
+            bill = Bill.objects.get(id=bill_id)
+            bill.billing_status = "paid"
+
+            bill.save()
+            datos={'message':"Success"}
+        else:
+            datos={'message':"Bill not found..."}
+
+        return JsonResponse(datos)   
 
 
 class ManagerView(View):
@@ -563,7 +578,7 @@ class CreateContract(View):
         
         contracts=list(Contract.objects.filter(contract_number=jd["contract_number"]).values())
         contractt=contracts[0]
-        generateBills(contractt["id"],client["id"],contractt['stratum_social'],client["type_client"],10)
+        generateBills(contractt["id"],client["id"],contractt['stratum_social'],client["type_client"])
         datos={'message':"Success"}
         return JsonResponse(datos)
 """
@@ -590,6 +605,8 @@ class CreateBill(View):
         datos={'message':"Success"}
         return JsonResponse(datos)
 """
+
+# metodo que calcula cuantos dias faltan desde la fecha hasta el dia 2 del proximo mes
 def caso2E(date):
     i = date.day
     number = 0
@@ -601,7 +618,8 @@ def caso2E(date):
    
     return relativedelta(days=number+1) + date , number+1
 
-
+# metodo que calcula la fecha de expedicion, si el dia es 1, simplemente se le suma 1 para llegar al dia 2,
+# si el dia es mayor, se llama al metodo caso 2E,sino se retorna la misma fecha,
 def expeditionDate(date):
     interval1 = relativedelta(days=1)
     usar = date + interval1
@@ -614,7 +632,7 @@ def expeditionDate(date):
     
     return fechita
 
-
+"""
 def caso2B(date):
     i = date.day
     number = 0
@@ -625,8 +643,8 @@ def caso2B(date):
             number += 1
    
     return relativedelta(days=number+1) + date
-
-
+"""
+"""
 def billPeriod(date):
     interval1 = relativedelta(days=1)
     usar = date + interval1
@@ -638,7 +656,8 @@ def billPeriod(date):
         fechita = date
     
     return fechita
-
+"""
+#logica del caso 1 del date before
 def caso1y2B(date):
     i = date.day
     number = 0
@@ -652,7 +671,7 @@ def caso1y2B(date):
     else:
         return date - relativedelta(days=number) 
 
-
+# metodo que calcula la fecha en que se va a empezar a cobrar el recibo, osea el dia 2 del mes anterior o si hoy es el dia 2, pues se retorna a si mismo
 def dateBefore(date):
     if(date.day < 2 or date.day > 2):
         fechita = caso1y2B(date)
@@ -661,54 +680,88 @@ def dateBefore(date):
     
     return fechita
 
-def generateBills(idContract,idClient,stratum,type_client,billNumber,billPeriod=date.today()):  
+def monthInSpanish(month):
+    monthh = ""
+    if(month == "January"):
+        monthh = "Enero"
+    elif(month == "February"):
+        monthh = "Febrero"
+    elif(month == "March"):
+        monthh = "Marzo"
+    elif(month == "April"):
+        monthh = "Abril"
+    elif(month == "May"):
+        monthh = "Mayo"
+    elif(month == "June"):
+        monthh = "Junio"
+    elif(month == "July"):
+        monthh = "Julio"
+    elif(month == "August"):
+        monthh = "Agosto"
+    elif(month == "September"):
+        monthh = "Septiembre"
+    elif(month == "October"):
+        monthh = "Octubre"
+    elif(month == "November"):
+        monthh = "Noviembre"
+    elif(month == "December"):
+        monthh = "Diciembre"
+    return monthh
+def generateBills(idContract,idClient,stratum,type_client,billPeriod=date.today()):  
     expedition = expeditionDate(date.today())
     interval = 30
     interval_convert = relativedelta(days=interval)
     expiration = expedition + interval_convert
-    nosabemos = 12315
+    nosabemos = 12401
     previous_month = expedition - relativedelta(days=3)
-    bill_month = previous_month.strftime("%B")
+    bill_month = monthInSpanish(previous_month.strftime("%B"))
     function_total = total_Payment(idClient,stratum,type_client)
-   
-    bill = Bill.objects.create(bill_number=billNumber,electronic_payment_number=nosabemos,expedition_date= expedition,
+    billNumber = random.getrandbits(10)
+    #electronic_payment_number=nosabemos,
+    bill = Bill.objects.create(bill_number=billNumber,expedition_date= expedition,
     expiration_date=expiration, billing_period=billPeriod,billing_days=interval,billing_month=bill_month,
-    month_consumption=function_total[0],other_charges=street_lighting_value(type_client),
+    month_consumption=function_total[0],public_light=street_lighting_value(type_client),other_charges=0,
     total_consumption=function_total[2],default_interest=function_total[1],
     total_payout=function_total[3],contract_id=idContract,publicity_id=1) #aca no pongo status porque hay un default
-    print (function_total)
-    print (type(idClient))
-    print(type(stratum))
-    print(type(type_client))
     bill.save()
+
+    pdf = create_pdf(billNumber)
+    
     
     
 
-def generateBillsPerMonth(idContract,idClient,stratum,type_client,billNumber,firstTime):
-    today = date.today()
-    generate_bill_date = today.day
-    if(generate_bill_date == 2):
-        generateBills(idContract,idClient,stratum,type_client,billNumber+1,dateBefore(date.today()))
-   
+
+
+def generateBillsPerMonth(idContract,idClient,stratum,type_client,billPeriod):
+        generateBills(idContract,idClient,stratum,type_client,billPeriod)
+
+# metodo que busca a todos los clientes con un contrato y les crea una factura
+def allTheClients():
+    client = list(Client.objects.values())
+    contract = list(Contract.objects.values())
+
+    for i in range(len(client)):
+        for j in range(len(contract)):
+            if (client[i]["id"] == contract[j]["client_id"]):
+                generateBillsPerMonth(contract[j]["id"],client[i]["id"],contract[j]["stratum_social"],client[i]["type_client"],dateBefore(date.today()))
+
 # Tarea a ejecutarse cada determinado tiempo.
 def timer():
-    clients = list(Client.objects.values())
-    
     while True:
-        generateBillsPerMonth()
-        time.sleep(10000)   # 3 segundos.
+        time.sleep(10)
+        allTheClients()
+       # 3 segundos.
 # Iniciar la ejecución en segundo plano.
-t = threading.Thread(target=timer)
+#t = threading.Thread(target=timer)
 #t.start()
 
 
 def pdf_view(request):
-    pdf=create_pdf(request)
+    pdf=create_pdf()
     return FileResponse(pdf, as_attachment=True, filename='factura.pdf')
 
 def send_pdf_view(request):
-    pdf=create_pdf(request)
-    #return FileResponse(pdf, as_attachment=True, filename='hello.pdf')
+    pdf=create_pdf()
     subject = 'Hola'
     contact_message = "Pruebaaaa"
     from_email = settings.EMAIL_HOST_USER
@@ -718,7 +771,17 @@ def send_pdf_view(request):
     EmailMsg.send()
     return HttpResponse("email enviado.")
 
-def create_pdf(request):
+def create_pdf(billNumber):
+    billForPDF = Bill.objects.get(bill_number=billNumber)
+    bill = list(Bill.objects.filter(bill_number=billNumber).values())[0]
+    contractNumber = bill["contract_id"]
+    #["contract_id"]
+    contract = list(Contract.objects.filter(id=contractNumber).values())[0]
+    clientId = contract["client_id"]
+    #["client_id"]
+    client = list(Client.objects.filter(id = clientId).values())[0]
+    #["type_client"]
+    
     buffer = io.BytesIO()
 
     # Create the PDF object, using the buffer as its "file."
@@ -758,19 +821,25 @@ def create_pdf(request):
     p.restoreState()
     p.setFillColorRGB(2, 62, 138)
     p.setLineWidth(0.4)
-    p.roundRect(116,10,75,30,5,stroke=1,fill=True)
+    p.roundRect(91,10,100,30,5,stroke=1,fill=True)
     p.setFillColor(canvas.black)
     p.setFont("Helvetica-Bold",3.5)
-    p.drawCentredString(130,16,"Nombre         :")
-    p.drawCentredString(160,16,"CARLOS CACERES") # DATO NOMBRE
-    p.drawCentredString(130,21,"Estrato          :")
-    p.drawCentredString(160,21,"4") # DATO ESTRATO
-    p.drawCentredString(130,26,"Tipo               :")
-    p.drawCentredString(160,26,"Natural") # DATO TIPO DE PERSONA
-    p.drawCentredString(130,31,"No. Contrato :")
-    p.drawCentredString(160,31,"8563") # DATO CONTRATO
-    p.drawCentredString(130,36,"Dirreccion     :")
-    p.drawCentredString(160,36,"CALLE 14 B 33 101") # DATO DIRRECCION
+    p.drawCentredString(105,16,"Nombre         :")
+    nombre = ""
+    nombre += client["first_name_user"]+" "+client["sec_name_user"]+" "+client["first_lastname_user"]+" "+client["sec_lastname_user"]
+    nombre = nombre.upper()
+    p.drawCentredString(145,16,nombre) # DATO NOMBRE
+    p.drawCentredString(105,21,"Estrato          :")
+    p.drawCentredString(145,21,str(contract["stratum_social"])) # DATO ESTRATO
+    p.drawCentredString(105,26,"Tipo               :")
+    p.drawCentredString(145,26,client["type_client"].upper()) # DATO TIPO DE PERSONA
+    p.drawCentredString(105,31,"No. Contrato :")
+    p.drawCentredString(145,31,str(contract["contract_number"])) # DATO CONTRATO
+    p.drawCentredString(105,36,"Direccion      :")
+    direccion = ""
+    direccion += contract["city"]+", "+contract["neighborhood"]+", "+contract["type_of_avenue"]+ " #"+contract["first_number"]+"-"+contract["second_number"]
+    direccion = direccion.upper()
+    p.drawCentredString(150,36,direccion) # DATO DIRRECCION
     # p.setFont("Helvetica-Bold",5)
     # p.drawCentredString(125,30,"Block No. 101, Triveni Apartments, Pitam Pura,")
     # p.drawCentredString(125,35,"New Delhi - 110034, India")
@@ -789,37 +858,54 @@ def create_pdf(request):
     #p.roundRect(15,63,170,40,10,stroke=1,fill=0)
     p.setFont("Helvetica-Bold",4)
     p.drawRightString(65,70,"No. Factura             :")
-    p.drawCentredString(75,70,"3560") # DATO NUMERO DE FACTURA
+    p.drawCentredString(75,70,str(bill["bill_number"])) # DATO NUMERO DE FACTURA
     p.drawRightString(65,75,"No. Factura Electornica :")
-    p.drawCentredString(75,75,"3301") # DATO NUMERO DE FACTURA ELECTRONICA
+    p.drawCentredString(75,75,str(bill["electronic_payment_number"])) # DATO NUMERO DE FACTURA ELECTRONICA
     p.drawRightString(135,70,"Fecha Expedicion:")
-    p.drawRightString(160,70,"02/05/2023") # DATO FECHA DE EXPEDICION
+    p.drawRightString(160,70,str(bill["expedition_date"])) # DATO FECHA DE EXPEDICION
     p.drawRightString(135,75,"Fecha Expiracion:")
-    p.drawRightString(160,75,"02/05/2023") # DATO FECHA DE EXPIRACION
-    p.drawRightString(135,80,"Periodo:")
-    p.drawCentredString(150,80,"01") # DATO PERIODO
+    p.drawRightString(160,75,str(bill["expiration_date"])) # DATO FECHA DE EXPIRACION
+    p.drawRightString(135,80,"Inicio Periodo de Facturacion:")
+    p.drawCentredString(150,80,str(bill["billing_period"])) # DATO PERIODO
     p.drawRightString(135,85,"Dia:")
-    p.drawCentredString(150,85,"02") # DATO DIA
+    p.drawCentredString(150,85,str(bill["billing_days"])) # DATO DIA
     p.drawRightString(135,90,"Mes:")
-    p.drawCentredString(150,90,"02") # DATO MES
+    p.drawCentredString(150,90,bill["billing_month"]) # DATO MES
     # This Block Consist of Item Description
     #p.roundRect(15,108,170,30,10,stroke=1,fill=0)
+    datosConsumo = total_Payment(client["id"],contract["stratum_social"],client["type_client"])
+    estrato = str(contract["stratum_social"])
+    valorUnitario = 0
+    if estrato == "1":
+        valorUnitario = 330.66
+    elif estrato == "2":
+        valorUnitario = 413.12
+    elif estrato == "3":
+        valorUnitario = 673.77
+    elif estrato == "4":
+        valorUnitario = 792.56
+    elif estrato == "5":
+        valorUnitario = 951.07
+    elif estrato == "6":
+        valorUnitario = 951.07
+    if client["type_client"].upper()=="LEGAL":
+        valorUnitario = 765.65
     p.setLineWidth(0.4)
     p.line(15,120,185,120)
     p.drawCentredString(30,116,"CONSUMO")
-    p.drawCentredString(30,126,"100") # DATO CONSUMO
+    p.drawCentredString(30,126,str(bill["month_consumption"])) # DATO CONSUMO
     p.drawCentredString(65,114,"VALOR")
     p.drawCentredString(65,118,"UNITARIO")
-    p.drawCentredString(65,126,"1000000,00") # DATO VALOR UNITARIO
+    p.drawCentredString(65,126,str(valorUnitario)) # DATO VALOR UNITARIO
     p.drawCentredString(95,114,"VALOR")
     p.drawCentredString(95,118,"TOTAL")
-    p.drawCentredString(95,126,"1000000,00") # DATO VALOR TOTAL
+    p.drawCentredString(95,126,str(round(datosConsumo[2],2))) # DATO VALOR TOTAL
     p.drawCentredString(130,114,"SUBSIDIO")
     p.drawCentredString(130,118,"(CONTRIBUCION)")
-    p.drawCentredString(130,126,"1000000,00") # DATO SUBSIDIO  
+    p.drawCentredString(130,126,str(round(datosConsumo[5],2))) # DATO SUBSIDIO  
     p.drawCentredString(165,114,"TOTAL")
     p.drawCentredString(165,118,"CONSUMO")
-    p.drawCentredString(165,126,"1000000,00") # DATO CONSUMO TOTAL  
+    p.drawCentredString(165,126,str(round(datosConsumo[6],2))) # DATO CONSUMO TOTAL  
     # Drawing table for Item Description
     p.line(15,210,185,210)
     # p.line(45,108,45,220)
@@ -834,24 +920,24 @@ def create_pdf(request):
     p.drawCentredString(50,170,"130 kWh-mes para alturas iguales o superiores a 1000m")
     p.drawCentredString(26,175,"sobre el nivel del mar")
     p.drawRightString(160,170,"Alumbrado publico:")
-    p.drawCentredString(170,170,"100000,00") # DATO ALUMBRADO PUBLICO
+    p.drawCentredString(170,170,str(datosConsumo[3])) # DATO ALUMBRADO PUBLICO
     p.drawRightString(160,160,"IVA:")
-    p.drawCentredString(170,160,"19%")
+    p.drawCentredString(170,160,str(datosConsumo[1]))
     p.drawRightString(160,165,"Otros:")
-    p.drawCentredString(170,165,"100000,00") # DATO OTROS
+    p.drawCentredString(170,165,str(bill["other_charges"])) # DATO OTROS
     p.setFillColorRGB(255,255,0)
     p.setLineWidth(0.4)
     p.roundRect(91,180,90,20,5,stroke=1,fill=True)
     p.setFillColor(canvas.black)
     p.drawRightString(140,188,"PAGO TOTAL (CONSUMO) :")
-    p.drawCentredString(150,188,"100000,00") # DATO PAGO TOTAL CONSUMO
+    p.drawCentredString(150,188,str(round(datosConsumo[2],2))) # DATO PAGO TOTAL CONSUMO
     p.drawRightString(140,193,"PAGO TOTAL           :")
-    p.drawCentredString(150,193,"100000,00") # DATO PAGO TOTAL 
+    p.drawCentredString(150,193,str(round(datosConsumo[4],2))) # DATO PAGO TOTAL 
     p.line(15,220,185,220)
     p.line(100,220,100,238)
     p.drawString(20,225,"We declare that above mentioned")
     p.drawString(20,230,"information is true.")
-    p.drawString(20,235,"(This is system generated invoive)")
+    p.drawString(20,235,"(This is system generated invoice)")
     p.drawRightString(180,235,"Authorised Signatory")
     p.showPage()
     p.save()
@@ -861,6 +947,8 @@ def create_pdf(request):
     buffer.seek(0)
     pdf = buffer.getvalue()
     buffer.close()
+    
+    billForPDF.pdf_bill.save("factura3.pdf", ContentFile(pdf))
     return pdf
 """
 def consumption(id):
@@ -917,34 +1005,46 @@ def calculateFee(stratum,type_client,consumo):
     if (type_client == "natural"):
         if (consumo <= 130):
             if(stratum == 1):
+                porcentajeSub = feeE1
                 fee = feePreCSE1
             elif(stratum == 2):
+                porcentajeSub = feeE2
                 fee = feePreCSE2
             elif(stratum == 3):
+                porcentajeSub = feeE3
                 fee = feePreCSE3
             elif(stratum == 4):
+                porcentajeSub = 0
                 fee = feePreCSE4
             elif(stratum == 5):
+                porcentajeSub = contributionE5
                 fee = feeCE5
             elif(stratum == 6):
+                porcentajeSub = contributionE6
                 fee = feeCE6
         else:
             if(stratum == 1):
+                porcentajeSub = feeE1
                 fee = feeSubCSE1
             elif(stratum == 2):
+                porcentajeSub = feeE2
                 fee = feeSubCSE2
             elif(stratum == 3):
+                porcentajeSub = feeE3
                 fee = feeSubCSE3
             elif(stratum == 4):
+                porcentajeSub = 0
                 fee = feeSubCSE4
             elif(stratum == 5):
+                porcentajeSub = contributionE5
                 fee = feeCE5
             elif(stratum == 6):
+                porcentajeSub = contributionE6
                 fee = feeCE6
     elif (type_client == "legal"):
         fee = CSCC
-
-    return fee
+    
+    return fee,porcentajeSub
 
 """  
 def subsidy(stratum):
@@ -983,11 +1083,15 @@ def total_Payment(id,stratum,type_client):
     consumo = transform
     iva = 0.19
     street_value = street_lighting_value(type_client)
-    energyPayment = (calculateFee(stratum,type_client,consumo) * consumo)
+    resultadoCalculateFee = calculateFee(stratum,type_client,consumo)
+    porcentajeSub = resultadoCalculateFee[1]
+    fee = resultadoCalculateFee[0]
+    energyPayment = (fee * consumo)
+    subsidio = energyPayment * porcentajeSub
     energyPaymentIVA = energyPayment + (energyPayment*iva)
     totalPayment = energyPaymentIVA + street_value
      
-    return consumo,iva,energyPayment,totalPayment
+    return consumo,iva,energyPayment,street_value,totalPayment,subsidio,fee
     
 
 
@@ -999,7 +1103,7 @@ def total_Payment(id,stratum,type_client):
 
 def logout_view(request):
     logout(request)
-    return HttpResponse("SE_ESTRESO_CAMILA")
+    return HttpResponse("Logout")
 
 
 
