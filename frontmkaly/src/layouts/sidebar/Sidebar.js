@@ -8,11 +8,17 @@ import {Menuitems, ClientMenuItems, ManagerMenuItems, OperatorMenuItems, AdminMe
 import Buynow from './Buynow';
 import {useRouter} from 'next/router';
 import {UserContext} from '../../context/UserContext';
+import es from '../../../public/languages/es';
+import en from '../../../public/languages/en';
 
 const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
 	const {user, setUser, isUserAuthenticated} = useContext(UserContext);
 	const [open, setOpen] = React.useState(true);
 	const [menuItems, setMenuItems] = useState([]);
+
+	const router = useRouter()
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 
 	const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 

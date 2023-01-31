@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
 import {
 	Typography,
 	Box,
@@ -65,6 +66,7 @@ const users = [
 ];
 
 const UsersTable = ({title}) => {
+	const router = useRouter();
 	const [users, setUsers] = useState([]);
 	const [allUsers, setAllUsers] = useState([]);
 
@@ -192,7 +194,7 @@ const UsersTable = ({title}) => {
 						const position = index + 1;
 						console.log(user);
 						return (
-							<TableRow key={user.id}>
+							<TableRow key={user.id} sx={{cursor: 'pointer'}} onClick={() => router.push('/user-management/info/' + user.id)}>
 								<TableCell>
 									<Typography
 										sx={{

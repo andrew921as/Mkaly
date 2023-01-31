@@ -17,11 +17,15 @@ import {
 	Alert,
 	CircularProgress,
 } from '@mui/material';
+import { useRouter } from 'next/router';
 import {registerUser, updateUserAdmin, updateUserOperator, updateUserManager, updateUserClient} from '../../functions/requests';
 import {UserContext} from '../../context/UserContext';
 import userimg from '../../../assets/images/users/user2.jpg';
 import Image from 'next/image';
 import axios from 'axios';
+
+import en from '../../../public/languages/en';
+import es from '../../../public/languages/es';
 
 const ProfileForm = ({title}) => {
 	const {user, setUser, initiateUser, logout} = useContext(UserContext);
@@ -29,12 +33,16 @@ const ProfileForm = ({title}) => {
 	const [isSuccess, setIsSuccess] = useState(null);
 	const [isWarning, setIsWarning] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const [selectedImage, setSelectedImage] = useState(null);
+	// const [selectedImage, setSelectedImage] = useState(null);
 
 	const [userData, setUserData] = React.useState({
 		username: user.username,
 		image: user.image,
 	});
+
+	const router = useRouter()
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 
 	const handleChangeUser = (value, type) => setUserData({...userData, [type]: value});
 
@@ -46,26 +54,25 @@ const ProfileForm = ({title}) => {
 
 	const handleUpdateUser = async () => {
 		try {
-			console.log(userData);
-			let image = await uploadImage();
-			setUserData({...userData, image});
+			// let image = await uploadImage();
 
 			let res = null;
 
 			if (user.role === 'admin') {
-				res = await updateUserAdmin(user.id, {...userData, image});
+				console.log('EDIT ADMIN', userData);
+				res = await updateUserAdmin(user.id, {...userData});
 			}
 
 			if (user.role === 'client') {
-				res = await updateUserClient(user.id, {...userData, image});
+				res = await updateUserClient(user.id, {...userData});
 			}
 
 			if (user.role === 'manager') {
-				res = await updateUserOperator(user.id, {...userData, image});
+				res = await updateUserOperator(user.id, {...userData});
 			}
 
 			if (user.role === 'operator') {
-				res = await updateUserManager(user.id, {...userData, image});
+				res = await updateUserManager(user.id, {...userData});
 			}
 
 			setIsLoading(false);
@@ -78,20 +85,23 @@ const ProfileForm = ({title}) => {
 		}
 	};
 
-	const uploadImage = async () => {
+	const uploadImage = async (file) => {
 		setIsLoading(true);
 		const formData = new FormData();
 
-		if (!selectedImage) {
-			return user.image;
+		if (!file) {
+			return;
 		}
 
-		formData.append('file', selectedImage);
+		formData.append('file', file);
 		formData.append('upload_preset', 'pf0gmt8s');
 
 		try {
 			let response = await axios.post('https://api.cloudinary.com/v1_1/dvm5lesco/image/upload', formData);
-			return response.data.url;
+			setUserData({...userData, image: response.data.url});
+			setIsLoading(false);
+			return;
+			// return response.data.url;
 		} catch (err) {
 			console.error('There was an error');
 			setIsLoading(false);
@@ -112,14 +122,14 @@ const ProfileForm = ({title}) => {
 							value={userData.username}
 							onChange={(e) => handleChangeUser(e.target.value, 'username')}
 							id="username"
-							label="Username"
+							label={t.Form.userName}
 							variant="outlined"
 							fullWidth
 						/>
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth variant="outlined">
-							<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+							<InputLabel htmlFor="outlined-adornment-password">{t.Form.password}</InputLabel>
 							<OutlinedInput
 								value={userData.password}
 								onChange={(e) => handleChangeUser(e.target.value, 'password')}
@@ -138,19 +148,19 @@ const ProfileForm = ({title}) => {
 					</Grid>
 
 					<Grid item xs={12} sx={{m: 2, flexDirection: 'column'}} align="center">
-						<Image src={user.image} alt={userimg} width="128" height="128" className="roundedCircle" />
+						<Image src={userData.image} alt={userimg} width="128" height="128" className="roundedCircle" />
 					</Grid>
 
 					<Grid item xs={12} sx={{m: 10, marginTop: 0, flexDirection: 'column'}} align="center">
 						<Button variant="outlined" component="label">
-							Upload Profile Picture
+							{t.EditProfil.upProPic}
 							<input
 								hidden
 								accept="image/*"
 								multiple
 								type="file"
 								onChange={(e) => {
-									setSelectedImage(e.target.files[0]);
+									uploadImage(e.target.files[0]);
 								}}
 							/>
 						</Button>
@@ -161,7 +171,7 @@ const ProfileForm = ({title}) => {
 							<CircularProgress />
 						) : (
 							<Button size="large" variant="contained" onClick={() => handleUpdateUser()}>
-								Update
+								{t.EditProfil.update}
 							</Button>
 						)}
 						{isSuccess && <Alert severity="success">{isSuccess}</Alert>}

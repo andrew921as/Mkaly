@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin 
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.core.files.storage import FileSystemStorage 
+from pathlib import Path
+import os
 
 
 
@@ -67,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     #imagen = models.ImageField('Imagen de Perfil', upload_to='perfil/',height_field=None , width_field=None, max_length=200, blank=True, null=True)
     city= models.CharField("Ciudad", max_length=20, null=False)
     is_active= models.BooleanField(default=True)
-    is_admin=models.BooleanField(default=True)
+    is_admin=models.BooleanField(default=False)
     role= models.CharField('nombre rol',max_length=15, null=False)
     image = models.FileField('imagen', upload_to='imagenes_ussuarios', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
     objects=UserManager()
@@ -123,7 +126,7 @@ class Contract (models.Model):
     type_of_avenue = models.CharField('Tipo de avenida', max_length=15, null=False)
     first_number  = models.CharField('Primer numero', max_length=15, null=False)
     second_number = models.CharField('Segundo numero', max_length=15, null=False)
-    stratum_social = models.CharField('Estrato social', max_length=15, null=False)
+    stratum_social = models.IntegerField('Estrato social', null=False)
     n_electric_transformer = models.CharField('Numero de transformador', max_length=15, null=False)
     transformer_property = models.CharField('Propiedades del transformador', max_length=20, null=False)
     type_of_conection = models.CharField('Tipo de conexion', max_length=20, null=False)
@@ -135,25 +138,27 @@ class Contract (models.Model):
 class Publicity (models.Model):
     month_publicity = models.CharField('Mes', unique=False, max_length=20, null=True)
     type_publicity = models.CharField('Tipo de publicidad', unique=False, max_length=20, null=True)
-    image_publicity = models.CharField( null=True, max_length=300)
+    image_publicity =  models.FileField('imagen publicidad', upload_to='imagenes_publicidad', default='https://res.cloudinary.com/dvm5lesco/image/upload/v1674920274/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8_wqmaht.jpg',max_length=400)
     
     
 class Bill (models.Model):
     bill_number = models.CharField('Numero de factura', unique=True, max_length=40, null=False)
-    electronic_payment_number = models.CharField('Numero de pago electronico', unique=True, max_length=40, null=True, blank=True)
+    electronic_payment_number = models.CharField('Numero de pago electronico', max_length=40, null=True, blank=True)
     expedition_date = models.DateField('Fecha de expedicion',null=False)
     expiration_date = models.DateField('Fecha de vencimiento',null=False)
     billing_period = models.DateField('Periodo de la factura',null=False)
     billing_days = models.IntegerField('Dias de la factura',null=False)
-    billing_month = models.CharField('Mes de la factura', unique=True, max_length=20, null=False)
-    billing_status = models.CharField('Estado de la factura', unique=True, max_length=20, null=True, blank=True)
-    details = models.TextField('Detalles de la factura', unique=True, max_length=200, null=True, blank=True)
-    month_consumption = models.IntegerField('Consumo del mes', null=False)
-    concepts = models.TextField('conceptos', unique=True, max_length=200, null=False)
+    billing_month = models.CharField('Mes de la factura', max_length=20, null=False)
+    billing_status = models.CharField('Estado de la factura', max_length=20, null=True, blank=True, default='pendiente')
+    month_consumption = models.FloatField('Consumo del mes', null=False)
+    public_light = models.FloatField('Valor de la luz publica', null=False, default=0)
     other_charges = models.IntegerField('Otros cargos ', null=True, blank=True)
-    total_consumption=models.IntegerField('Total a pagar por consumo', null=False)
-    default_interest= models.IntegerField('Intereses de mora', null=True, blank=True)
-    total_payout = models.IntegerField('Total a pagar',null=False)
+    total_consumption=models.FloatField('Total a pagar por consumo', null=False)
+    default_interest= models.FloatField('IVA', null=True, blank=True)
+    total_payout = models.FloatField('Total a pagar',null=False)
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    fs = FileSystemStorage(location=os.path.join(BASE_DIR, 'app1/static/media'))
+    pdf_bill =  models.FileField('pdf factura', upload_to='pdf',max_length=4000, null = True, blank=True, storage=fs)
     contract = models.ForeignKey(
         Contract,
         on_delete=models.CASCADE

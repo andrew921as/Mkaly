@@ -8,3 +8,8 @@
 .roundedCircle {
 	border-radius: 100%;
 }
+
+.leaflet-container {
+	width: 500px;
+	height: 500px;
+}
