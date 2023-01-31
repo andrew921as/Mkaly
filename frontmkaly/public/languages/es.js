@@ -161,6 +161,6 @@ export default {
 		idNumber:"Numero ID",
 		warningNotFou:"Usuario no encontrado.",
 	},
-}
-
 };
+
+

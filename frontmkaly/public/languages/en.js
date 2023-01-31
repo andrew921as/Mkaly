@@ -158,7 +158,5 @@ export default {
 		idNumber:"ID Number",
 		warningNotFou:"User not found.",
 	},
-}
-
 };
 

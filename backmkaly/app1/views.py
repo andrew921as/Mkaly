@@ -409,7 +409,7 @@ class ClientView(View):
         contracts = list(Contract.objects.filter(client_id=client_id).values())
         bills = list(Bill.objects.filter(contract_id=contract_id).values())
         #print(contracts[0].id + "---------------------------------------------------------------------------------------------------")
-        if ( len(bills) > 0):
+        if ( len(bills) > 0 ):
            # contract=contracts[0]
            # bill=bills[0]
            #(date.today().day > bills[i]["expedition_date"].day) and 
@@ -421,9 +421,9 @@ class ClientView(View):
 
     def put(self,request,client_id,contract_id):
         bills = list(Bill.objects.filter(contract_id=contract_id).values())
-        if (len(bills) > 0):
+        if (len(bills) > 0 ):
             for i in range (len(bills)):
-                if( (bills[i]["billing_status"] == "pendiente")):
+                if((bills[i]["billing_status"] == "pendiente")and (date.today().day > bills[i]["expedition_date"].day) and (date.today().month < bills[i]["expedition_date"].month)):
                     bill = Bill.objects.get(id=bills[i]["id"])
                     bill.billing_status = "mora"
                     bill.other_charges = bill.total_payout * 0.1
