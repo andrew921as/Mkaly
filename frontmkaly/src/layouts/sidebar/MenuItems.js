@@ -1,3 +1,4 @@
+
 const ClientMenuItems = [
 	{
 		title: 'Dashboard',

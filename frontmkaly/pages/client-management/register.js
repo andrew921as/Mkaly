@@ -20,9 +20,15 @@ import ClientForm from '../../src/components/clientManagement/ClientForm';
 import {UserContext} from '../../src/context/UserContext';
 import {useRouter} from 'next/router';
 
+import en from '../../public/languages/en';
+import es from '../../public/languages/es';
+
 const RegisterClient = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
+
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 
 	console.log(user);
 
@@ -36,7 +42,7 @@ const RegisterClient = () => {
 	// 	}
 	// }, [user]);
 
-	return <ClientForm title="Client Registration" />;
+	return <ClientForm title={t.Dashboar.operatorD.registerCli} />;
 };
 
 export default RegisterClient;

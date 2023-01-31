@@ -21,6 +21,9 @@ import {UserContext} from '../../src/context/UserContext';
 import {useRouter} from 'next/router';
 import {getUser} from '../../src/functions/requests';
 
+import en from '../../public/languages/en';
+import es from '../../public/languages/es';
+
 const EditClient = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
@@ -28,6 +31,8 @@ const EditClient = () => {
 	const [userData, setUserData] = useState(null);
 	const [isSuccess, setIsSuccess] = useState(null);
 	const [isWarning, setIsWarning] = useState(null);
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 	/*
 manager
 client
@@ -40,11 +45,11 @@ client
 			if (user.role === 'client') {
 				setUserData(user);
 			} else {
-				setIsWarning('The user you are trying to edit is not a client.');
+				setIsWarning(t.EditClient.warningNotCli);
 			}
 		} catch (err) {
 			console.log(err);
-			setIsWarning('User not found.');
+			setIsWarning(t.EditClient.warningNotFou);
 		}
 	};
 
@@ -57,15 +62,15 @@ client
 	// }, [user]);
 
 	if (userData) {
-		return <ClientForm title="Edit Client Profile" initialUserData={userData} />;
+		return <ClientForm title={t.EditClient.Title} initialUserData={userData} />;
 	}
 
 	return (
 		<div>
-			<h1 className="font-black text-4xl ml-16">Edit Client Profile</h1>
+			<h1 className="font-black text-4xl ml-16">{t.EditClient.Title}</h1>
 			<Grid container align="center">
 				<Grid item xs={12} sx={{m: 2}}>
-					Write down the Id number of the client you are willing to edit
+				{t.EditClient.description}
 				</Grid>
 				<Grid item xs={12} sx={{m: 2}}>
 					<TextField
@@ -81,7 +86,7 @@ client
 				</Grid>
 				<Grid item xs={12} sx={{m: 2}}>
 					<Button size="large" variant="contained" color="warning" onClick={() => handleSearchUser()}>
-						Search
+					{t.EditClient.search}
 					</Button>
 				</Grid>
 				{isSuccess && <Alert severity="success">{isSuccess}</Alert>}

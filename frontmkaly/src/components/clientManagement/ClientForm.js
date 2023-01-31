@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
 import {
 	Box,
 	Container,
@@ -18,10 +19,17 @@ import {
 } from '@mui/material';
 import {registerUser, updateUser} from '../../functions/requests';
 
+import en from '../../../public/languages/en';
+import es from '../../../public/languages/es';
+
 const ClientForm = ({title, initialUserData}) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(null);
 	const [isWarning, setIsWarning] = useState(null);
+
+	const router = useRouter()
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 
 	console.log(initialUserData);
 
@@ -88,7 +96,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.first_name_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'first_name_user')}
 							id="first_name"
-							label="First Name"
+							label={t.Form.first_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -98,7 +106,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.sec_name_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'sec_name_user')}
 							id="second_name"
-							label="Second Name"
+							label={t.Form.second_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -108,7 +116,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.first_lastname_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'first_lastname_user')}
 							id="first_last_name"
-							label="First Last Name"
+							label={t.Form.first_last_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -118,7 +126,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.sec_lastname_user}
 							onChange={(e) => handleChangeUser(e.target.value, 'sec_lastname_user')}
 							id="second_last_name"
-							label="Second Last Name"
+							label={t.Form.second_last_name}
 							variant="outlined"
 							fullWidth
 						/>
@@ -128,7 +136,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.email}
 							onChange={(e) => handleChangeUser(e.target.value, 'email')}
 							id="email"
-							label="Email"
+							label={t.Form.Email}
 							variant="outlined"
 							fullWidth
 						/>
@@ -138,7 +146,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.username}
 							onChange={(e) => handleChangeUser(e.target.value, 'username')}
 							id="clientname"
-							label="Client name"
+							label={t.Form.userName}
 							variant="outlined"
 							fullWidth
 						/>
@@ -147,7 +155,7 @@ const ClientForm = ({title, initialUserData}) => {
 					{!initialUserData && (
 						<Grid item xs={5} sx={{m: 2}}>
 							<FormControl fullWidth variant="outlined">
-								<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+								<InputLabel htmlFor="outlined-adornment-password">{t.Form.password}</InputLabel>
 								<OutlinedInput
 									disabled={initialUserData ? true : false}
 									value={userData.password}
@@ -172,7 +180,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.phone_number}
 							onChange={(e) => handleChangeUser(e.target.value, 'phone_number')}
 							id="phone_number"
-							label="Phone Number"
+							label={t.Form.PhoneN}
 							type="number"
 							variant="outlined"
 							fullWidth
@@ -186,24 +194,24 @@ const ClientForm = ({title, initialUserData}) => {
 								labelId="clientType"
 								id="clientType"
 								value={userData.client_type}
-								label="Client Type"
+								label={t.Form.ClientType.Title}
 								onChange={(e) => handleChangeUser(e.target.value, 'client_type')}
 							>
-								<MenuItem value="natural">Natural</MenuItem>
-								<MenuItem value="business">Business</MenuItem>
+								<MenuItem value="natural">{t.Form.ClientType.Natural}</MenuItem>
+								<MenuItem value="business">{t.Form.ClientType.Bussiness}</MenuItem>
 							</Select>
 						</FormControl>
 					</Grid>
 
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth>
-							<InputLabel id="type_id">Type of Document</InputLabel>
+							<InputLabel id="type_id">{t.Form.documentType}</InputLabel>
 							<Select
 								value={userData.idType}
 								onChange={(e) => handleChangeUser(e.target.value, 'idType')}
 								labelId="type_id"
 								id="type_id"
-								label="Type of Document"
+								label={t.Form.documentType}
 							>
 								<MenuItem value="cc">C.C.</MenuItem>
 								<MenuItem value="ce">C.E.</MenuItem>
@@ -219,7 +227,7 @@ const ClientForm = ({title, initialUserData}) => {
 							value={userData.id_card}
 							onChange={(e) => handleChangeUser(e.target.value, 'id_card')}
 							id="id_number"
-							label="ID Number"
+							label={t.Form.IDNumber}
 							type="number"
 							variant="outlined"
 							fullWidth
@@ -233,12 +241,12 @@ const ClientForm = ({title, initialUserData}) => {
 							id="city"
 							options={['Cali', 'Jamundi', 'Bogota', 'Cartagena']}
 							fullWidth
-							renderInput={(params) => <TextField {...params} label="City" />}
+							renderInput={(params) => <TextField {...params} label={t.Form.City} />}
 						/>
 					</Grid>
 					<Grid item xs={12} sx={{m: 2}} align="center">
 						<Button size="large" variant="contained" onClick={() => (initialUserData ? handleUpdateUser() : handleRegisterUser())}>
-							{initialUserData ? 'Update' : 'Register'}
+							{initialUserData ? t.EditProfil.update : t.Form.RegisterB}
 						</Button>
 						{isSuccess && <Alert severity="success">{isSuccess}</Alert>}
 						{isWarning && <Alert severity="error">{isWarning}</Alert>}

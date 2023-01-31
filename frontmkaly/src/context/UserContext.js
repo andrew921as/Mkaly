@@ -5,8 +5,8 @@ export const initialUserState = {
 	name: '',
 	email: '',
 	password: '',
-	role: '',
-	id: '',
+	role: 'admin',
+	id: '1',
 };
 
 export const UserContext = createContext({});
