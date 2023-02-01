@@ -1,6 +1,23 @@
-import React from 'react';
-import {Typography, Box, Table, TableBody, TableCell, TableHead, TableRow, FormControl, InputLabel, InputAdornment, Input} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
+import {
+	Typography,
+	Box,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow,
+	FormControl,
+	InputLabel,
+	InputAdornment,
+	Input,
+	Button,
+} from '@mui/material';
 import BaseCard from '../baseCard/BaseCard';
+
+// API
+import {getUsers, updateUser} from '../../functions/requests';
 
 const users = [
 	{
@@ -48,13 +65,67 @@ const users = [
 	//   },
 ];
 
-const ClientTable = ({title}) => {
+const UsersTable = ({title}) => {
+	const router = useRouter();
+	const [users, setUsers] = useState([]);
+	const [allUsers, setAllUsers] = useState([]);
+
+	const fetchUsers = async () => {
+		const {data} = await getUsers();
+
+		if (!data.users) {
+			return;
+		}
+
+		const clients = data.users.filter((user) => user.role == 'client');
+
+		const sortedUsers = clients.sort((a, b) => {
+			let fa = a.first_name_user.toLowerCase(),
+				fb = b.first_name_user.toLowerCase();
+
+			if (fa < fb) {
+				return -1;
+			}
+			if (fa > fb) {
+				return 1;
+			}
+			return 0;
+		});
+		setUsers(sortedUsers);
+		setAllUsers(sortedUsers);
+	};
+
+	const handleSearchUser = async (data) => {
+		const filteredUsers = allUsers.filter((user) => {
+			return user.first_name_user.toLowerCase().includes(data.toLowerCase());
+		});
+
+		setUsers(filteredUsers);
+	};
+
+	const handleUpdateUser = async (userData) => {
+		try {
+			const res = await updateUser(userData.id, userData);
+			console.log(res);
+
+			await fetchUsers();
+			// setIsSuccess('User was updated successfully');
+		} catch (err) {
+			console.log('There was an error, try again later.');
+		}
+	};
+
+	useEffect(() => {
+		fetchUsers();
+	}, []);
+
 	return (
 		<BaseCard title={title}>
 			<FormControl variant="standard">
-				<InputLabel htmlFor="search-user">Search user</InputLabel>
+				<InputLabel htmlFor="search-user">Search client</InputLabel>
 				<Input
 					id="search-user"
+					onChange={(e) => handleSearchUser(e.target.value)}
 					startAdornment={
 						<InputAdornment position="start">
 							<p>🔎</p>
@@ -62,18 +133,6 @@ const ClientTable = ({title}) => {
 					}
 				/>
 			</FormControl>
-			{/* <TextField
-				id="filled-search"
-				label="Search user here"
-				type="search"
-				variant="outlined"
-				color="info"
-				startAdornment={
-					<InputAdornment position="start">
-						<p>H</p>
-					</InputAdornment>
-				}
-			/> */}
 			<Table
 				aria-label="simple table"
 				sx={{
@@ -103,19 +162,20 @@ const ClientTable = ({title}) => {
 								Email
 							</Typography>
 						</TableCell>
-						{/* <TableCell align="right">
-              <Typography color="textSecondary" variant="h6">
-                Budget
-              </Typography>
-            </TableCell> */}
+						<TableCell>
+							<Typography color="textSecondary" variant="h6">
+								Status
+							</Typography>
+						</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
 					{users.map((user, index) => {
 						const position = index + 1;
+						console.log(user);
 						return (
-							<TableRow key={user.id}>
-								<TableCell>
+							<TableRow key={user.id} sx={{cursor: 'pointer'}}>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography
 										sx={{
 											fontSize: '15px',
@@ -125,7 +185,7 @@ const ClientTable = ({title}) => {
 										{position}
 									</Typography>
 								</TableCell>
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Box
 										sx={{
 											display: 'flex',
@@ -139,7 +199,7 @@ const ClientTable = ({title}) => {
 													fontWeight: '600',
 												}}
 											>
-												{user.firstName}
+												{user.first_name_user} {user.sec_name_user}
 											</Typography>
 											{/* <Typography
 												color="textSecondary"
@@ -152,25 +212,16 @@ const ClientTable = ({title}) => {
 										</Box>
 									</Box>
 								</TableCell>
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography color="textSecondary" variant="h6">
-										{user.lastName}
+										{user.first_lastname_user} {user.sec_lastname_user}
 									</Typography>
 								</TableCell>
-								{/* <TableCell>
-									<Chip
-										sx={{
-											pl: '4px',
-											pr: '4px',
-											backgroundColor: product.pbg,
-											color: '#fff',
-										}}
-										size="small"
-										label={user.email}
-									></Chip>
-								</TableCell> */}
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography variant="h6">{user.email}</Typography>
+								</TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
+									<Typography variant="h6">{user.is_active ? '🟢' : '🔴'}</Typography>
 								</TableCell>
 							</TableRow>
 						);
@@ -181,4 +232,4 @@ const ClientTable = ({title}) => {
 	);
 };
 
-export default ClientTable;
+export default UsersTable;

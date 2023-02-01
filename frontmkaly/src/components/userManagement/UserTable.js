@@ -72,6 +72,11 @@ const UsersTable = ({title}) => {
 
 	const fetchUsers = async () => {
 		const {data} = await getUsers();
+
+		if (!data.users) {
+			return;
+		}
+
 		const sortedUsers = data.users.sort((a, b) => {
 			let fa = a.first_name_user.toLowerCase(),
 				fb = b.first_name_user.toLowerCase();
@@ -90,7 +95,7 @@ const UsersTable = ({title}) => {
 
 	const handleSearchUser = async (data) => {
 		const filteredUsers = allUsers.filter((user) => {
-			return user.username.includes(data.toLowerCase());
+			return user.first_name_user.toLowerCase().includes(data.toLowerCase());
 		});
 
 		setUsers(filteredUsers);
@@ -194,8 +199,8 @@ const UsersTable = ({title}) => {
 						const position = index + 1;
 						console.log(user);
 						return (
-							<TableRow key={user.id} sx={{cursor: 'pointer'}} onClick={() => router.push('/user-management/info/' + user.id)}>
-								<TableCell>
+							<TableRow key={user.id} sx={{cursor: 'pointer'}}>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography
 										sx={{
 											fontSize: '15px',
@@ -205,7 +210,7 @@ const UsersTable = ({title}) => {
 										{position}
 									</Typography>
 								</TableCell>
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Box
 										sx={{
 											display: 'flex',
@@ -232,7 +237,7 @@ const UsersTable = ({title}) => {
 										</Box>
 									</Box>
 								</TableCell>
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography color="textSecondary" variant="h6">
 										{user.first_lastname_user} {user.sec_lastname_user}
 									</Typography>
@@ -249,13 +254,13 @@ const UsersTable = ({title}) => {
 										label={user.email}
 									></Chip>
 								</TableCell> */}
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography variant="h6">{user.email}</Typography>
 								</TableCell>
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography variant="h6">{user.role}</Typography>
 								</TableCell>
-								<TableCell>
+								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
 									<Typography variant="h6">{user.is_active ? '🟢' : '🔴'}</Typography>
 								</TableCell>
 								<TableCell>

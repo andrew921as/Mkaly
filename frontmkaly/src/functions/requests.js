@@ -33,6 +33,17 @@ export const registerUser = async (data) => {
 	}
 };
 
+export const createContract = async (userId, data) => {
+	try {
+		const res = await axios.post(`${API}/create_contract/${userId}`, data);
+
+		// const res = await axios.get(`${API}/admin_view/`);
+		return res;
+	} catch (err) {
+		throw err;
+	}
+};
+
 // PUT REQUESTS
 
 export const updateUser = async (userId, data) => {
@@ -121,6 +132,15 @@ export const searchClient = async (clientId) => {
 export const getClients = async () => {
 	try {
 		const clientsD = await axios.get(`${API}/manager_view/`);
+		return clientsD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const getClientContracts = async (clientId) => {
+	try {
+		const clientsD = await axios.get(`${API}/client_view/${clientId}`);
 		return clientsD;
 	} catch (e) {
 		throw e;

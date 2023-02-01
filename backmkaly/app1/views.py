@@ -407,18 +407,18 @@ class ClientView(View):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request,client_id, contract_id):     
+    def get(self, request,client_id):     
         contracts = list(Contract.objects.filter(client_id=client_id).values())
-        bills = list(Bill.objects.filter(contract_id=contract_id).values())
         #print(contracts[0].id + "---------------------------------------------------------------------------------------------------")
-        if ( len(bills) > 0 ):
+        if ( len(contracts) > 0):
+
            # contract=contracts[0]
            # bill=bills[0]
            #(date.today().day > bills[i]["expedition_date"].day) and 
             #(date.today().month < bills[i]["expedition_date"].month) and
-           datos={'message':"Success",'Contract':contracts,'Bill':bills}
+           datos={'message':"Success",'Contract':contracts}
         else:
-            datos={'message':"Bills not found..."}
+            datos={'message':"Contracts not found..."}
         return JsonResponse(datos)
 
     def put(self,request,client_id,contract_id):
@@ -436,23 +436,30 @@ class ClientView(View):
                     datos={'message': "Bill not found"}
         return JsonResponse(datos)
 
-class SearchBill(View):
+
+class SearchAllBills(View):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request,bill_id):     
-        bills = list(Bill.objects.filter(id=bill_id).values())
+    def get(self, request,client_id):     
+        contracts = list(Contract.objects.filter(client_id=client_id).values())
+        bill_list = []
+        
+        for i in range (len(contracts)):
+            bills = list(Bill.objects.filter(contract_id=contracts[i]["id"]).values())
+            bill_list.append(bills)
+       
         #print(contracts[0].id + "---------------------------------------------------------------------------------------------------")
-        if ( len(bill) > 0):
-            bill=bills[0]
+        if ( len(bills) > 0):
+           # contract=contracts[0]
            # bill=bills[0]
            #(date.today().day > bills[i]["expedition_date"].day) and 
             #(date.today().month < bills[i]["expedition_date"].month) and
-            datos={'message':"Success",'Bill':bill}
+           datos={'message':"Success",'Bill':bill_list}
         else:
-            datos={'message':"Bill not found..."}
+            datos={'message':"Bills not found..."}
         return JsonResponse(datos)
 
 class ClientEdit(View):
@@ -853,7 +860,7 @@ def create_pdf(billNumber):
     # Changing the font size for Specifying Address
     absolute_path = os.path.dirname(__file__)
     print(absolute_path)
-    relative_path = ".\static\media\images_pdf\logo.png"
+    relative_path = "./static/media/images_pdf/logo.png"
     full_path = os.path.join(absolute_path, relative_path)
     p.saveState()
     p.scale(1,-1)

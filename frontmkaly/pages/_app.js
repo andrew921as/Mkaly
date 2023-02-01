@@ -8,6 +8,10 @@ import theme from '../src/theme/theme';
 import createEmotionCache from '../src/createEmotionCache';
 import FullLayout from '../src/layouts/FullLayout';
 
+// date-fns
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+
 // Context
 import {UserProvider} from '../src/context/UserContext';
 
@@ -30,7 +34,9 @@ export default function MyApp(props) {
 				{/* <Login /> */}
 				<UserProvider>
 					<FullLayout>
-						<Component {...pageProps} />
+						<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<Component {...pageProps} />
+						</LocalizationProvider>
 					</FullLayout>
 				</UserProvider>
 			</ThemeProvider>

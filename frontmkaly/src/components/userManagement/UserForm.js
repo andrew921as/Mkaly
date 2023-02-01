@@ -17,7 +17,7 @@ import {
 	Alert,
 } from '@mui/material';
 import {registerUser, updateUser} from '../../functions/requests';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 //Diccionaries
 import en from '../../../public/languages/en';
 import es from '../../../public/languages/es';
@@ -38,17 +38,17 @@ const UserForm = ({title, initialUserData}) => {
 		type_card: '',
 		id_card: 0,
 		city: '',
-		phone_number: '',
-		client_type: '',
+		Phone: '',
+		type_client: '',
 		headquarters: '',
 		is_active: true,
 		is_superuser: false,
 		is_admin: false,
 	});
 
-	const router = useRouter()
-	const {locale}= router
-	const t = locale === 'en' ? en : es
+	const router = useRouter();
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 
 	const handleChangeUser = (value, type) => setUserData({...userData, [type]: value});
 
@@ -174,10 +174,8 @@ const UserForm = ({title, initialUserData}) => {
 									label={t.Form.password}
 								/>
 							</FormControl>
-            </Grid>
-						)}
-					
-					
+						</Grid>
+					)}
 
 					<Grid item xs={5} sx={{m: 2}}>
 						<FormControl fullWidth>
@@ -195,10 +193,10 @@ const UserForm = ({title, initialUserData}) => {
 						<>
 							<Grid item xs={5} sx={{m: 2}}>
 								<TextField
-									value={userData.phone_number}
-									onChange={(e) => handleChangeUser(e.target.value, 'phone_number')}
-									id="phone_number"
-									label={t.Form.PhoneN}
+									value={userData.Phone}
+									onChange={(e) => handleChangeUser(e.target.value, 'Phone')}
+									id="Phone"
+									label="Phone Number"
 									type="number"
 									variant="outlined"
 									fullWidth
@@ -211,9 +209,9 @@ const UserForm = ({title, initialUserData}) => {
 									<Select
 										labelId="clientType"
 										id="clientType"
-										value={userData.client_type}
-										label={t.Form.ClientType.Title}
-										onChange={(e) => handleChangeUser(e.target.value, 'client_type')}
+										value={userData.type_client}
+										label="Client Type"
+										onChange={(e) => handleChangeUser(e.target.value, 'type_client')}
 									>
 										<MenuItem value="natural">{t.Form.ClientType.Natural}</MenuItem>
 										<MenuItem value="business">{t.Form.ClientType.Bussiness}</MenuItem>

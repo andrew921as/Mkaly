@@ -185,6 +185,43 @@ export default {
 		idNumber:"Numero ID",
 		warningNotFou:"Usuario no encontrado.",
 	},
+	InfoUser: {
+		email: 'Email',
+		username: 'Nombre de usuario',
+		idCard: 'Número de identificación',
+		city: 'Ciudad',
+		active: 'Activo',
+		role: 'Rol',
+		buttonCreateContract: 'Crear Nuevo Contrato',
+		contract: {
+			contractStart: 'Contrato #',
+			contractAddress: 'Dirección: ',
+		},
+	},
+	ContractForm: {
+		contractNumber: 'Número de contrato',
+		startContract: 'Inicio de contrato (fecha)',
+		service: 'Servicio',
+		serviceDescription: 'Descripción del servicio',
+		postalCode: 'Código postal',
+		city: 'Ciudad',
+		neighbourhood: 'Barrio',
+		typeOfAvenue: 'Tipo de calle',
+		firstNumber: 'Primer Número',
+		secondNumber: 'Segundo Número',
+		stratumSocial: 'Estrato social',
+		numberElectricTranformer: '# De transformadores eléctricos',
+		transformerProperty: 'Propiedad del transformador',
+		typeOfConnection: 'Tipo de conexión',
+		interiorTypeOfConnection: 'Interior',
+		exteriorTypeOfConnection: 'Exterior',
+		buttonCreateContract: 'Crear',
+		handleCreateContract: {
+			Success: 'Contrato creado correctamente',
+			Warning: 'Hubo un error, Intenta mas tarde.',
+			warningNoFields: 'Debes llenar todos los campos',
+		},
+	},
 };
 
 
