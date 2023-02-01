@@ -2,6 +2,16 @@ import axios from 'axios';
 const API = 'http://localhost:8000';
 
 // POST REQUESTS
+export const payBill = async (billId) => {
+	try {
+		const res = await axios.put(`${API}/client_pay/${billId}`, {});
+		// const res = await axios.get(`${API}/admin_view/`);
+		return res;
+	} catch (err) {
+		throw err;
+	}
+};
+
 export const loginRequest = async (username, password) => {
 	try {
 		const res = await axios.post(`${API}/autenticate_view/`, {email: username, password});
@@ -82,6 +92,15 @@ export const updateUserManager = async (userId, data) => {
 };
 
 // GET REQUESTS
+
+export const getIsPaidBill = async (billId) => {
+	try {
+		const userD = await axios.get(`${API}/client_pay/${billId}`);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
 
 export const getUser = async (userId) => {
 	try {

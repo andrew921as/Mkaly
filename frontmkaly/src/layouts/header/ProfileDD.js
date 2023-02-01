@@ -1,4 +1,5 @@
 import React, {useContext} from 'react';
+import Link from 'next/link';
 import FeatherIcon from 'feather-icons-react';
 import Image from 'next/image';
 import {useRouter} from 'next/router';
@@ -23,15 +24,22 @@ import {
 	MenuItem,
 } from '@mui/material';
 import {UserContext} from '../../context/UserContext';
+
+import en from '../../../public/languages/en';
+import es from '../../../public/languages/es';
+
 const ProfileDD = () => {
 	const router = useRouter();
 	const {user, setUser, logout} = useContext(UserContext);
 	const [anchorEl4, setAnchorEl4] = React.useState(null);
 	const [openDialog, setOpenDialog] = React.useState(false);
-	const [language, setLanguage] = React.useState('english');
+	const [language, setLanguage] = React.useState('en');
+
+	const { asPath, locale } = router
+	const t = locale === 'en' ? en : es
 
 	const handleChange = (event) => {
-		setLanguage(event.target.value || '');
+		setLanguage(event.target.value || 'en');
 	};
 
 	const handleClick4 = (event) => {
@@ -63,7 +71,7 @@ const ProfileDD = () => {
 						}}
 					>
 						<Typography color="textSecondary" variant="h5" fontWeight="400" sx={{ml: 1}}>
-							Hi,
+							{t.ProfileD.Hi}
 						</Typography>
 						<Typography
 							variant="h5"
@@ -94,7 +102,7 @@ const ProfileDD = () => {
 					<Box p={2} pt={0}>
 						<List component="nav" aria-label="secondary mailbox folder" onClick={handleClose4}>
 							<ListItemButton onClick={() => router.push('/profile/edit')}>
-								<ListItemText primary="Edit Profile" />
+								<ListItemText primary= {t.ProfileD.EditPro} />
 							</ListItemButton>
 							{/* <ListItemButton>
 								<ListItemText primary="Account" />
@@ -108,7 +116,7 @@ const ProfileDD = () => {
 									setOpenDialog(true);
 								}}
 							>
-								<ListItemText primary="Change Language" />
+								<ListItemText primary={t.ProfileD.ChangeLan} />
 							</ListItemButton>
 						</List>
 					</Box>
@@ -123,7 +131,7 @@ const ProfileDD = () => {
 							variant="contained"
 							color="primary"
 						>
-							Logout
+							{t.ProfileD.ButtonLogO}
 						</Button>
 					</Box>
 				</Box>
@@ -143,19 +151,18 @@ const ProfileDD = () => {
 								onChange={handleChange}
 								input={<OutlinedInput label="Lang" />}
 							>
-								<MenuItem value="">
+								{/* <MenuItem value="">
 									<em>None</em>
-								</MenuItem>
-								<MenuItem value={'spanish'}>Spanish</MenuItem>
-								<MenuItem value={'english'}>English</MenuItem>
-								<MenuItem value={'portuguese'}>Portuguese</MenuItem>
+								</MenuItem> */}
+								<MenuItem value={'es'}>ES</MenuItem>
+								<MenuItem value={'en'}>EN</MenuItem>
 							</Select>
 						</FormControl>
 					</Box>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleCloseDialog}>Cancel</Button>
-					<Button onClick={handleCloseDialog}>Save</Button>
+					<Button onClick={handleCloseDialog}><Link href={asPath} locale={language}>Save</Link></Button>
 				</DialogActions>
 			</Dialog>
 		</>

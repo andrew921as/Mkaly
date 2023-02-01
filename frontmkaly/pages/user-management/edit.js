@@ -22,6 +22,9 @@ import {UserContext} from '../../src/context/UserContext';
 import {useRouter} from 'next/router';
 import {getUser} from '../../src/functions/requests';
 
+import es from '../../public/languages/es';
+import en from '../../public/languages/en';
+
 const EditUser = () => {
 	const [userData, setUserData] = React.useState(null);
 	const [userId, setUserId] = useState(null);
@@ -30,13 +33,16 @@ const EditUser = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
 
+	const {locale}= router
+	const t = locale === 'en' ? en : es
+
 	const handleSearchUser = async () => {
 		try {
 			const {data} = await getUser(userId);
 			setUserData(data.user);
 		} catch (err) {
 			console.log(err);
-			setIsWarning('User not found.');
+			setIsWarning(t.EditUser.warningNotFou);
 		}
 	};
 
@@ -49,21 +55,21 @@ const EditUser = () => {
 	// }, [user]);
 
 	if (userData) {
-		return <UserForm title="Edit User Profile" initialUserData={userData} />;
+		return <UserForm title={t.EditUser.Title} initialUserData={userData} />;
 	}
 
 	return (
 		<div>
-			<h1 className="font-black text-4xl ml-16">Edit User Profile</h1>
+			<h1 className="font-black text-4xl ml-16">{t.EditUser.Title}</h1>
 			<Grid container align="center">
 				<Grid item xs={12} sx={{m: 2}}>
-					Write down the Id number of the user you are willing to edit
+				{t.EditUser.description}
 				</Grid>
 				<Grid item xs={12} sx={{m: 2}}>
 					<TextField
 						onChange={(e) => setUserId(e.target.value)}
 						id="id_number"
-						label="ID Number"
+						label={t.EditUser.idNumber}
 						variant="outlined"
 						InputProps={{
 							startAdornment: <InputAdornment position="start">#</InputAdornment>,
@@ -73,7 +79,7 @@ const EditUser = () => {
 				</Grid>
 				<Grid item xs={12} sx={{m: 2}}>
 					<Button size="large" variant="contained" color="warning" onClick={() => handleSearchUser()}>
-						Search
+					{t.EditClient.search}
 					</Button>
 				</Grid>
 				{isSuccess && <Alert severity="success">{isSuccess}</Alert>}

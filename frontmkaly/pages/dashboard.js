@@ -10,10 +10,12 @@ import {OptionButton} from '../src/components';
 import {UserContext} from '../src/context/UserContext';
 import {useRouter} from 'next/router';
 
+import es from '../public/languages/es';
+import en from '../public/languages/en';
+
 const Dashboard = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
-
 	console.log(user);
 
 	// useEffect(() => {
@@ -58,40 +60,43 @@ const ClientDashboard = () => {
 
 // ADMIN
 const AdminDashboard = () => {
+	const router = useRouter();
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 	const users = [
 		{
 			time: '1',
 			color: 'secondary.main',
-			text: 'Admins',
+			text: t.Dashboar.adminD.users.Admins,
 		},
 		{
 			time: '10',
 			color: '#FFFF00',
-			text: 'Clients',
+			text: t.Dashboar.adminD.users.Clients,
 		},
 		{
 			time: '20',
 			color: 'success.main',
-			text: 'Operators',
+			text: t.Dashboar.adminD.users.Operators,
 		},
 		{
 			time: '5',
 			color: 'primary.main',
-			text: 'Managers',
+			text: t.Dashboar.adminD.users.Managers,
 		},
 	];
 	return (
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12} lg={12}>
-					<SalesOverview title="Sales" />
+					<SalesOverview title={t.Dashboar.adminD.sales}/>
 				</Grid>
 				{/* ------------------------- row 1 ------------------------- */}
 				<Grid item xs={12} lg={4}>
-					<DailyActivity title="Users" activities={users} />
+					<DailyActivity title={t.Dashboar.adminD.users.Title} activities={users} />
 				</Grid>
 				<Grid item xs={12} lg={8}>
-					<SalesOverview title="Users simultaneously logged on" />
+					<SalesOverview title={t.Dashboar.adminD.usersSimus} />
 				</Grid>
 			</Grid>
 		</>
@@ -100,43 +105,46 @@ const AdminDashboard = () => {
 
 // MANAGER
 const ManagerDashboard = () => {
+	const router = useRouter();
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 	const clientState = [
 		{
 			time: '1',
 			color: 'secondary.main',
-			text: 'In debt',
+			text: t.Dashboar.managerD.clientSservices.clientDebt,
 		},
 		{
 			time: '20',
 			color: 'success.main',
-			text: 'Up to date',
+			text: t.Dashboar.managerD.clientSservices.clientUpto,
 		},
 	];
 	const serviceState = [
 		{
 			time: '1',
 			color: 'secondary.main',
-			text: 'Suspended',
+			text: t.Dashboar.managerD.clientSservices.clientSus,
 		},
 		{
 			time: '20',
 			color: 'success.main',
-			text: 'Active',
+			text: t.Dashboar.managerD.clientSservices.clientActive,
 		},
 	];
 	return (
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12} lg={12}>
-					<SalesOverview title="Sales" />
+					<SalesOverview title={t.Dashboar.managerD.sales} />
 				</Grid>
 				{/* ------------------------- row 1 ------------------------- */}
 				<Grid item xs={12} lg={4}>
-					<DailyActivity title="Clients State" activities={clientState} />
-					<DailyActivity title="Active/Suspended services" activities={serviceState} />
+					<DailyActivity title={t.Dashboar.managerD.clientSta} activities={clientState} />
+					<DailyActivity title={t.Dashboar.managerD.activeSuspend} activities={serviceState} />
 				</Grid>
 				<Grid item xs={12} lg={8}>
-					<SalesOverview title="Online vs Face-to-face Payments" />
+					<SalesOverview title={t.Dashboar.managerD.onlineFace} />
 				</Grid>
 			</Grid>
 		</>
@@ -145,6 +153,9 @@ const ManagerDashboard = () => {
 
 // OPERATOR
 const OperatorDashboard = () => {
+	const router = useRouter();
+	const {locale}= router
+	const t = locale === 'en' ? en : es
 	return (
 		<>
 			{/* Container */}
@@ -157,16 +168,16 @@ const OperatorDashboard = () => {
 					justifyContent: 'center',
 				}}
 			>
-				<BaseCard title="CLIENT MANAGEMENT">
+				<BaseCard title={t.Dashboar.operatorD.title}>
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="REGISTER CLIENT" icon="client" link="/client-management/register" />
-						<OptionButton title="MODIFY CLIENT" icon="edit" link="/client-management/edit" />
+						<OptionButton title={t.Dashboar.operatorD.registerCli} icon="client" link="/client-management/register" />
+						<OptionButton title={t.Dashboar.operatorD.modifyCli} icon="edit" link="/client-management/edit" />
 					</Stack>
 					<br />
 					<br />
 					<Stack direction="row" spacing={10}>
-						<OptionButton title="SEARCH CLIENT" icon="search" link="/client-management/search" />
-						<OptionButton title="REGISTER PAYMENTS" icon="payment" link="/client-management/register" />
+						<OptionButton title={t.Dashboar.operatorD.searchCli} icon="search" link="/client-management/search" />
+						<OptionButton title={t.Dashboar.operatorD.registerPay} icon="payment" link="/client-management/register" />
 					</Stack>
 				</BaseCard>
 			</Box>

@@ -6,9 +6,16 @@ import {OptionButton} from '../../src/components';
 import {UserContext} from '../../src/context/UserContext';
 import {useRouter} from 'next/router';
 
+import es from '../../public/languages/es';
+import en from '../../public/languages/en';
+
 const UserManagement = () => {
 	const router = useRouter();
 	const {user, isUserAuthenticated} = useContext(UserContext);
+
+	const {locale}= router
+	const t = locale === 'en' ? en : es
+
 
 	// useEffect(() => {
 	// 	if (!isUserAuthenticated()) {
@@ -31,16 +38,16 @@ const UserManagement = () => {
 					// alignItems: 'center',
 				}}
 			>
-				<BaseCard title="USER MANAGEMENT">
+				<BaseCard title={t.userManageP.Title}>
 					<Box>
 						<Stack direction="row" spacing={5}>
-							<OptionButton title="REGISTER USER" icon="client" link="/user-management/register" />
-							<OptionButton title="MODIFY USER" icon="edit" link="/user-management/edit" />
+							<OptionButton title={t.userManageP.registeU} icon="client" link="/user-management/register" />
+							<OptionButton title={t.userManageP.modifyU} icon="edit" link="/user-management/edit" />
 						</Stack>
 						<br />
 						<br />
 						<Stack direction="row" display="flex" justifyContent="center">
-							<OptionButton title="SEARCH USER" icon="search" link="/user-management/search" />
+							<OptionButton title={t.userManageP.searchU} icon="search" link="/user-management/search" />
 							{/* <OptionButton title="REGISTER PAYMENTS" icon="payment" /> */}
 						</Stack>
 					</Box>
