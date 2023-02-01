@@ -16,11 +16,14 @@ import {
 	Button,
 	Alert,
 } from '@mui/material';
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
+
 import {createContract, updateUser} from '../../functions/requests';
 import {useRouter} from 'next/router';
 //Diccionaries
 import en from '../../../public/languages/en';
 import es from '../../../public/languages/es';
+import {getDate, getMonth, getYear} from 'date-fns';
 const UserContractForm = ({title, initialUserData}) => {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [isSuccess, setIsSuccess] = useState(null);
@@ -48,22 +51,46 @@ const UserContractForm = ({title, initialUserData}) => {
 	const {locale} = router;
 	const t = locale === 'en' ? en : es;
 
-	const handleChangeUser = (value, type) => setUserData({...userData, [type]: value});
+	const handleChangeUser = (value, type) => {
+		if (type == 'start_contract') {
+			let year = getYear(value);
+			let month = getMonth(value) + 1 < 10 ? `0${getMonth(value) + 1}` : getMonth(value);
+			let day = getDate(value) < 10 ? `0${getDate(value)}` : getDate(value);
 
-	// const handleClickShowPassword = () => setShowPassword((show) => !show);
+			let formattedDate = `${year}-${month}-${day}`;
+			value = formattedDate;
+		}
 
-	// const handleMouseDownPassword = (event) => {
-	// 	event.preventDefault();
-	// };
+		setUserData({...userData, [type]: value});
+	};
 
 	const handleRegisterUser = async () => {
+		if (
+			!userData.contract_number ||
+			!userData.start_contract ||
+			!userData.service ||
+			!userData.service_description ||
+			!userData.postal_code ||
+			!userData.city ||
+			!userData.neighborhood ||
+			!userData.type_of_avenue ||
+			!userData.first_number ||
+			!userData.second_number ||
+			!userData.stratum_social ||
+			!userData.n_electric_transformer ||
+			!userData.transformer_property ||
+			!userData.type_of_conection
+		) {
+			setIsWarning(t.ContractForm.handleCreateContract.warningNoFields);
+			return;
+		}
+
 		try {
 			const res = await createContract(userId, userData);
-			console.log(res);
 			// console.log('CREATE CONTRACT');
-			setIsSuccess(t.UserForm.handleRegisterUser.Success);
+			setIsSuccess(t.ContractForm.handleCreateContract.Success);
 		} catch (err) {
-			setIsWarning(t.UserForm.handleRegisterUser.Warning);
+			setIsWarning(t.ContractForm.handleCreateContract.Warning);
 		}
 	};
 
@@ -92,14 +119,22 @@ const UserContractForm = ({title, initialUserData}) => {
 						/>
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
-						<TextField
+						<DesktopDatePicker
+							sx={{color: 'black'}}
+							label={t.ContractForm.startContract}
+							inputFormat="yyyy/mm/dd"
+							value={userData.start_contract}
+							onChange={(pickedDate) => handleChangeUser(pickedDate, 'start_contract')}
+							renderInput={(params) => <TextField {...params} />}
+						/>
+						{/* <TextField
 							value={userData.start_contract}
 							onChange={(e) => handleChangeUser(e.target.value, 'start_contract')}
 							id="start_contract"
 							label={t.ContractForm.startContract}
 							variant="outlined"
 							fullWidth
-						/>
+						/> */}
 					</Grid>
 					<Grid item xs={5} sx={{m: 2}}>
 						<TextField
@@ -139,7 +174,7 @@ const UserContractForm = ({title, initialUserData}) => {
 							onChange={(event, value) => handleChangeUser(value, 'city')}
 							disablePortal
 							id="city"
-							options={['Cali', 'Jamundi', 'Bogota', 'Cartagena']}
+							options={['Cali', 'Jamundi', 'Bogota', 'Cartagena', 'Candelaria']}
 							fullWidth
 							renderInput={(params) => <TextField {...params} label={t.ContractForm.city} />}
 						/>
@@ -199,6 +234,8 @@ const UserContractForm = ({title, initialUserData}) => {
 							label={t.ContractForm.stratumSocial}
 							type="number"
 							variant="outlined"
+							InputProps={{inputProps: {min: 1, max: 6}}}
+							inputProps={{maxLength: 1}}
 							fullWidth
 						/>
 					</Grid>
@@ -236,8 +273,8 @@ const UserContractForm = ({title, initialUserData}) => {
 								label={t.ContractForm.typeOfConnection}
 								onChange={(e) => handleChangeUser(e.target.value, 'type_of_conection')}
 							>
-								<MenuItem value="a">A</MenuItem>
-								<MenuItem value="b">B</MenuItem>
+								<MenuItem value={t.ContractForm.interiorTypeOfConnection}>{t.ContractForm.interiorTypeOfConnection}</MenuItem>
+								<MenuItem value={t.ContractForm.exteriorTypeOfConnection}>{t.ContractForm.exteriorTypeOfConnection}</MenuItem>
 							</Select>
 						</FormControl>
 					</Grid>

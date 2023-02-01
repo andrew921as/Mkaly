@@ -118,3 +118,12 @@ export const getClients = async () => {
 		throw e;
 	}
 };
+
+export const getClientContracts = async (clientId) => {
+	try {
+		const clientsD = await axios.get(`${API}/client_view/${clientId}`);
+		return clientsD;
+	} catch (e) {
+		throw e;
+	}
+};

@@ -73,6 +73,10 @@ export default {
 		active: 'Active',
 		role: 'Role',
 		buttonCreateContract: 'Create New Contract',
+		contract: {
+			contractStart: 'Contract #',
+			contractAddress: 'Address: ',
+		},
 	},
 	ContractForm: {
 		contractNumber: 'Contract Number',
@@ -89,6 +93,13 @@ export default {
 		numberElectricTranformer: '# Of Electric Transformers',
 		transformerProperty: 'Transformer Property',
 		typeOfConnection: 'Type Of Connection',
+		interiorTypeOfConnection: 'Interior',
+		exteriorTypeOfConnection: 'Exterior',
 		buttonCreateContract: 'Create',
+		handleCreateContract: {
+			Success: 'Contract was created successfully',
+			Warning: 'There was an error, try again later.',
+			warningNoFields: 'You need to fill all the fields',
+		},
 	},
 };

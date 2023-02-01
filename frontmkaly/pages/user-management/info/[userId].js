@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 
 import {getUser} from '../../../src/functions/requests';
@@ -8,11 +8,16 @@ import {Button, CircularProgress} from '@mui/material';
 import es from '../../../public/languages/es';
 import en from '../../../public/languages/en';
 
+// Requests
+import {getClientContracts} from '../../../src/functions/requests';
+
 // MAP
 // import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import {MapContainer, TileLayer, useMap, Marker, Popup} from 'react-leaflet';
 import opencage from 'opencage-api-client';
 import axios from 'axios';
+import {UserContext} from '../../../src/context/UserContext';
+import {marker} from 'leaflet';
 // import 'leaflet';
 
 const UserInfo = () => {
@@ -20,41 +25,33 @@ const UserInfo = () => {
 	const router = useRouter();
 	const {userId} = router.query;
 	const [user, setUser] = useState([]);
-	const [markersCoords, setMarkersCoords] = useState([[3.4446307, -76.5430657]]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [contracts, setContracts] = useState([]);
+	const {user: currentUser} = useContext(UserContext);
+	const [markers, setMarkers] = useState([{coord: [3.4446307, -76.5430657]}]);
+	const [isLoading, setIsLoading] = useState(true);
 	const {locale} = router;
 	const t = locale === 'en' ? en : es;
 
-	const decodeAddress = async (address) => {
+	const getCoords = async () => {
 		try {
-			let result = await axios.get(`https://api.opencagedata.com/geocode/v1/json?key=750d3373673b4ae68d86b6d831c2f327&q=${address}`);
-			console.log(result);
-		} catch (err) {}
-		// opencage
-		// 	.geocode({q: address})
-		// 	.then((data) => {
-		// 		console.log(data.results[0].geometry);
-		// 		// { "lat": 49.2909409, "lng": -123.024879 }
-		// 	})
-		// 	.catch((error) => {
-		// 		console.warn(error.message);
-		// 	});
-	};
+			setIsLoading(true);
+			let result = await Promise.all(
+				contracts.map(async (contract) => {
+					let address = `${contract.type_of_avenue}, ${contract.neighborhood}, ${contract.city}, Colombia`;
+					let res = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`);
+					if (res.data.length > 0) {
+						const location = res.data[0];
+						// setMarkers([...markersCoords, [location.lat, location.lon]]);
+						return {contract, coord: [location.lat, location.lon]};
+					} else {
+						console.log('No se pudo encontrar la ubicación especificada.');
+						return null;
+					}
+				})
+			);
 
-	const axios = require('axios');
-
-	const getCoords = async (saddress) => {
-		try {
-			const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${saddress}&format=json`);
-			if (response.data.length > 0) {
-				const location = response.data[0];
-				// console.log(`C# ${location.lat} ${location.lon}  ---> ${location.display_name}`);
-				setMarkersCoords([...markersCoords, [location.lat, location.lon]]);
-				return [location.lat, location.lon];
-			} else {
-				console.log('No se pudo encontrar la ubicación especificada.');
-				return null;
-			}
+			setMarkers(result);
+			setIsLoading(false);
 		} catch (error) {
 			console.error(error);
 			return null;
@@ -63,21 +60,28 @@ const UserInfo = () => {
 
 	const fetchUser = async () => {
 		const {data} = await getUser(userId);
-		setIsLoading(false);
+		const {data: contracts} = await getClientContracts(data.user.id);
+		setContracts(contracts.Contract);
 		setUser(data.user);
+		// setIsLoading(false);
 	};
 
 	useEffect(() => {
 		setIsLoading(true);
 		fetchUser();
-		// decodeAddress(encodeURIComponent('Calle 3 oeste, San Cayetano, Cali, Colombia'));
-		getCoords('calle 19, villagorgona, candelaria, colombia').then((coords) => {
-			console.log(coords);
-		});
 	}, []);
 
+	useEffect(() => {
+		getCoords();
+		console.log(markers);
+	}, [contracts]);
+
 	if (isLoading) {
-		return <CircularProgress />;
+		return (
+			<div className="flex w-full h-screen justify-center items-center">
+				<CircularProgress />
+			</div>
+		);
 	}
 
 	return (
@@ -108,21 +112,26 @@ const UserInfo = () => {
 					<p>
 						<b>{t.InfoUser.role}:</b> {user.role}
 					</p>
-					<Button onClick={() => router.push(`/user-management/contracts/${userId}`)} sx={{color: 'white'}} color="blue" size="large" variant="contained">
-						{t.InfoUser.buttonCreateContract}
-					</Button>
+					{currentUser.role === 'operator' && (
+						<Button onClick={() => router.push(`/user-management/contracts/${userId}`)} sx={{color: 'white'}} color="blue" size="large" variant="contained">
+							{t.InfoUser.buttonCreateContract}
+						</Button>
+					)}
 				</div>
 
 				<div className="overflow-hidden rounded-3xl w-full h-[500px] sm:w-[500px] sm:h-[500px]">
-					<MapContainer center={[3.4446307, -76.5430657]} zoom={14} scrollWheelZoom={true}>
+					<MapContainer center={markers[0]?.coord?.length > 0 ? markers[0].coord : [3.4446307, -76.5430657]} zoom={14} scrollWheelZoom={true}>
 						<TileLayer
 							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 						/>
 
-						{markersCoords.map((coord) => (
-							<Marker position={coord}>
-								<Popup>Property of {user.first_name_user}.</Popup>
+						{markers.map((marker) => (
+							<Marker position={marker.coord}>
+								<Popup>
+									{t.InfoUser.contract.contractStart} {marker.contract.contract_number}, {t.InfoUser.contract.contractAddress} {marker.contract.type_of_avenue}{' '}
+									# {marker.contract.first_number} - {marker.contract.second_number}.
+								</Popup>
 							</Marker>
 						))}
 					</MapContainer>
