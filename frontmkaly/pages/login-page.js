@@ -143,10 +143,10 @@ export default function Login() {
 						justifyContent: 'center',
 					}}
 				>
-					<Stack direction="column" justifyContent="center" alignItems="center" spacing={4.5} sx={{position: 'relative'}}>
+					<Stack direction="column" justifyContent="center" alignItems="center" spacing={3} sx={{position: 'relative'}}>
 						{windowSize.innerWidth > 400 ? (
 							<div>
-								<Image className="logo-Login" width={190} height={125} src={Logo} />
+								<Image className="logo-Login" width={150} height={90} src={Logo} />
 							</div>
 						) : (
 							''

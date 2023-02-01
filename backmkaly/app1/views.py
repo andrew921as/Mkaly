@@ -436,6 +436,24 @@ class ClientView(View):
                     datos={'message': "Bill not found"}
         return JsonResponse(datos)
 
+class SearchBill(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request,bill_id):     
+        bills = list(Bill.objects.filter(id=bill_id).values())
+        #print(contracts[0].id + "---------------------------------------------------------------------------------------------------")
+        if ( len(bill) > 0):
+            bill=bills[0]
+           # bill=bills[0]
+           #(date.today().day > bills[i]["expedition_date"].day) and 
+            #(date.today().month < bills[i]["expedition_date"].month) and
+            datos={'message':"Success",'Bill':bill}
+        else:
+            datos={'message':"Bill not found..."}
+        return JsonResponse(datos)
 
 class SearchAllBills(View):
 
@@ -756,6 +774,134 @@ def monthInSpanish(month):
     elif(month == "December"):
         monthh = "Diciembre"
     return monthh
+
+def calculateFee(stratum,type_client,consumo): 
+# CS : subsistence consumption , E: Stratum, C: Comercial or Contribution
+    feeE1 = 0.7
+    feeE2 = 0.4
+    feeE3 = 0.15
+
+    contributionE5 = 0.2
+    contributionE6 = 0.2
+    contributionC = 0.2
+
+    CSE1 = 330.66
+    CSE2 = 413.12
+    CSE3 = 673.77
+    CSE4 = 792.56
+    CSE5 = 951.07
+    CSE6 = 951.07
+    CSC = 765.65
+
+    CSCC = CSC + (CSC*contributionC)
+
+    feePreCSE1 = CSE1 - (feeE1*CSE1)
+    feePreCSE2 = CSE2 - (feeE2*CSE2)
+    feePreCSE3 = CSE3 - (feeE3*CSE3)
+    feePreCSE4 = CSE4
+
+    feeCE5 = CSE5 + (contributionE5*CSE5)
+    feeCE6 = CSE6 + (contributionE6*CSE6)
+
+    #feeSubCSE1 = feePreCSE1 + (consumo - 130)*CSE1
+    #feeSubCSE2 = feePreCSE2 + (consumo - 130)*CSE2
+    #feeSubCSE3 = feePreCSE3 + (consumo - 130)*CSE3
+    #feeSubCSE4 = feePreCSE4 + (consumo - 130)*CSE4
+
+    fee = 0
+
+    if (type_client == "natural"):
+            if(stratum == 1):
+                porcentajeSub = feeE1
+                fee = feePreCSE1
+            elif(stratum == 2):
+                porcentajeSub = feeE2
+                fee = feePreCSE2
+            elif(stratum == 3):
+                porcentajeSub = feeE3
+                fee = feePreCSE3
+            elif(stratum == 4):
+                porcentajeSub = 0
+                fee = feePreCSE4
+            elif(stratum == 5):
+                porcentajeSub = contributionE5
+                fee = feeCE5
+            elif(stratum == 6):
+                porcentajeSub = contributionE6
+                fee = feeCE6
+    elif (type_client == "legal"):
+        fee = CSCC
+
+    return fee,porcentajeSub
+
+
+
+def street_lighting_value(type_client):
+    if (type_client == "natural"):
+        street_lighting = 21590.86
+    elif (type_client == "legal"):
+        street_lighting = 30000
+
+    return street_lighting
+
+def total_consumption(fee,consumo,stratum,type_client):
+    CSE1 = 330.66
+    CSE2 = 413.12
+    CSE3 = 673.77
+    CSE4 = 792.56
+    CSE5 = 951.07
+    CSE6 = 951.07
+    CSC = 765.65
+    energyPayment=0
+
+    if(consumo >= 130):
+        if(type_client == "legal"):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSC
+        elif(stratum == 1):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE1
+        elif(stratum == 2):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE2
+        elif(stratum == 3):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE3
+        elif(stratum == 4):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE4
+        elif(stratum == 5):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE5
+        elif(stratum == 6):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE6 
+    else:
+        energyPayment = (fee * consumo)
+        
+    return energyPayment
+
+def total_Payment(id,stratum,type_client):
+    
+    url = "https://energy-service-ds-v3cot.ondigitalocean.app/consumption"
+    payload = json.dumps({
+    "client_id": id,
+    })
+    headers = {
+    'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    dic = ast.literal_eval(response.text)
+
+    transform = int(dic['energy consumption'])
+    consumo = transform
+    iva = 0.19
+    street_value = street_lighting_value(type_client)
+    resultadoCalculateFee = calculateFee(stratum,type_client,consumo)
+    porcentajeSub = resultadoCalculateFee[1]
+    fee = resultadoCalculateFee[0]
+    energyPayment = total_consumption(fee,consumo,stratum,type_client)
+    subsidio = energyPayment * porcentajeSub
+    energyPaymentIVA = energyPayment + (energyPayment*iva)
+    totalPayment = energyPaymentIVA + street_value
+     
+    return consumo,iva,energyPayment,street_value,totalPayment,subsidio,fee
+
+
+
 def generateBills(idContract,idClient,stratum,type_client,billPeriod=date.today()):  
     expedition = expeditionDate(date.today())
     interval = 30
@@ -776,11 +922,8 @@ def generateBills(idContract,idClient,stratum,type_client,billPeriod=date.today(
 
     pdf = create_pdf(billNumber)
     
+  
     
-    
-
-
-
 def generateBillsPerMonth(idContract,idClient,stratum,type_client,billPeriod):
         generateBills(idContract,idClient,stratum,type_client,billPeriod)
 
@@ -797,24 +940,31 @@ def allTheClients():
 # Tarea a ejecutarse cada determinado tiempo.
 def timer():
     while True:
-        time.sleep(10)
+        time.sleep(30*86400)
         allTheClients()
        # 3 segundos.
 # Iniciar la ejecución en segundo plano.
-#t = threading.Thread(target=timer)
-#t.start()
+t = threading.Thread(target=timer)
+t.start()
 
 
-def pdf_view(request):
-    pdf=create_pdf()
-    return FileResponse(pdf, as_attachment=True, filename='factura.pdf')
+@method_decorator(csrf_exempt)
+def pdf_view(request, bill_number):
+    
+    pdf=create_pdf(bill_number)[1]
+    #pdf.close()
+    return FileResponse(pdf, as_attachment=True, filename='factura3.pdf')
+    #FileResponse(open('report.pdf', 'rb'), as_attachment=True, content_type='application/pdf')
 
+    
+@method_decorator(csrf_exempt)
 def send_pdf_view(request):
-    pdf=create_pdf()
-    subject = 'Hola'
-    contact_message = "Pruebaaaa"
+    jd = json.loads(request.body) 
+    pdf=create_pdf(jd['bill_number'])[0]
+    subject = 'Factura Mkaly'
+    contact_message = "A continuacion anexamos su factura"
     from_email = settings.EMAIL_HOST_USER
-    to_email = [from_email, 'camyj2010@gmail.com']
+    to_email = [from_email, jd['email']]
     EmailMsg=EmailMessage(subject,contact_message,from_email,to_email)
     EmailMsg.attach('factura.pdf',pdf,'application/pdf')
     EmailMsg.send()
@@ -823,6 +973,8 @@ def send_pdf_view(request):
 def create_pdf(billNumber):
     billForPDF = Bill.objects.get(bill_number=billNumber)
     bill = list(Bill.objects.filter(bill_number=billNumber).values())[0]
+    print(billForPDF.total_payout)
+    print(bill)
     contractNumber = bill["contract_id"]
     #["contract_id"]
     contract = list(Contract.objects.filter(id=contractNumber).values())[0]
@@ -948,13 +1100,13 @@ def create_pdf(billNumber):
     p.drawCentredString(65,126,str(valorUnitario)) # DATO VALOR UNITARIO
     p.drawCentredString(95,114,"VALOR")
     p.drawCentredString(95,118,"TOTAL")
-    p.drawCentredString(95,126,str(round(datosConsumo[2],2))) # DATO VALOR TOTAL
+    p.drawCentredString(95,126,str(round(bill["total_consumption"],2))) # DATO VALOR TOTAL
     p.drawCentredString(130,114,"SUBSIDIO")
     p.drawCentredString(130,118,"(CONTRIBUCION)")
     p.drawCentredString(130,126,str(round(datosConsumo[5],2))) # DATO SUBSIDIO  
     p.drawCentredString(165,114,"TOTAL")
     p.drawCentredString(165,118,"CONSUMO")
-    p.drawCentredString(165,126,str(round(datosConsumo[6],2))) # DATO CONSUMO TOTAL  
+    p.drawCentredString(165,126,str(round(bill["total_payout"],2))) # DATO CONSUMO TOTAL  
     # Drawing table for Item Description
     p.line(15,210,185,210)
     # p.line(45,108,45,220)
@@ -979,15 +1131,20 @@ def create_pdf(billNumber):
     p.roundRect(91,180,90,20,5,stroke=1,fill=True)
     p.setFillColor(canvas.black)
     p.drawRightString(140,188,"PAGO TOTAL (CONSUMO) :")
-    p.drawCentredString(150,188,str(round(datosConsumo[2],2))) # DATO PAGO TOTAL CONSUMO
+    p.drawCentredString(150,188,str(round(bill["total_consumption"],2))) # DATO PAGO TOTAL CONSUMO
     p.drawRightString(140,193,"PAGO TOTAL           :")
-    p.drawCentredString(150,193,str(round(datosConsumo[4],2))) # DATO PAGO TOTAL 
+    p.drawCentredString(150,193,str(round(bill["total_payout"],2))) # DATO PAGO TOTAL 
     p.line(15,220,185,220)
-    p.line(100,220,100,238)
-    p.drawString(20,225,"We declare that above mentioned")
-    p.drawString(20,230,"information is true.")
-    p.drawString(20,235,"(This is system generated invoice)")
-    p.drawRightString(180,235,"Authorised Signatory")
+    absolute_pathPubli = os.path.dirname(__file__)
+    print(absolute_pathPubli)
+    relative_pathPubli = ".\static\media\images_pdf\DirectvtP.png"
+    full_pathPubli = os.path.join(absolute_pathPubli, relative_pathPubli)
+    p.saveState()
+    p.scale(1,-1)
+    x_val = 10
+    y_val = -255
+    p.drawImage(full_pathPubli,x_val,y_val,width=185,height=30)
+    p.restoreState()
     p.showPage()
     p.save()
 
@@ -995,10 +1152,10 @@ def create_pdf(billNumber):
     # present the option to save the file.
     buffer.seek(0)
     pdf = buffer.getvalue()
-    buffer.close()
+    #buffer.close()
     
-    billForPDF.pdf_bill.save("factura3.pdf", ContentFile(pdf))
-    return pdf
+    billForPDF.pdf_bill.save("factura.pdf", ContentFile(pdf))
+    return pdf, buffer
 """
 def consumption(id):
         url = "https://energy-service-ds-v3cot.ondigitalocean.app/consumption"
@@ -1016,145 +1173,7 @@ def consumption(id):
         return consumo
 """
 
-def calculateFee(stratum,type_client,consumo): 
-    # CS : subsistence consumption , E: Stratum, C: Comercial or Contribution
-    feeE1 = 0.7
-    feeE2 = 0.4
-    feeE3 = 0.15
 
-    contributionE5 = 0.2
-    contributionE6 = 0.2
-    contributionC = 0.2
-
-    CSE1 = 330.66
-    CSE2 = 413.12
-    CSE3 = 673.77
-    CSE4 = 792.56
-    CSE5 = 951.07
-    CSE6 = 951.07
-    CSC = 765.65
-
-    CSCC = CSC + (CSC*contributionC)
-
-    feePreCSE1 = CSE1 - (feeE1*CSE1)
-    feePreCSE2 = CSE2 - (feeE2*CSE2)
-    feePreCSE3 = CSE3 - (feeE3*CSE3)
-    feePreCSE4 = CSE4
-
-    feeCE5 = CSE5 + (contributionE5*CSE5)
-    feeCE6 = CSE6 + (contributionE6*CSE6)
-
-    #feeSubCSE1 = feePreCSE1 + (consumo - 130)*CSE1
-    #feeSubCSE2 = feePreCSE2 + (consumo - 130)*CSE2
-    #feeSubCSE3 = feePreCSE3 + (consumo - 130)*CSE3
-    #feeSubCSE4 = feePreCSE4 + (consumo - 130)*CSE4
-    
-    fee = 0
-
-    if (type_client == "natural"):
-            if(stratum == 1):
-                porcentajeSub = feeE1
-                fee = feePreCSE1
-            elif(stratum == 2):
-                porcentajeSub = feeE2
-                fee = feePreCSE2
-            elif(stratum == 3):
-                porcentajeSub = feeE3
-                fee = feePreCSE3
-            elif(stratum == 4):
-                porcentajeSub = 0
-                fee = feePreCSE4
-            elif(stratum == 5):
-                porcentajeSub = contributionE5
-                fee = feeCE5
-            elif(stratum == 6):
-                porcentajeSub = contributionE6
-                fee = feeCE6
-    elif (type_client == "legal"):
-        fee = CSCC
-    
-    return fee,porcentajeSub
-
-"""  
-def subsidy(stratum):
-    if (stratum == 1):
-        subsidy = 0.7
-    elif (stratum == 2):
-        subsidy = 0.4
-    elif (stratum == 3):
-        subsidy == 0.15
-        
-    return subsidy
-"""
-
-
-def street_lighting_value(type_client):
-    if (type_client == "natural"):
-        street_lighting = 21590.86
-    elif (type_client == "legal"):
-        street_lighting = 30000
-
-    return street_lighting
-
-def total_consumption(fee,consumo,stratum):
-    CSE1 = 330.66
-    CSE2 = 413.12
-    CSE3 = 673.77
-    CSE4 = 792.56
-    CSE5 = 951.07
-    CSE6 = 951.07
-    CSC = 765.65
-    energyPayment=0
-    if(consumo >= 130):
-        if(stratum == 1):
-            energyPayment = (fee * consumo) + (consumo - 130)*CSE1
-        elif(stratum == 2):
-            energyPayment = (fee * consumo) + (consumo - 130)*CSE2
-        elif(stratum == 3):
-            energyPayment = (fee * consumo) + (consumo - 130)*CSE3
-        elif(stratum == 4):
-            energyPayment = (fee * consumo) + (consumo - 130)*CSE4
-        elif(stratum == 5):
-            energyPayment = (fee * consumo) + (consumo - 130)*CSE5
-        elif(stratum == 6):
-            energyPayment = (fee * consumo) + (consumo - 130)*CSE6
-        else:
-            energyPayment = (fee * consumo)
-        
-    return energyPayment
-
-def total_Payment(id,stratum,type_client):
-    
-    url = "https://energy-service-ds-v3cot.ondigitalocean.app/consumption"
-    payload = json.dumps({
-    "client_id": id,
-    })
-    headers = {
-    'Content-Type': 'application/json'
-    }
-    response = requests.request("POST", url, headers=headers, data=payload)
-    dic = ast.literal_eval(response.text)
-
-    
-
-    #feeSubCSE1 = feePreCSE1 + (consumo - 130)*CSE1
-    #feeSubCSE2 = feePreCSE2 + (consumo - 130)*CSE2
-    #feeSubCSE3 = feePreCSE3 + (consumo - 130)*CSE3
-    #feeSubCSE4 = feePreCSE4 + (consumo - 130)*CSE4
-
-    transform = int(dic['energy consumption'])
-    consumo = transform
-    iva = 0.19
-    street_value = street_lighting_value(type_client)
-    resultadoCalculateFee = calculateFee(stratum,type_client,consumo)
-    porcentajeSub = resultadoCalculateFee[1]
-    fee = resultadoCalculateFee[0]
-    energyPayment = total_consumption(fee,consumo,stratum)
-    subsidio = energyPayment * porcentajeSub
-    energyPaymentIVA = energyPayment + (energyPayment*iva)
-    totalPayment = energyPaymentIVA + street_value
-     
-    return consumo,iva,energyPayment,street_value,totalPayment,subsidio,fee
     
     
 #print((calculateFee(2,"natural",153)[0] * 153) + ((calculateFee(2,"natural",153)[0] * 153) * 0.19))
