@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'proyecto_desarrollo',
         'USER': 'postgres',
-        'PASSWORD': 'pg123',
+        'PASSWORD': 'cesar0915',
         'HOST': 'localhost',
         'DATABASE_PORT': 5432
     }
@@ -172,3 +172,6 @@ CLOUDINARY_STORAGE={
     'API_SECRET': '1wFfwa-szxeBtnIPFDpHG2hp-84'
 }
 DEFAULT_FILE_STORAGE='cloudinary_storage.storage.MediaCloudinaryStorage'
+
+STRIPE_SECRET_KEY = "sk_test_51MVe1FGpB3JzZ9MsfMhUpJBBCFt7vFYBB65pjEAVL0PQah9ijekD0m7SjYBMvTXnHGIcGN2EFICE1sfdHwECDf8Q00AQNHRB5H"
+STRIPE_PUBLIC_KEY = "pk_test_51MVe1FGpB3JzZ9Msw92mAPAJIrr7uHxjWDm4XdRx0By1PvMG5hXaMC6M3Lcu0aww6CeiZcpCZtI8OMYx6wWQLvmK00HFVOGN70"

@@ -95,7 +95,11 @@ export default {
 			TitleRegPago: 'Register your payment',
 			ButtonPay: 'Submit',
 			TitleMessage: 'Important',
-			MessageImp : "Remember that you can only make payments for the past due months online. You also have the option to visit one of our branches or contact our call center."
+			MessageImp : "Remember that you can only make payments for the past due months online. You also have the option to visit one of our branches or contact our call center.",
+			success: "Payment was successful",
+			warningAlreadyPaid: "Error, The bill is already paid",
+			warning: "Bill not found",
+			error: "There was an error"
 		}
 	},
 	user_management:{

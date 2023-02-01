@@ -19,13 +19,14 @@ from reportlab.lib.pagesizes import letter, A4
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-#from django.shortcuts import redirect
+from django.shortcuts import redirect
 from datetime import date 
 from dateutil.relativedelta import relativedelta
 from io import BytesIO
 import threading
 import time
 import random
+import stripe
 
 
 
@@ -488,16 +489,37 @@ class ClientPay(View):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def put(self,request,bill_id):
-        bills = list(Bill.objects.filter(id=bill_id).values())
+    def get(self,request,bill_id):
+        bills = list(Bill.objects.filter(bill_number=bill_id).values())
         if (len(bills) > 0):
-            bill = Bill.objects.get(id=bill_id)
-            bill.billing_status = "paid"
+            bill = Bill.objects.get(bill_number=bill_id)
 
-            bill.save()
-            datos={'message':"Success"}
+            if bill.billing_status == "paid":
+                datos={'message':"The bill is already paid", 'ok': True, "alreadyPaid": True}
+            else:
+                datos={'message':"The bill is not paid", 'ok': False, "alreadyPaid": False}
+
+            
         else:
-            datos={'message':"Bill not found..."}
+            datos={'message':"Bill not found...", 'ok': False, "alreadyPaid": False, "error": True}
+
+        return JsonResponse(datos)   
+
+    def put(self,request,bill_id):
+        bills = list(Bill.objects.filter(bill_number=bill_id).values())
+        if (len(bills) > 0):
+            bill = Bill.objects.get(bill_number=bill_id)
+
+            if bill.billing_status == "paid":
+                datos={'message':"The facture is already paid", 'ok': False, "alreadyPaid": True}
+            else:
+                bill.billing_status = "paid"
+                bill.save()
+                datos={'message':"Success", 'ok': True}
+
+            
+        else:
+            datos={'message':"Bill not found...", 'ok': False, "alreadyPaid": False}
 
         return JsonResponse(datos)   
 
@@ -740,9 +762,9 @@ def generateBills(idContract,idClient,stratum,type_client,billPeriod=date.today(
     #electronic_payment_number=nosabemos,
     bill = Bill.objects.create(bill_number=billNumber,expedition_date= expedition,
     expiration_date=expiration, billing_period=billPeriod,billing_days=interval,billing_month=bill_month,
-    month_consumption=function_total[0],public_light=street_lighting_value(type_client),other_charges=0,
+    month_consumption=function_total[0],public_light=function_total[3],other_charges=0,
     total_consumption=function_total[2],default_interest=function_total[1],
-    total_payout=function_total[3],contract_id=idContract,publicity_id=1) #aca no pongo status porque hay un default
+    total_payout=function_total[4],contract_id=idContract,publicity_id=1) #aca no pongo status porque hay un default
     bill.save()
 
     pdf = create_pdf(billNumber)
@@ -1015,15 +1037,14 @@ def calculateFee(stratum,type_client,consumo):
     feeCE5 = CSE5 + (contributionE5*CSE5)
     feeCE6 = CSE6 + (contributionE6*CSE6)
 
-    feeSubCSE1 = feePreCSE1 + (consumo - 130)*CSE1
-    feeSubCSE2 = feePreCSE2 + (consumo - 130)*CSE2
-    feeSubCSE3 = feePreCSE3 + (consumo - 130)*CSE3
-    feeSubCSE4 = feePreCSE4 + (consumo - 130)*CSE4
+    #feeSubCSE1 = feePreCSE1 + (consumo - 130)*CSE1
+    #feeSubCSE2 = feePreCSE2 + (consumo - 130)*CSE2
+    #feeSubCSE3 = feePreCSE3 + (consumo - 130)*CSE3
+    #feeSubCSE4 = feePreCSE4 + (consumo - 130)*CSE4
     
     fee = 0
 
     if (type_client == "natural"):
-        if (consumo <= 130):
             if(stratum == 1):
                 porcentajeSub = feeE1
                 fee = feePreCSE1
@@ -1036,25 +1057,6 @@ def calculateFee(stratum,type_client,consumo):
             elif(stratum == 4):
                 porcentajeSub = 0
                 fee = feePreCSE4
-            elif(stratum == 5):
-                porcentajeSub = contributionE5
-                fee = feeCE5
-            elif(stratum == 6):
-                porcentajeSub = contributionE6
-                fee = feeCE6
-        else:
-            if(stratum == 1):
-                porcentajeSub = feeE1
-                fee = feeSubCSE1
-            elif(stratum == 2):
-                porcentajeSub = feeE2
-                fee = feeSubCSE2
-            elif(stratum == 3):
-                porcentajeSub = feeE3
-                fee = feeSubCSE3
-            elif(stratum == 4):
-                porcentajeSub = 0
-                fee = feeSubCSE4
             elif(stratum == 5):
                 porcentajeSub = contributionE5
                 fee = feeCE5
@@ -1087,6 +1089,33 @@ def street_lighting_value(type_client):
 
     return street_lighting
 
+def total_consumption(fee,consumo,stratum):
+    CSE1 = 330.66
+    CSE2 = 413.12
+    CSE3 = 673.77
+    CSE4 = 792.56
+    CSE5 = 951.07
+    CSE6 = 951.07
+    CSC = 765.65
+    energyPayment=0
+    if(consumo >= 130):
+        if(stratum == 1):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE1
+        elif(stratum == 2):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE2
+        elif(stratum == 3):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE3
+        elif(stratum == 4):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE4
+        elif(stratum == 5):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE5
+        elif(stratum == 6):
+            energyPayment = (fee * consumo) + (consumo - 130)*CSE6
+        else:
+            energyPayment = (fee * consumo)
+        
+    return energyPayment
+
 def total_Payment(id,stratum,type_client):
     
     url = "https://energy-service-ds-v3cot.ondigitalocean.app/consumption"
@@ -1099,6 +1128,13 @@ def total_Payment(id,stratum,type_client):
     response = requests.request("POST", url, headers=headers, data=payload)
     dic = ast.literal_eval(response.text)
 
+    
+
+    #feeSubCSE1 = feePreCSE1 + (consumo - 130)*CSE1
+    #feeSubCSE2 = feePreCSE2 + (consumo - 130)*CSE2
+    #feeSubCSE3 = feePreCSE3 + (consumo - 130)*CSE3
+    #feeSubCSE4 = feePreCSE4 + (consumo - 130)*CSE4
+
     transform = int(dic['energy consumption'])
     consumo = transform
     iva = 0.19
@@ -1106,23 +1142,116 @@ def total_Payment(id,stratum,type_client):
     resultadoCalculateFee = calculateFee(stratum,type_client,consumo)
     porcentajeSub = resultadoCalculateFee[1]
     fee = resultadoCalculateFee[0]
-    energyPayment = (fee * consumo)
+    energyPayment = total_consumption(fee,consumo,stratum)
     subsidio = energyPayment * porcentajeSub
     energyPaymentIVA = energyPayment + (energyPayment*iva)
     totalPayment = energyPaymentIVA + street_value
      
     return consumo,iva,energyPayment,street_value,totalPayment,subsidio,fee
     
-
-
-
-
-   
-
     
+#print((calculateFee(2,"natural",153)[0] * 153) + ((calculateFee(2,"natural",153)[0] * 153) * 0.19))
 
 def logout_view(request):
     logout(request)
     return HttpResponse("Logout")
 
 
+# stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key = "sk_test_51MVe1FGpB3JzZ9MsfMhUpJBBCFt7vFYBB65pjEAVL0PQah9ijekD0m7SjYBMvTXnHGIcGN2EFICE1sfdHwECDf8Q00AQNHRB5H"
+
+class CreateCheckoutSessionView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, bill_num):
+        domain_url = 'http://localhost:3000/'
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        try:
+
+            bill = Bill.objects.get(bill_number=bill_num)
+
+            #print(bill.bill_number)
+
+            product = stripe.Product.create(
+                name="Tu factura #"+ bill.bill_number,
+                type='good',
+                description='A product created by Energeia',
+                attributes=['xd'],
+                #default_price_data={
+                #    "currency": "COP",
+                #    'unit_amount': int(bill.total_payout) * 100,
+                #},
+                metadata={'value':bill.total_payout},
+            )
+
+            #print(product)
+            # Create new Checkout Session for the order
+            # Other optional params include:
+            # [billing_address_collection] - to display billing address details on the page
+            # [customer] - if you have an existing Stripe Customer ID
+            # [payment_intent_data] - capture the payment later
+            # [customer_email] - prefill the email input in the form
+            # For full details see https://stripe.com/docs/api/checkout/sessions/create
+
+            # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+            checkout_session = stripe.checkout.Session.create(
+                success_url=domain_url + 'client-management/payment/?success=1&billn=' + bill.bill_number,
+                cancel_url=domain_url + 'client-management/payment/?success=0',
+                payment_method_types=['card'],
+                mode='payment',
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': 'COP',
+                            'unit_amount': int(bill.total_payout) * 100,
+                            'product_data': {
+                                'name': product.name
+                            }
+                            # 'unit_amount': bill.total_payout,
+                        },
+                        'quantity': 1,
+                    },
+                ],
+                metadata={
+                    "product_id": product.id
+                },
+                # mode='payment',
+                # success_url=domain_url+'user-management/payment/',
+                # cancel_url=domain_url+'user-management/payment/',
+            )
+            return JsonResponse({'sessionId': checkout_session['id'], 'url': checkout_session.url})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+    
+        # def post(self, request, bill_num):
+        # bill = Bill.objects.get(bill_number=bill_num)
+        # YOUR_DOMAIN = "http://localhost:3000/"
+        # checkout_session = stripe.checkout.Session.create(
+        #     payment_method_types=['card'],
+        #     line_items=[
+        #         {
+        #             'price_data': {
+        #                 'currency': 'COP',
+        #                 'unit_amount': 1,
+        #                 # 'unit_amount': bill.total_payout,
+        #             },
+        #             'quantity': 1,
+        #         },
+        #     ],
+        # #  metadata={
+        # #      "product_id": product.id
+        # #   },
+        #     mode='payment',
+        #     success_url=YOUR_DOMAIN+'user-management/payment/',
+        #     cancel_url=YOUR_DOMAIN+'user-management/payment/',
+        # )
+        
+        
+        # # return redirect(checkout_session.url, code=303)
+        # JsonResponse({
+        #    'id': checkout_session.id,
+        #    #'url': checkout_session.url
+        # })

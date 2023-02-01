@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useState, useEffect} from 'react';
 import {
     Grid,
     Stack,
@@ -11,24 +11,93 @@ import {
     FormLabel,
     Container,
     Button,
+    Alert,
 } from "@mui/material";
 import Image from 'next/image';
 import creditCard from '../../assets/images/icons/credit-card.svg'
 import { useRouter } from 'next/router';
 import es from '../../public/languages/es';
 import en from '../../public/languages/en';
-//import { loadStripe } from "@stripe/stripe-js";
-//import { Elements } from "@stripe/react-stripe-js";
-//import CheckoutForm from "../../src/components/clientManagement/CheckoutForm";
 
-//const stripePromise = laodStripe('pk_test_51MVe1FGpB3JzZ9Msw92mAPAJIrr7uHxjWDm4XdRx0By1PvMG5hXaMC6M3Lcu0aww6CeiZcpCZtI8OMYx6wWQLvmK00HFVOGN70')
+import axios from 'axios';
+
+// Requests
+import { getIsPaidBill, payBill } from '../../src/functions/requests';
 
 export default function payment() {
     const router = useRouter()
+	const {success, billn} = router.query;
+
     const { locale } = router
     const t = locale === 'en' ? en : es
     const theme = useTheme();
     const isMatch = useMediaQuery(theme.breakpoints.down('md'));
+    const [isSuccess, setIsSuccess] = useState(null);
+	const [isWarning, setIsWarning] = useState(null);
+
+    const [billN, setBillN] = useState("")
+
+    // const handleSubmit = (data)=>{
+    //     console.log("envio estos datos: " + data)
+    // };
+
+    const handleOnCheckout = async () => {
+
+        
+        try {
+            
+            const {data: isPaid} = await getIsPaidBill(billN);
+
+            console.log(isPaid)
+
+            if(isPaid.ok){
+                setIsWarning(t.client_management.payment.warningAlreadyPaid)
+                setIsSuccess(null)
+                return;
+            }
+
+            if(isPaid.error){
+                setIsWarning(t.client_management.payment.warning)
+                setIsSuccess(null)
+                return;
+            }
+
+
+            let {data} = await axios.get(`http://127.0.0.1:8000/create_checkout/${billN}`)
+            window.location.assign(data.url)
+            console.log(res)
+        } catch (err) {
+            
+        }
+    }
+
+    const handleUpdatePayment = async () => {
+        try {
+            await payBill(billn);
+            setIsSuccess(t.client_management.payment.success)
+            setIsWarning(null)
+        } catch (err) {
+            setIsWarning(t.client_management.payment.error)
+            setIsSuccess(null)
+        }
+    }
+
+    useEffect(() => {
+
+        if(!success){
+            return;
+        }
+
+        if(success == 1){
+            handleUpdatePayment()
+            
+        } else if(success == 0){
+            setIsWarning(t.client_management.payment.error)
+            setIsSuccess(null)
+        }
+        
+    }, [success]);
+
     return (
 
         <div className='block ml-auto mr-auto'>
@@ -52,26 +121,27 @@ export default function payment() {
                         }}
                     >
                         <Typography sx={{ fontSize: { md: '30px', xs: '18px' }, color: '#00408F', fontWeight: 'bold' }}> {t.client_management.payment.TitleRegPago} </Typography>
-
                         <Typography> {t.client_management.payment.FactureNumber} </Typography>
 
                         <TextField
+                            onChange={(e) => setBillN(e.target.value)}
                             id="name-basic"
                             label='#'
                             variant="outlined"
                             sx={{ width: '100%' }}
                         />
-                        <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <form action="/client-management/platform" method="POST">
+                         
+                        <Container sx={{ display: 'flex', justifyContent: 'center' }}>  
                                 <Button
-                                    id = "checkout-button"
+                                    onClick={() => handleOnCheckout()}
+                                    id = "checkout-button"  
                                     variant="contained"
-                                    sx={{ width: '20%', background: '#FDC500', color: 'black' }}
                                     type = "submit"
                                 >
-                                {t.client_management.payment.ButtonPay}
+                                    {t.client_management.payment.ButtonPay}
                                 </Button>
-                            </form>
+                                {isSuccess && <Alert severity="success">{isSuccess}</Alert>}
+						        {isWarning && <Alert severity="error">{isWarning}</Alert>}
                         </Container>
                     </Stack>
                 </div>

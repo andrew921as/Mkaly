@@ -36,29 +36,29 @@ const FullLayout = ({children}) => {
 	// Auth
 	const {user, initiateUser, isUserAuthenticated} = useContext(UserContext);
 
-	// useEffect(() => {
-	// 	if (isUserAuthenticated()) {
-	// 		router.push('/dashboard');
-	// 	}
-	// }, [user]);
+	useEffect(() => {
+		if (isUserAuthenticated()) {
+			router.push('/dashboard');
+		}
+	}, [user]);
 
-	// useEffect(() => {
-	// 	const loggedInUser = JSON.parse(localStorage.getItem('user'));
-	// 	if (loggedInUser) {
-	// 		//console.log('Saved user', loggedInUser);
-	// 		initiateUser(loggedInUser);
-	// 	} else {
-	// 		router.push('/');
-	// 	}
+	useEffect(() => {
+		const loggedInUser = JSON.parse(localStorage.getItem('user'));
+		if (loggedInUser) {
+			//console.log('Saved user', loggedInUser);
+			initiateUser(loggedInUser);
+		} else {
+			router.push('/');
+		}
 
-	// 	// if (!isUserAuthenticated()) {
-	// 	// 	router.push('/');
-	// 	// } else {
-	// 	// 	router.push('/dashboard');
-	// 	// }
+		// if (!isUserAuthenticated()) {
+		// 	router.push('/');
+		// } else {
+		// 	router.push('/dashboard');
+		// }
 
-	// 	console.log('LOGGED', user);
-	// }, []);
+		console.log('LOGGED', user);
+	}, []);
 
 	return (
 		<MainWrapper>
