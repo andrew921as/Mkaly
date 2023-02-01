@@ -89,6 +89,25 @@ export default {
 		Title:"LOGIN",
 		LoginB:"Log In"
 	},
+	client_management:{
+		payment :{
+			FactureNumber: "Invoice number",
+			TitleRegPago: 'Register your payment',
+			ButtonPay: 'Submit',
+			TitleMessage: 'Important',
+			MessageImp : "Remember that you can only make payments for the past due months online. You also have the option to visit one of our branches or contact our call center.",
+			success: "Payment was successful",
+			warningAlreadyPaid: "Error, The bill is already paid",
+			warning: "Bill not found",
+			error: "There was an error"
+		}
+	},
+	user_management:{
+		payment :{
+			TitleRegPago: 'Register payment',
+		}
+	},
+
 	InvoiceCa:{
 		UpTo:"UP TO DAY",
 		Value:"Value : $20.000",

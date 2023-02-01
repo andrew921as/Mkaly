@@ -26,6 +26,7 @@ urlpatterns = [
     path('autenticate_view/', views.autenticate_view),
     path('create_contract/<int:id>', views.CreateContract.as_view(), name = 'create_contract'),
     path('client_pay/<int:bill_id>', views.ClientPay.as_view(), name = 'client_pay'),
+    path('create_checkout/<int:bill_num>', views.CreateCheckoutSessionView.as_view(), name = 'create_checkout'),
     #path('create_bill/<int:id>', views.CreateBill.as_view(), name = 'create_bill')
    # path('admin_editing/<id_card>', views.admin_editing),
     #path('admin_edit/', views.admin_edit),

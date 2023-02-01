@@ -7,6 +7,7 @@ export const initialUserState = {
 	password: '',
 	role: '',
 	id: '',
+	role: ''
 };
 
 export const UserContext = createContext({});

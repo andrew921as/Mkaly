@@ -92,6 +92,30 @@ export default {
 		Title:"Iniciar sesion",
 		LoginB:"Iniciar sesion"
 	},
+	client_management:{
+		payment :{
+			FactureNumber: "Numero de factura",
+			TitleRegPago: 'Registrar pago en línea',
+			ButtonPay: 'Pagar',
+			TitleMessage: 'Importante',
+			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.",
+			success: "Pago exitoso",
+			warningAlreadyPaid: "Error, la factura ya está pagada",
+			warning: "No se encontró la factura",
+			error: "Hubo un error"
+		}
+	},
+	user_management:{
+		payment :{
+			FactureNumber: "Numero de factura",
+			TitleRegPago: 'Registrar pago',
+			ButtonPay: 'Pagar',
+			TitleMessage: 'Importante',
+			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center."
+		}
+	},
+	
+
 	InvoiceCa:{
 		UpTo:"AL DIA",
 		Value:"Valor : $20.000",
