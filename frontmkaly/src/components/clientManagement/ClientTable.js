@@ -16,59 +16,18 @@ import {
 } from '@mui/material';
 import BaseCard from '../baseCard/BaseCard';
 
+import es from '../../../public/languages/es';
+import en from '../../../public/languages/en';
+
 // API
 import {getUsers, updateUser} from '../../functions/requests';
-
-const users = [
-	{
-		id: '123412155',
-		firstName: 'Sunil Joshi',
-		lastName: 'Web Designer',
-		email: 'joshi@mail.com',
-		// pbg: "primary.main",
-		// budget: "3.9",
-	},
-	{
-		id: '123412156',
-		firstName: 'Sunil Joshi',
-		lastName: 'Web Designer',
-		email: 'sunil@mail.com',
-		// pbg: "primary.main",
-		// budget: "3.9",
-	},
-	//   {
-	//     id: "2",
-	//     name: "Andrew McDownland",
-	//     post: "Project Manager",
-	//     pname: "Real Homes WP Theme",
-	//     priority: "Medium",
-	//     pbg: "secondary.main",
-	//     budget: "24.5",
-	//   },
-	//   {
-	//     id: "3",
-	//     name: "Christopher Jamil",
-	//     post: "Project Manager",
-	//     pname: "MedicalPro WP Theme",
-	//     priority: "High",
-	//     pbg: "error.main",
-	//     budget: "12.8",
-	//   },
-	//   {
-	//     id: "4",
-	//     name: "Nirav Joshi",
-	//     post: "Frontend Engineer",
-	//     pname: "Hosting Press HTML",
-	//     priority: "Critical",
-	//     pbg: "success.main",
-	//     budget: "2.4",
-	//   },
-];
 
 const UsersTable = ({title}) => {
 	const router = useRouter();
 	const [users, setUsers] = useState([]);
 	const [allUsers, setAllUsers] = useState([]);
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 
 	const fetchUsers = async () => {
 		const {data} = await getUsers();
@@ -122,7 +81,7 @@ const UsersTable = ({title}) => {
 	return (
 		<BaseCard title={title}>
 			<FormControl variant="standard">
-				<InputLabel htmlFor="search-user">Search client</InputLabel>
+				<InputLabel htmlFor="search-user">{t.ClientsTable.search}</InputLabel>
 				<Input
 					id="search-user"
 					onChange={(e) => handleSearchUser(e.target.value)}
@@ -149,22 +108,22 @@ const UsersTable = ({title}) => {
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								First Name
+								{t.ClientsTable.first_name}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Last Name
+								{t.ClientsTable.first_last_name}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Email
+								{t.ClientsTable.Email}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Status
+								{t.ClientsTable.status}
 							</Typography>
 						</TableCell>
 					</TableRow>
@@ -186,34 +145,12 @@ const UsersTable = ({title}) => {
 									</Typography>
 								</TableCell>
 								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
-									<Box
-										sx={{
-											display: 'flex',
-											alignItems: 'center',
-										}}
-									>
-										<Box>
-											<Typography
-												variant="h6"
-												sx={{
-													fontWeight: '600',
-												}}
-											>
-												{user.first_name_user} {user.sec_name_user}
-											</Typography>
-											{/* <Typography
-												color="textSecondary"
-												sx={{
-													fontSize: '13px',
-												}}
-											>
-												{product.post}
-											</Typography> */}
-										</Box>
-									</Box>
+									<Typography variant="h6">
+										{user.first_name_user} {user.sec_name_user}
+									</Typography>
 								</TableCell>
 								<TableCell onClick={() => router.push('/user-management/info/' + user.id)}>
-									<Typography color="textSecondary" variant="h6">
+									<Typography variant="h6">
 										{user.first_lastname_user} {user.sec_lastname_user}
 									</Typography>
 								</TableCell>

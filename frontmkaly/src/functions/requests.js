@@ -46,6 +46,15 @@ export const createContract = async (userId, data) => {
 
 // PUT REQUESTS
 
+export const userEnableDisable = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/admin_enable/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
 export const updateUser = async (userId, data) => {
 	try {
 		const userD = await axios.put(`${API}/admin_view/${userId}`, data);
@@ -147,15 +156,23 @@ export const getClientContracts = async (clientId) => {
 	}
 };
 
+export const getClientBills = async (clientId) => {
+	try {
+		const clientsD = await axios.get(`${API}/search_all_bills/${clientId}`);
+		return clientsD;
+  } catch (e) {
+    throw e;
+  }
+
 export const getPDF = async (data) => {
 	try {
 		const PDF = await axios.get(`${API}/pdf_view_download/${data}`);
 		return PDF;
+
 	} catch (e) {
 		throw e;
 	}
 };
-
 
 export const postCorreoPdf = async (data)=> {
 	try {
@@ -166,7 +183,6 @@ export const postCorreoPdf = async (data)=> {
 	}
 };
 
-
 // export const postCorreoPdf = async (billN, email)=> {
 // 	try {
 // 		const PDF = await axios.post(`${API}/pdf_view`,{"email": email, "bill_number":billN});
@@ -175,3 +191,4 @@ export const postCorreoPdf = async (data)=> {
 // 		throw e;
 // 	}
 // };
+

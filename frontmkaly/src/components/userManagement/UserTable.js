@@ -16,59 +16,18 @@ import {
 } from '@mui/material';
 import BaseCard from '../baseCard/BaseCard';
 
-// API
-import {getUsers, updateUser} from '../../functions/requests';
+import es from '../../../public/languages/es';
+import en from '../../../public/languages/en';
 
-const users = [
-	{
-		id: '123412155',
-		firstName: 'Sunil Joshi',
-		lastName: 'Web Designer',
-		email: 'joshi@mail.com',
-		// pbg: "primary.main",
-		// budget: "3.9",
-	},
-	{
-		id: '123412156',
-		firstName: 'Sunil Joshi',
-		lastName: 'Web Designer',
-		email: 'sunil@mail.com',
-		// pbg: "primary.main",
-		// budget: "3.9",
-	},
-	//   {
-	//     id: "2",
-	//     name: "Andrew McDownland",
-	//     post: "Project Manager",
-	//     pname: "Real Homes WP Theme",
-	//     priority: "Medium",
-	//     pbg: "secondary.main",
-	//     budget: "24.5",
-	//   },
-	//   {
-	//     id: "3",
-	//     name: "Christopher Jamil",
-	//     post: "Project Manager",
-	//     pname: "MedicalPro WP Theme",
-	//     priority: "High",
-	//     pbg: "error.main",
-	//     budget: "12.8",
-	//   },
-	//   {
-	//     id: "4",
-	//     name: "Nirav Joshi",
-	//     post: "Frontend Engineer",
-	//     pname: "Hosting Press HTML",
-	//     priority: "Critical",
-	//     pbg: "success.main",
-	//     budget: "2.4",
-	//   },
-];
+// API
+import {getUsers, userEnableDisable} from '../../functions/requests';
 
 const UsersTable = ({title}) => {
 	const router = useRouter();
 	const [users, setUsers] = useState([]);
 	const [allUsers, setAllUsers] = useState([]);
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 
 	const fetchUsers = async () => {
 		const {data} = await getUsers();
@@ -103,7 +62,8 @@ const UsersTable = ({title}) => {
 
 	const handleUpdateUser = async (userData) => {
 		try {
-			const res = await updateUser(userData.id, userData);
+			console.log(userData);
+			const res = await userEnableDisable(userData.id, userData);
 			console.log(res);
 
 			await fetchUsers();
@@ -120,7 +80,7 @@ const UsersTable = ({title}) => {
 	return (
 		<BaseCard title={title}>
 			<FormControl variant="standard">
-				<InputLabel htmlFor="search-user">Search user</InputLabel>
+				<InputLabel htmlFor="search-user">{t.UsersTable.search}</InputLabel>
 				<Input
 					id="search-user"
 					onChange={(e) => handleSearchUser(e.target.value)}
@@ -159,32 +119,32 @@ const UsersTable = ({title}) => {
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								First Name
+								{t.UsersTable.first_name}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Last Name
+								{t.UsersTable.first_last_name}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Email
+								{t.UsersTable.Email}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Role
+								{t.UsersTable.Rol.Title}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Status
+								{t.UsersTable.status}
 							</Typography>
 						</TableCell>
 						<TableCell>
 							<Typography color="textSecondary" variant="h6">
-								Activate/Deactivate
+								{t.UsersTable.activate}
 							</Typography>
 						</TableCell>
 						{/* <TableCell align="right">
@@ -271,12 +231,12 @@ const UsersTable = ({title}) => {
 												sx={{color: '#CD0404'}}
 												color="error"
 												variant="outlined"
-												onClick={() => handleUpdateUser({...user, is_active: false})}
+												onClick={() => handleUpdateUser({id: user.id, is_active: false})}
 											>
 												Deactivate
 											</Button>
 										) : (
-											<Button size="large" variant="contained" onClick={() => handleUpdateUser({...user, is_active: true})}>
+											<Button size="large" variant="contained" onClick={() => handleUpdateUser({id: user.id, is_active: true})}>
 												Activate
 											</Button>
 										)}

@@ -41,39 +41,38 @@ export default {
 		Energy: 'Suminstrando energía limpia, nuevos paneles solares y aerogeneradores',
 	},
 
-	Form:{
-		userName:"Nombre de Usuario",
-		password:"Contraseña",
-		first_name:"Primer Nombre",
-		second_name:"Segundo nombre",
-		first_last_name:"Primer Apellido",
-		second_last_name:"Segundo Apellido",
-		Email:"Email",
-		Rol:{
-			Title: "Rol de usuario",
-			admin: "administrador",
-			manager : "gerente",
-			operator: "operador",
-			client: "cliente"
+	Form: {
+		userName: 'Nombre de Usuario',
+		password: 'Contraseña',
+		first_name: 'Primer Nombre',
+		second_name: 'Segundo nombre',
+		first_last_name: 'Primer Apellido',
+		second_last_name: 'Segundo Apellido',
+		Email: 'Email',
+		Rol: {
+			Title: 'Rol de usuario',
+			admin: 'administrador',
+			manager: 'gerente',
+			operator: 'operador',
+			client: 'cliente',
 		},
-		documentType:"Tipo de documento",
-		IDNumber:"Numero de identificacion",
-		City:"Ciudad",
-		PhoneN:"Numero de telefono",
-		ClientType:{
-			Title:"Tipo de cliente",
-			Natural:"Natural",
-			Bussiness:"Empresarial"
+		documentType: 'Tipo de documento',
+		IDNumber: 'Numero de identificacion',
+		City: 'Ciudad',
+		PhoneN: 'Numero de telefono',
+		ClientType: {
+			Title: 'Tipo de cliente',
+			Natural: 'Natural',
+			Bussiness: 'Empresarial',
 		},
-		HeadQuarters:{
-			Title:"Sedes",
-			North:"Norte",
-			West:"Oeste",
-			Est:"Este",
-			South:"Sur",
+		HeadQuarters: {
+			Title: 'Sedes',
+			North: 'Norte',
+			West: 'Oeste',
+			Est: 'Este',
+			South: 'Sur',
 		},
-		RegisterB:"Registrar",
-
+		RegisterB: 'Registrar',
 	},
 	UserForm: {
 		handleRegisterUser: {
@@ -83,107 +82,107 @@ export default {
 		handleUpdateUser: {
 			Success: 'El usuario fue actualizado correctamente',
 		},
-	
 	},
-	LoginP:{
-		NoRegis:"Aun no estas registrado?",
-		NoRegisP1:"Acercate al punto de atencion mas cercano y un operador te atendera",
-		NoRegisP2:"O contactanos por nuestra linea principal: ",
-		Title:"Iniciar sesion",
-		LoginB:"Iniciar sesion"
+	LoginP: {
+		NoRegis: 'Aun no estas registrado?',
+		NoRegisP1: 'Acercate al punto de atencion mas cercano y un operador te atendera',
+		NoRegisP2: 'O contactanos por nuestra linea principal: ',
+		Title: 'Iniciar sesion',
+		LoginB: 'Iniciar sesion',
 	},
-	client_management:{
-		payment :{
-			FactureNumber: "Numero de factura",
+	client_management: {
+		payment: {
+			FactureNumber: 'Numero de factura',
 			TitleRegPago: 'Registrar pago en línea',
 			ButtonPay: 'Pagar',
 			TitleMessage: 'Importante',
-			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. Tambien tiene la opcion de acércarse a una de nuestras sedes o contactar a nuestro call center.",
-			success: "Pago exitoso",
+			MessageImp: 'Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.',
+			success: 'Pago exitoso',
+			warningAlreadyPaid: 'Error, la factura ya está pagada',
+			warning: 'No se encontró la factura',
+			error: 'Hubo un error',
+		},
+	},
+	user_management: {
+		payment: {
+			FactureNumber: 'Numero de factura',
+			TitleRegPago: 'Registrar pago',
+			ButtonPay: 'Pagar',
+			TitleMessage: 'Importante',
+			MessageImp: 'Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.',
+		  success: "Pago exitoso",
 			warningAlreadyPaid: "Error, la factura ya está pagada",
 			warning: "No se encontró la factura",
 			error: "Hubo un error"
 		}
 	},
-	user_management:{
-		payment :{
-			FactureNumber: "Numero de factura",
-			TitleRegPago: 'Registrar pago',
-			ButtonPay: 'Pagar',
-			TitleMessage: 'Importante',
-			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. Tambien tiene la opcion de acércarse a una de nuestras sedes o contactar a nuestro call center."
-		}
+	InvoiceCa: {
+		UpTo: 'AL DIA',
+		Value: 'Valor : $20.000',
+		Pay: 'PAGO',
 	},
-	
-
-	InvoiceCa:{
-		UpTo:"AL DIA",
-		Value:"Valor : $20.000",
-		Pay:"PAGO"
+	ProfileD: {
+		Hi: 'Hola,',
+		EditPro: 'Editar Perfil',
+		ChangeLan: 'Cambiar idioma',
+		ButtonLogO: 'Cerrar sesión',
 	},
-	ProfileD:{
-		Hi:"Hola,",
-		EditPro:"Editar Perfil",
-		ChangeLan: "Cambiar idioma",
-		ButtonLogO:"Cerrar sesión"
+	EditProfil: {
+		Title: 'Ediar Perfil',
+		upProPic: 'Cargar foto de perfil',
+		update: 'Actualizar',
 	},
-	EditProfil:{
-		Title:"Ediar Perfil",
-		upProPic:"Cargar foto de perfil",
-		update:"Actualizar"
-	},
-	Dashboar:{
-		operatorD:{
-			title:"MANEJO DE CLIENTES",
-			registerCli:"REGISTRAR CLIENTE",
-			modifyCli:"MODIFICAR CLIENTE",
-			searchCli:"BUSCAR CLIENTES",
-			registerPay:"REGISTRAR PAGOS",
+	Dashboar: {
+		operatorD: {
+			title: 'MANEJO DE CLIENTES',
+			registerCli: 'REGISTRAR CLIENTE',
+			modifyCli: 'MODIFICAR CLIENTE',
+			searchCli: 'BUSCAR CLIENTES',
+			registerPay: 'REGISTRAR PAGOS',
 		},
-		managerD:{
-			sales:"Ventas",
-			clientSta:"Estado de clientes",
-			activeSuspend:"Servicios Activos/Suspendidos",
-			onlineFace:"Pagos en Linea vs Presenciales",
-			clientSservices:{
-				clientDebt:"En deuda",
-				clientUpto:"Al dia",
-				clientSus:"Suspendidos",
-				clientActive:"Activos",
+		managerD: {
+			sales: 'Ventas',
+			clientSta: 'Estado de clientes',
+			activeSuspend: 'Servicios Activos/Suspendidos',
+			onlineFace: 'Pagos en Linea vs Presenciales',
+			clientSservices: {
+				clientDebt: 'En deuda',
+				clientUpto: 'Al dia',
+				clientSus: 'Suspendidos',
+				clientActive: 'Activos',
 			},
 		},
-		adminD:{
-			sales:"Ventas",
-			usersSimus:"Usuarios activos al tiempo",
-			users:{
-				Title:"Usuarios",
-				Admins: "Administradores",
-				Managers: "Gerentes",
-				Operators: "Operadores",
-				Clients: "Clientes"
-			}
-		}
+		adminD: {
+			sales: 'Ventas',
+			usersSimus: 'Usuarios activos al tiempo',
+			users: {
+				Title: 'Usuarios',
+				Admins: 'Administradores',
+				Managers: 'Gerentes',
+				Operators: 'Operadores',
+				Clients: 'Clientes',
+			},
+		},
 	},
-	EditClient:{
-		Title:"Editar Perfil del Cliente",
-		description:"Escribe el numero de identificacion del cliente que deseas modificar",
-		search:"Buscar",
-		warningNotCli:"El usuario que estas deseando buscar no es un cliente.",
-		warningNotFou:"Usuario no encontrado.",
-
+	EditClient: {
+		Title: 'Editar Perfil del Cliente',
+		description: 'Escribe el numero de identificacion del cliente que deseas modificar',
+		search: 'Buscar',
+		warningNotCli: 'El usuario que estas deseando buscar no es un cliente.',
+		warningNotFou: 'Usuario no encontrado.',
 	},
-	userManageP:{
-		Title:"MANEJO DE USUARIOS",
-		registeU:"REGISTRAR USUARIO",
-		modifyU:"MODIFICAR USUARIO",
-		searchU:"BUSCAR USUARIO",
+	userManageP: {
+		Title: 'MANEJO DE USUARIOS',
+		registeU: 'REGISTRAR USUARIO',
+		modifyU: 'MODIFICAR USUARIO',
+		searchU: 'BUSCAR USUARIO',
 	},
-	userRegistration:"Registrar Usuario",
-	EditUser:{
-		Title:"Editar Perfil del Usuario",
-		description:"Escribe el numero de identificacion del usuario que deseas modificar",
-		idNumber:"Numero ID",
-		warningNotFou:"Usuario no encontrado.",
+	userRegistration: 'Registrar Usuario',
+	EditUser: {
+		Title: 'Editar Perfil del Usuario',
+		description: 'Escribe el numero de identificacion del usuario que deseas modificar',
+		idNumber: 'Numero ID',
+		warningNotFou: 'Usuario no encontrado.',
 	},
 	InfoUser: {
 		email: 'Email',
@@ -222,6 +221,69 @@ export default {
 			warningNoFields: 'Debes llenar todos los campos',
 		},
 	},
+	BillTable: {
+		title: 'Tabla de facturas',
+		search: 'Buscar Factura',
+		billNumber: '# De Factura',
+		expeditionDate: 'Fecha de expedición',
+		expirationDate: 'Fecha de expiración',
+		status: 'Estado',
+		totalPayout: 'Cargo',
+		isPaid: 'Pagado',
+		pending: 'Pendiente',
+		success: 'Pagado',
+		mora: 'En mora',
+		// contract: {
+		// 	contractStart: 'Contract #',
+		// 	contractAddress: 'Address: ',
+		// },
+	},
+	UsersTable: {
+		userName: 'User Name',
+		password: 'Password',
+		first_name: 'Nombre',
+		second_name: 'Second Name',
+		first_last_name: 'Apellido',
+		second_last_name: 'Second Last Name',
+		Email: 'Email',
+		status: 'Estado',
+		activate: 'Activar/Desactivar',
+		Rol: {
+			Title: 'Rol',
+			Admin: 'Administrador',
+			Manager: 'Gerente',
+			Operator: 'Operador',
+			Client: 'Cliente',
+		},
+		documentType: 'Type of Document',
+		IDNumber: 'ID Number',
+		City: 'City',
+		PhoneN: 'Phone number',
+		ClientType: {
+			Title: 'Client Type',
+			Natural: 'Natural',
+			Bussiness: 'Business',
+		},
+		HeadQuarters: {
+			Title: 'Headquarters',
+			North: 'North',
+			West: 'West',
+			Est: 'Est',
+			South: 'South',
+		},
+		RegisterB: 'Register',
+		title: 'Tabla de usuarios',
+		search: 'Buscar usuarios',
+	},
+	ClientsTable: {
+		first_name: 'Nombre',
+		first_last_name: 'Apellido',
+		Email: 'Email',
+		status: 'Estado',
+		activate: 'Activate/Deactivate',
+		title: 'Tabla de clientes',
+		search: 'Buscar Clientes',
+	},
 	consultBill:{
 		Title:"Consultar factura",
 		description:"Enivar factura electronica",
@@ -230,7 +292,4 @@ export default {
 		Title2:"Descargar factura",
 	},
 };
-
-
-
 

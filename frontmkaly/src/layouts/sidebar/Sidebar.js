@@ -4,7 +4,17 @@ import PropTypes from 'prop-types';
 import {Box, Drawer, useMediaQuery, List, Link, Button, Typography, ListItem, Collapse, ListItemIcon, ListItemText} from '@mui/material';
 import FeatherIcon from 'feather-icons-react';
 // import LogoIcon from "../logo/LogoIcon";
-import {Menuitems, ClientMenuItems, ManagerMenuItems, OperatorMenuItems, AdminMenuItems} from './MenuItems';
+import {
+	Menuitems,
+	ClientMenuItems,
+	ManagerMenuItems,
+	OperatorMenuItems,
+	AdminMenuItems,
+	ClientMenuItemsES,
+	ManagerMenuItemsES,
+	OperatorMenuItemsES,
+	AdminMenuItemsES,
+} from './MenuItems';
 import Buynow from './Buynow';
 import {useRouter} from 'next/router';
 import {UserContext} from '../../context/UserContext';
@@ -16,9 +26,9 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
 	const [open, setOpen] = React.useState(true);
 	const [menuItems, setMenuItems] = useState([]);
 
-	const router = useRouter()
-	const {locale}= router
-	const t = locale === 'en' ? en : es
+	const router = useRouter();
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 
 	const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
@@ -38,16 +48,32 @@ const Sidebar = ({isMobileSidebarOpen, onSidebarClose, isSidebarOpen}) => {
 		} else {
 			switch (user.role) {
 				case 'manager':
-					setMenuItems(ManagerMenuItems);
+					if (locale === 'en') {
+						setMenuItems(ManagerMenuItems);
+					} else {
+						setMenuItems(ManagerMenuItemsES);
+					}
 					break;
 				case 'admin':
-					setMenuItems(AdminMenuItems);
+					if (locale === 'en') {
+						setMenuItems(AdminMenuItems);
+					} else {
+						setMenuItems(AdminMenuItemsES);
+					}
 					break;
 				case 'operator':
-					setMenuItems(OperatorMenuItems);
+					if (locale === 'en') {
+						setMenuItems(OperatorMenuItems);
+					} else {
+						setMenuItems(OperatorMenuItemsES);
+					}
 					break;
 				case 'client':
-					setMenuItems(ClientMenuItems);
+					if (locale === 'en') {
+						setMenuItems(ClientMenuItems);
+					} else {
+						setMenuItems(ClientMenuItemsES);
+					}
 					break;
 				default:
 					setMenuItems([]);
