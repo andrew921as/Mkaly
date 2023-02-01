@@ -6,7 +6,7 @@ import DailyActivity from '../src/components/dashboard/DailyActivity';
 import ProductPerfomance from '../src/components/dashboard/ProductPerfomance';
 import InvoiceCard from '../src/components/dashboard/InvoiceCard';
 import BaseCard from '../src/components/baseCard/BaseCard';
-import {OptionButton} from '../src/components';
+import {BillsTable, OptionButton} from '../src/components';
 import {UserContext} from '../src/context/UserContext';
 import {useRouter} from 'next/router';
 
@@ -44,11 +44,14 @@ const Dashboard = () => {
 };
 
 const ClientDashboard = () => {
+	const router = useRouter();
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 	return (
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12}>
-					<ProductPerfomance />
+					<BillsTable title={t.BillTable.title} />
 				</Grid>
 				<Grid item xs={4}>
 					<InvoiceCard />
@@ -61,8 +64,8 @@ const ClientDashboard = () => {
 // ADMIN
 const AdminDashboard = () => {
 	const router = useRouter();
-	const {locale}= router
-	const t = locale === 'en' ? en : es
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 	const users = [
 		{
 			time: '1',
@@ -89,7 +92,7 @@ const AdminDashboard = () => {
 		<>
 			<Grid container spacing={0}>
 				<Grid item xs={12} lg={12}>
-					<SalesOverview title={t.Dashboar.adminD.sales}/>
+					<SalesOverview title={t.Dashboar.adminD.sales} />
 				</Grid>
 				{/* ------------------------- row 1 ------------------------- */}
 				<Grid item xs={12} lg={4}>
@@ -106,8 +109,8 @@ const AdminDashboard = () => {
 // MANAGER
 const ManagerDashboard = () => {
 	const router = useRouter();
-	const {locale}= router
-	const t = locale === 'en' ? en : es
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 	const clientState = [
 		{
 			time: '1',
@@ -154,8 +157,8 @@ const ManagerDashboard = () => {
 // OPERATOR
 const OperatorDashboard = () => {
 	const router = useRouter();
-	const {locale}= router
-	const t = locale === 'en' ? en : es
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 	return (
 		<>
 			{/* Container */}

@@ -46,6 +46,15 @@ export const createContract = async (userId, data) => {
 
 // PUT REQUESTS
 
+export const userEnableDisable = async (userId, data) => {
+	try {
+		const userD = await axios.put(`${API}/admin_enable/${userId}`, data);
+		return userD;
+	} catch (e) {
+		throw e;
+	}
+};
+
 export const updateUser = async (userId, data) => {
 	try {
 		const userD = await axios.put(`${API}/admin_view/${userId}`, data);
@@ -141,6 +150,15 @@ export const getClients = async () => {
 export const getClientContracts = async (clientId) => {
 	try {
 		const clientsD = await axios.get(`${API}/client_view/${clientId}`);
+		return clientsD;
+	} catch (e) {
+		throw e;
+	}
+};
+
+export const getClientBills = async (clientId) => {
+	try {
+		const clientsD = await axios.get(`${API}/search_all_bills/${clientId}`);
 		return clientsD;
 	} catch (e) {
 		throw e;

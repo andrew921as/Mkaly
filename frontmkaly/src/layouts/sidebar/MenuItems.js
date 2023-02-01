@@ -1,4 +1,3 @@
-
 const ClientMenuItems = [
 	{
 		title: 'Dashboard',
@@ -6,7 +5,7 @@ const ClientMenuItems = [
 		href: '/dashboard',
 	},
 	{
-		title: 'Registrar Pago',
+		title: 'Register Payment',
 		icon: 'credit-card',
 		href: '/client-management/payment',
 	},
@@ -23,11 +22,6 @@ const AdminMenuItems = [
 		icon: 'home',
 		href: '/user-management',
 	},
-	// {
-	// 	title: 'Client Management',
-	// 	icon: 'home',
-	// 	href: '/client-management',
-	// },
 ];
 
 const ManagerMenuItems = [
@@ -99,4 +93,68 @@ const Menuitems = [
 	},
 ];
 
-export {ClientMenuItems, AdminMenuItems, ManagerMenuItems, OperatorMenuItems, Menuitems};
+// SPANISH
+
+const ClientMenuItemsES = [
+	{
+		title: 'Inicio',
+		icon: 'home',
+		href: '/dashboard',
+	},
+	{
+		title: 'Registrar Pago',
+		icon: 'credit-card',
+		href: '/client-management/payment',
+	},
+];
+
+const AdminMenuItemsES = [
+	{
+		title: 'Inicio',
+		icon: 'home',
+		href: '/dashboard',
+	},
+	{
+		title: 'Gestión De Usuarios',
+		icon: 'home',
+		href: '/user-management',
+	},
+];
+
+const ManagerMenuItemsES = [
+	{
+		title: 'Inicio',
+		icon: 'home',
+		href: '/dashboard',
+	},
+];
+
+const OperatorMenuItemsES = [
+	// {
+	// 	title: 'Inicio',
+	// 	icon: 'home',
+	// 	href: '/dashboard',
+	// },
+	{
+		title: 'Gestión de clientes',
+		icon: 'home',
+		href: '/dashboard',
+	},
+	{
+		title: 'Registrar pago',
+		icon: 'dollar-sign',
+		href: '/user-management/payment',
+	},
+];
+
+export {
+	ClientMenuItems,
+	AdminMenuItems,
+	ManagerMenuItems,
+	OperatorMenuItems,
+	Menuitems,
+	ClientMenuItemsES,
+	AdminMenuItemsES,
+	OperatorMenuItemsES,
+	ManagerMenuItemsES,
+};

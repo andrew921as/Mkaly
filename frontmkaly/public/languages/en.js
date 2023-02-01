@@ -1,4 +1,3 @@
-
 export default {
 	LandingP: {
 		Title: 'Welcome to MKALY',
@@ -38,39 +37,38 @@ export default {
 		Expansion: 'We are expanding to new zones: Tulua, Pradera and Miriti Paraná',
 		Energy: 'Becoming clean,new solar panels and wind power',
 	},
-	Form:{
-		userName:"User Name",
-		password:"Password",
-		first_name:"First Name",
-		second_name:"Second Name",
-		first_last_name:"First Last Name",
-		second_last_name:"Second Last Name",
-		Email:"Email",
-		Rol:{
-			Title: "User Role",
-			Admin: "admin",
-			Manager : "manager",
-			Operator: "operator",
-			Client: "client"
-
+	Form: {
+		userName: 'User Name',
+		password: 'Password',
+		first_name: 'First Name',
+		second_name: 'Second Name',
+		first_last_name: 'First Last Name',
+		second_last_name: 'Second Last Name',
+		Email: 'Email',
+		Rol: {
+			Title: 'User Role',
+			Admin: 'admin',
+			Manager: 'manager',
+			Operator: 'operator',
+			Client: 'client',
 		},
-		documentType:"Type of Document",
-		IDNumber:"ID Number",
-		City:"City",
-		PhoneN:"Phone number",
-		ClientType:{
-			Title:"Client Type",
-			Natural:"Natural",
-			Bussiness:"Business"
+		documentType: 'Type of Document',
+		IDNumber: 'ID Number',
+		City: 'City',
+		PhoneN: 'Phone number',
+		ClientType: {
+			Title: 'Client Type',
+			Natural: 'Natural',
+			Bussiness: 'Business',
 		},
-		HeadQuarters:{
-			Title:"Headquarters",
-			North:"North",
-			West:"West",
-			Est:"Est",
-			South:"South",
+		HeadQuarters: {
+			Title: 'Headquarters',
+			North: 'North',
+			West: 'West',
+			Est: 'Est',
+			South: 'South',
 		},
-		RegisterB:"Register",
+		RegisterB: 'Register',
 	},
 	UserForm: {
 		handleRegisterUser: {
@@ -82,100 +80,100 @@ export default {
 		},
 	},
 
-	LoginP:{
-		NoRegis:"haven't registered yet?",
-		NoRegisP1:"Come to the nearest points and our operators will help you",
-		NoRegisP2:"Or get in touch with us through our main line: ",
-		Title:"LOGIN",
-		LoginB:"Log In"
+	LoginP: {
+		NoRegis: "haven't registered yet?",
+		NoRegisP1: 'Come to the nearest points and our operators will help you',
+		NoRegisP2: 'Or get in touch with us through our main line: ',
+		Title: 'LOGIN',
+		LoginB: 'Log In',
 	},
-	client_management:{
-		payment :{
-			FactureNumber: "Invoice number",
+	client_management: {
+		payment: {
+			FactureNumber: 'Invoice number',
 			TitleRegPago: 'Register your payment',
 			ButtonPay: 'Submit',
 			TitleMessage: 'Important',
-			MessageImp : "Remember that you can only make payments for the past due months online. You also have the option to visit one of our branches or contact our call center.",
-			success: "Payment was successful",
-			warningAlreadyPaid: "Error, The bill is already paid",
-			warning: "Bill not found",
-			error: "There was an error"
-		}
+			MessageImp:
+				'Remember that you can only make payments for the past due months online. You also have the option to visit one of our branches or contact our call center.',
+			success: 'Payment was successful',
+			warningAlreadyPaid: 'Error, The bill is already paid',
+			warning: 'Bill not found',
+			error: 'There was an error',
+		},
 	},
-	user_management:{
-		payment :{
+	user_management: {
+		payment: {
 			TitleRegPago: 'Register payment',
-		}
+		},
 	},
 
-	InvoiceCa:{
-		UpTo:"UP TO DAY",
-		Value:"Value : $20.000",
-		Pay:"PAY"
+	InvoiceCa: {
+		UpTo: 'UP TO DAY',
+		Value: 'Value : $20.000',
+		Pay: 'PAY',
 	},
-	ProfileD:{
-		Hi:"Hi,",
-		EditPro:"Edit Profile",
-		ChangeLan: "Change Language",
-		ButtonLogO:"Logout"
+	ProfileD: {
+		Hi: 'Hi,',
+		EditPro: 'Edit Profile',
+		ChangeLan: 'Change Language',
+		ButtonLogO: 'Logout',
 	},
-	EditProfil:{
-		Title:"Edit Profile",
-		upProPic:"Upload Profile Picture",
-		update:"Update"
+	EditProfil: {
+		Title: 'Edit Profile',
+		upProPic: 'Upload Profile Picture',
+		update: 'Update',
 	},
-	Dashboar:{
-		operatorD:{
-			title:"CLIENT MANAGEMENT",
-			registerCli:"REGISTER CLIENT",
-			modifyCli:"MODIFY CLIENT",
-			searchCli:"SEARCH CLIENT",
-			registerPay:"REGISTER PAYMENTS",
+	Dashboar: {
+		operatorD: {
+			title: 'CLIENT MANAGEMENT',
+			registerCli: 'REGISTER CLIENT',
+			modifyCli: 'MODIFY CLIENT',
+			searchCli: 'SEARCH CLIENT',
+			registerPay: 'REGISTER PAYMENTS',
 		},
-		managerD:{
-			sales:"Sales",
-			clientSta:"Clients State",
-			activeSuspend:"Active/Suspended services",
-			onlineFace:"Online vs Face-to-face Payments",
-			clientSservices:{
-				clientDebt:"In debt",
-				clientUpto:"Up to date",
-				clientSus:"Suspended",
-				clientActive:"Active",
+		managerD: {
+			sales: 'Sales',
+			clientSta: 'Clients State',
+			activeSuspend: 'Active/Suspended services',
+			onlineFace: 'Online vs Face-to-face Payments',
+			clientSservices: {
+				clientDebt: 'In debt',
+				clientUpto: 'Up to date',
+				clientSus: 'Suspended',
+				clientActive: 'Active',
 			},
 		},
-		adminD:{
-			sales:"Sales",
-			usersSimus:"Users simultaneously logged on",
-			users:{
-				Title:"Users",
-				Admins: "Admins",
-				Managers: "Managers",
-				Operators: "Operators",
-				Clients: "Clients"
-			}
-		}
+		adminD: {
+			sales: 'Sales',
+			usersSimus: 'Users simultaneously logged on',
+			users: {
+				Title: 'Users',
+				Admins: 'Admins',
+				Managers: 'Managers',
+				Operators: 'Operators',
+				Clients: 'Clients',
+			},
+		},
 	},
-	EditClient:{
-		Title:"Edit Client Profile",
-		description:"Write down the Id number of the client you are willing to edit",
-		search:"Search",
-		warningNotCli:"The user you are trying to edit is not a client.",
-		warningNotFou:"User not found.",
-
+	EditClient: {
+		Title: 'Edit Client Profile',
+		description: 'Write down the Id number of the client you are willing to edit',
+		search: 'Search',
+		warningNotCli: 'The user you are trying to edit is not a client.',
+		warningNotFou: 'User not found.',
 	},
-	userManageP:{
-		Title:"USER MANAGEMENT",
-		registeU:"REGISTER USER",
-		modifyU:"MODIFY USER",
-		searchU:"SEARCH USER",
+	userManageP: {
+		Title: 'USER MANAGEMENT',
+		registeU: 'REGISTER USER',
+		modifyU: 'MODIFY USER',
+		searchU: 'SEARCH USER',
 	},
-	userRegistration:"User Registration",
-	EditUser:{
-		Title:"Edit User Profile",
-		description:"Write down the Id number of the user you are willing to edit",
-		idNumber:"ID Number",
-		warningNotFou:"User not found.",
+	userRegistration: 'User Registration',
+	EditUser: {
+		Title: 'Edit User Profile',
+		description: 'Write down the Id number of the user you are willing to edit',
+		idNumber: 'ID Number',
+		warningNotFou: 'User not found.',
 	},
 	InfoUser: {
 		email: 'Email',
@@ -214,5 +212,67 @@ export default {
 			warningNoFields: 'You need to fill all the fields',
 		},
 	},
+	BillTable: {
+		title: 'Table of bills',
+		search: 'Search bill',
+		billNumber: 'Bill Number',
+		expeditionDate: 'Expedition Date',
+		expirationDate: 'Expiration Date',
+		status: 'Status',
+		totalPayout: 'Charge',
+		isPaid: 'Paid',
+		pending: 'Pending',
+		success: 'Paid',
+		mora: 'In debt',
+		// contract: {
+		// 	contractStart: 'Contract #',
+		// 	contractAddress: 'Address: ',
+		// },
+	},
+	UsersTable: {
+		userName: 'User Name',
+		password: 'Password',
+		first_name: 'First Name',
+		second_name: 'Second Name',
+		first_last_name: 'Last Name',
+		second_last_name: 'Second Last Name',
+		Email: 'Email',
+		status: 'Status',
+		activate: 'Activate/Deactivate',
+		Rol: {
+			Title: 'Role',
+			Admin: 'admin',
+			Manager: 'manager',
+			Operator: 'operator',
+			Client: 'client',
+		},
+		documentType: 'Type of Document',
+		IDNumber: 'ID Number',
+		City: 'City',
+		PhoneN: 'Phone number',
+		ClientType: {
+			Title: 'Client Type',
+			Natural: 'Natural',
+			Bussiness: 'Business',
+		},
+		HeadQuarters: {
+			Title: 'Headquarters',
+			North: 'North',
+			West: 'West',
+			Est: 'Est',
+			South: 'South',
+		},
+		RegisterB: 'Register',
+		title: 'Table Of Users',
+		search: 'Search User',
+	},
+	ClientsTable: {
+		first_name: 'First Name',
+		first_last_name: 'Last Name',
+		Email: 'Email',
+		status: 'Status',
+		activate: 'Activate/Deactivate',
+		title: 'Table Of Clients',
+		search: 'Search Client',
+	},
 };
-

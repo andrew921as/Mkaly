@@ -27,7 +27,7 @@ const UserInfo = () => {
 	const [user, setUser] = useState([]);
 	const [contracts, setContracts] = useState([]);
 	const {user: currentUser} = useContext(UserContext);
-	const [markers, setMarkers] = useState([{coord: [3.4446307, -76.5430657]}]);
+	const [markers, setMarkers] = useState([{}]);
 	const [isLoading, setIsLoading] = useState(true);
 	const {locale} = router;
 	const t = locale === 'en' ? en : es;
@@ -72,8 +72,11 @@ const UserInfo = () => {
 	}, []);
 
 	useEffect(() => {
-		getCoords();
-		console.log(markers);
+		if (contracts?.length > 0) {
+			getCoords();
+		} else {
+			setIsLoading(false);
+		}
 	}, [contracts]);
 
 	if (isLoading) {
@@ -126,14 +129,18 @@ const UserInfo = () => {
 							url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 						/>
 
-						{markers.map((marker) => (
-							<Marker position={marker.coord}>
-								<Popup>
-									{t.InfoUser.contract.contractStart} {marker.contract.contract_number}, {t.InfoUser.contract.contractAddress} {marker.contract.type_of_avenue}{' '}
-									# {marker.contract.first_number} - {marker.contract.second_number}.
-								</Popup>
-							</Marker>
-						))}
+						{markers.map((marker) => {
+							if (marker?.coord) {
+								return (
+									<Marker position={marker.coord}>
+										<Popup>
+											{t.InfoUser.contract.contractStart} {marker?.contract?.contract_number}, {t.InfoUser.contract.contractAddress}{' '}
+											{marker?.contract?.type_of_avenue} # {marker?.contract?.first_number} - {marker?.contract?.second_number}.
+										</Popup>
+									</Marker>
+								);
+							}
+						})}
 					</MapContainer>
 				</div>
 			</div>
