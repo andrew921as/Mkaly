@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import cloudinary_storage
 from django.core.files.storage import FileSystemStorage
-
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-)oi-7teqo!w115=$*rlk&+o%-dm%f_&xawpw2!ew&mj)e=tl-%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -87,14 +87,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'proyecto_desarrollo',
-        'USER': 'postgres',
-        'PASSWORD': '201504',
-        'HOST': 'localhost',
-        'DATABASE_PORT': 5432
-    }
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
 
