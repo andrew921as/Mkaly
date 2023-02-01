@@ -161,6 +161,10 @@ export default {
 		idNumber:"Numero ID",
 		warningNotFou:"Usuario no encontrado.",
 	},
+	consultBill:{
+		Title:"Consultar factura",
+		description:"Porfavor ingrese el numero de su factura"
+	},
 };
 
 

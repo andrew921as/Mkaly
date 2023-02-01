@@ -441,7 +441,7 @@ class SearchBill(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request,bill_id):     
-        bills = list(Bill.objects.filter(id=bill_id).values())
+        bills = list(Bill.objects.filter(bill_number=bill_id).values())
         #print(contracts[0].id + "---------------------------------------------------------------------------------------------------")
         if ( len(bill) > 0):
             bill=bills[0]

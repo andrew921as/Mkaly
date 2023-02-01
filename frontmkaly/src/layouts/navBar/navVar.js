@@ -1,7 +1,9 @@
-import { AppBar, Toolbar, Typography, Button, Stack, Menu, MenuItem, useMediaQuery, useTheme } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Stack, Menu, MenuItem, useMediaQuery, useTheme, Box } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import logoMkaly from '../../../assets/Icons/logo-Mkaly.png';
+import UK from '../../../assets/Icons/united-kingdom.png';
+import Col from '../../../assets/Icons/colombia.png';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 //Diccionarios
@@ -29,6 +31,13 @@ export const Navbar = () => {
 			<Toolbar>
 				{isMatch ? (
 					<>
+						<Stack
+						 direction="row"
+						 justifyContent="space-between"
+						 alignItems="center"
+						 spacing={3}
+						 sx={{width:"100%"}}
+						>
 						<Button
 							id="demo-positioned-button"
 							aria-controls={open ? 'demo-positioned-menu' : undefined}
@@ -38,6 +47,19 @@ export const Navbar = () => {
 						>
 							<Image src={logoMkaly} width={50} height={35} />
 						</Button>
+						<Box>
+						<Button
+						><Link href={asPath} locale='en'>
+							<Image src={UK} width={40} height={35} />
+							</Link>
+						</Button>
+						<Button
+						><Link href={asPath} locale='es'>
+							<Image src={Col} width={40} height={35} />
+							</Link>
+						</Button>
+						</Box>
+						</Stack>
 						<Menu
 							id="demo-positioned-menu"
 							aria-labelledby="demo-positioned-button"
@@ -68,14 +90,13 @@ export const Navbar = () => {
 								<Button href="#contact-us">{t.LandingP.Menu.Contact}</Button>
 							</MenuItem>
 							<MenuItem onClick={handleClose}>
-								<Button href="#Start">{t.LandingP.Menu.Consult}</Button>
-							</MenuItem>
-							<MenuItem onClick={handleClose}>
-								<Button href="#" locale="en">{t.LandingP.Menu.Language}</Button>
+								<Link href="/consultBill">
+									<Button href="#Start">{t.LandingP.Menu.Consult}</Button>
+								</Link>
 							</MenuItem>
 							<MenuItem onClick={handleClose}>
 								<Link href="/login-page">
-									<Button color="inherit">{t.LandingP.Menu.Consult}</Button>
+									<Button color="inherit">{t.LandingP.Menu.Login}</Button>
 								</Link>
 							</MenuItem>
 						</Menu>
@@ -93,7 +114,9 @@ export const Navbar = () => {
 							<Button href="#AboutUs">{t.LandingP.Menu.About}</Button>
 							<Button href="#newProjects">{t.LandingP.Menu.New}</Button>
 							<Button href="#contact-us">{t.LandingP.Menu.Contact}</Button>
-							<Button>{t.LandingP.Menu.Consult}</Button>
+							<Link href="/consultBill">
+								<Button>{t.LandingP.Menu.Consult}</Button>
+							</Link>
 							<Button
 								id="basic-button"
 								aria-controls={open ? 'basic-menu' : undefined}

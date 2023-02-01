@@ -158,5 +158,9 @@ export default {
 		idNumber:"ID Number",
 		warningNotFou:"User not found.",
 	},
+	consultBill:{
+		Title:"Consult bill",
+		description:"Please enter the bill number"
+	},
 };
 

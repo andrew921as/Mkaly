@@ -107,3 +107,12 @@ export const getClients = async () => {
 		throw e;
 	}
 };
+
+export const getBill = async (data) => {
+	try {
+		const billD = await axios.get(`${API}/search_bill/${data}`);
+		return billD;
+	} catch (e) {
+		throw e;
+	}
+};
