@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'proyecto_desarrollo',
         'USER': 'postgres',
-        'PASSWORD': 'cesar0915',
+        'PASSWORD': '201504',
         'HOST': 'localhost',
         'DATABASE_PORT': 5432
     }
@@ -159,8 +159,8 @@ fs = FileSystemStorage(location=os.path.join(BASE_DIR, 'backmkaly/app1/static/me
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'mkalyempresa@gmail.com'
-EMAIL_HOST_PASSWORD = 'pifprzorsekppwzd'
+EMAIL_HOST_USER = 'mkalyempresabills@gmail.com'
+EMAIL_HOST_PASSWORD = 'otszopumbgexzikd'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

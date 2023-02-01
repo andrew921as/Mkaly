@@ -142,7 +142,7 @@ class Publicity (models.Model):
     
     
 class Bill (models.Model):
-    bill_number = models.CharField('Numero de factura', unique=True, max_length=40, null=False)
+    bill_number = models.IntegerField('Numero de factura', unique=True, null=False)
     electronic_payment_number = models.CharField('Numero de pago electronico', max_length=40, null=True, blank=True)
     expedition_date = models.DateField('Fecha de expedicion',null=False)
     expiration_date = models.DateField('Fecha de vencimiento',null=False)

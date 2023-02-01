@@ -8,6 +8,7 @@ import es from '../public/languages/es';
 //Componentes
 import Image from 'next/image';
 import selfP from '../assets/images/publicity/happyFamily.png';
+import P1 from '../assets/images/publicity/Publicidad1.png';
 import Animation from '../src/components/Animation.js';
 import ContacUs from '../src/components/landingP/ContactUs'
 import NewProject from '../src/components/landingP/NewProject';
@@ -47,7 +48,8 @@ export default function Index() {
 				<Animation>
 					<NewProject/>
 				</Animation>
-
+				<Image src={P1} responsive/>
+				<br/>
 				{/* This is the contact us section--------------------------------------------------------------------------------------------------------------------- */}
 				<div id='contact-us'></div>
 				{

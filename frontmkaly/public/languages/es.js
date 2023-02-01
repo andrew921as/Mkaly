@@ -98,7 +98,7 @@ export default {
 			TitleRegPago: 'Registrar pago en línea',
 			ButtonPay: 'Pagar',
 			TitleMessage: 'Importante',
-			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.",
+			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. Tambien tiene la opcion de acércarse a una de nuestras sedes o contactar a nuestro call center.",
 			success: "Pago exitoso",
 			warningAlreadyPaid: "Error, la factura ya está pagada",
 			warning: "No se encontró la factura",
@@ -111,7 +111,7 @@ export default {
 			TitleRegPago: 'Registrar pago',
 			ButtonPay: 'Pagar',
 			TitleMessage: 'Importante',
-			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center."
+			MessageImp : "Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. Tambien tiene la opcion de acércarse a una de nuestras sedes o contactar a nuestro call center."
 		}
 	},
 	
@@ -222,6 +222,15 @@ export default {
 			warningNoFields: 'Debes llenar todos los campos',
 		},
 	},
+	consultBill:{
+		Title:"Consultar factura",
+		description:"Enivar factura electronica",
+		billNumber:"# Numero de factura",
+		billEmail:"@ Correo electronico",
+		Title2:"Descargar factura",
+	},
 };
+
+
 
 

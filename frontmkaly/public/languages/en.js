@@ -214,5 +214,12 @@ export default {
 			warningNoFields: 'You need to fill all the fields',
 		},
 	},
+	consultBill:{
+		Title:"Consult bill",
+		description:"Please enter the bill number",
+		billNumber:"# Bill number",
+		billEmail:"@ Email",
+		Title2:"Download Bill",
+	},
 };
 
