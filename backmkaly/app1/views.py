@@ -208,7 +208,7 @@ class AdminEnable(View):
             user.save()
             datos ={'message':"User successfully changed"}
         else:
-            datos={'massage':"User not found"}
+            datos={'message':"User not found"}
 
         return JsonResponse(datos)
 
