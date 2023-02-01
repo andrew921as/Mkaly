@@ -15,8 +15,8 @@ import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Login() {
 	const router = useRouter();
-	const {locale}= router
-	const t = locale === 'en' ? en : es
+	const {locale} = router;
+	const t = locale === 'en' ? en : es;
 
 	const {user, setUser, login} = useContext(UserContext);
 
@@ -32,7 +32,7 @@ export default function Login() {
 	const theme = useTheme();
 	const isMatch = useMediaQuery(theme.breakpoints.down('sm'));
 	const isMatchXs = useMediaQuery(theme.breakpoints.down('xSmall'));
-	const [windowSize, setWindowSize] = useState(getWindowSize());
+	const [windowSize, setWindowSize] = useState({innerWidth: 1920, innerHeight: 1080});
 
 	const handleLogin = async () => {
 		if (!captcha.current.getValue()) {
@@ -50,8 +50,10 @@ export default function Login() {
 	};
 
 	function getWindowSize() {
-		const {innerWidth, innerHeight} = window;
-		return {innerWidth, innerHeight};
+		if (typeof window !== 'undefined') {
+			const {innerWidth, innerHeight} = window;
+			return {innerWidth, innerHeight};
+		}
 	}
 
 	/**
@@ -111,7 +113,7 @@ export default function Login() {
 								<Typography variant="h2">{t.LoginP.NoRegis}</Typography>
 								<Typography sx={{maxWidth: '70%'}}>{t.LoginP.NoRegisP1}</Typography>
 								<Typography sx={{maxWidth: '70%', textAlign: 'center'}}>
-								{t.LoginP.NoRegisP2}
+									{t.LoginP.NoRegisP2}
 									<a href="tel://+573158680329" style={{textDecoration: 'none', color: '#000000'}}>
 										{' '}
 										+57 315 868 0329
@@ -227,11 +229,11 @@ export default function Login() {
 								>
 									<Stack direction="column" justifyContent="center" alignItems="center" spacing={1} sx={{margin: '5%'}}>
 										<Typography variant="h3" sx={{fontWeight: 'bold'}}>
-										{t.LoginP.NoRegis}
+											{t.LoginP.NoRegis}
 										</Typography>
 										<Typography>{t.LoginP.NoRegisP1}</Typography>
 										<Typography>
-													{t.LoginP.NoRegisP2}
+											{t.LoginP.NoRegisP2}
 											<a href="tel://+573158680329" style={{textDecoration: 'none', color: '#000000'}}>
 												{' '}
 												+57 315 868 0329

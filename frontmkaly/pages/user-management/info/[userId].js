@@ -13,15 +13,14 @@ import {getClientContracts} from '../../../src/functions/requests';
 
 // MAP
 // import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
-import {MapContainer, TileLayer, useMap, Marker, Popup} from 'react-leaflet';
-import opencage from 'opencage-api-client';
+import {MapContainer, TileLayer, Marker, Popup} from '@react-leaflet/universal-leaflet';
+// import opencage from 'opencage-api-client';
 import axios from 'axios';
 import {UserContext} from '../../../src/context/UserContext';
-import {marker} from 'leaflet';
+// import {marker} from 'leaflet';
 // import 'leaflet';
 
 const UserInfo = () => {
-	var geocoder = new google.maps.Geocoder();
 	const router = useRouter();
 	const {userId} = router.query;
 	const [user, setUser] = useState([]);
@@ -35,23 +34,25 @@ const UserInfo = () => {
 	const getCoords = async () => {
 		try {
 			setIsLoading(true);
-			let result = await Promise.all(
-				contracts.map(async (contract) => {
-					let address = `${contract.type_of_avenue}, ${contract.neighborhood}, ${contract.city}, Colombia`;
-					let res = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`);
-					if (res.data.length > 0) {
-						const location = res.data[0];
-						// setMarkers([...markersCoords, [location.lat, location.lon]]);
-						return {contract, coord: [location.lat, location.lon]};
-					} else {
-						console.log('No se pudo encontrar la ubicación especificada.');
-						return null;
-					}
-				})
-			);
+			if (typeof window !== 'undefined') {
+				let result = await Promise.all(
+					contracts.map(async (contract) => {
+						let address = `${contract.type_of_avenue}, ${contract.neighborhood}, ${contract.city}, Colombia`;
+						let res = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`);
+						if (res.data.length > 0) {
+							const location = res.data[0];
+							// setMarkers([...markersCoords, [location.lat, location.lon]]);
+							return {contract, coord: [location.lat, location.lon]};
+						} else {
+							console.log('No se pudo encontrar la ubicación especificada.');
+							return null;
+						}
+					})
+				);
 
-			setMarkers(result);
-			setIsLoading(false);
+				setMarkers(result);
+				setIsLoading(false);
+			}
 		} catch (error) {
 			console.error(error);
 			return null;
@@ -78,6 +79,14 @@ const UserInfo = () => {
 			setIsLoading(false);
 		}
 	}, [contracts]);
+
+	if (typeof window == 'undefined') {
+		return (
+			<div className="flex w-full h-screen justify-center items-center">
+				<CircularProgress />
+			</div>
+		);
+	}
 
 	if (isLoading) {
 		return (
