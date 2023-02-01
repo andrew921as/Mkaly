@@ -60,6 +60,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://localhost:8000',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -91,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'proyecto_desarrollo',
         'USER': 'postgres',
-        'PASSWORD': '201504',
+        'PASSWORD': 'pg123',
         'HOST': 'localhost',
         'DATABASE_PORT': 5432
     }
@@ -144,7 +145,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 absolute_path = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(BASE_DIR, '/app1/static/media/images')
-fs = FileSystemStorage(location=os.path.join(BASE_DIR, 'backmkaly/app1/static/media'))
+fs = FileSystemStorage(location=os.path.join(BASE_DIR, 'frontmkaly/public/files'))
 #MEDIA_ROOT = os.path.join(absolute_path, '..backmkaly.app1.static', 'media')
 
 #STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'static-only')

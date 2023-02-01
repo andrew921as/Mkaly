@@ -142,7 +142,7 @@ class Publicity (models.Model):
     
     
 class Bill (models.Model):
-    bill_number = models.CharField('Numero de factura', unique=True, max_length=40, null=False)
+    bill_number = models.IntegerField('Numero de factura', unique=True, null=False)#bill_number = models.CharField('Numero de factura', unique=True,max_length=40, null=False)
     electronic_payment_number = models.CharField('Numero de pago electronico', max_length=40, null=True, blank=True)
     expedition_date = models.DateField('Fecha de expedicion',null=False)
     expiration_date = models.DateField('Fecha de vencimiento',null=False)
@@ -157,7 +157,7 @@ class Bill (models.Model):
     default_interest= models.FloatField('IVA', null=True, blank=True)
     total_payout = models.FloatField('Total a pagar',null=False)
     BASE_DIR = Path(__file__).resolve().parent.parent
-    fs = FileSystemStorage(location=os.path.join(BASE_DIR, 'app1/static/media'))
+    fs = FileSystemStorage(location=os.path.join(BASE_DIR, '../frontmkaly/public/files'))
     pdf_bill =  models.FileField('pdf factura', upload_to='pdf',max_length=4000, null = True, blank=True, storage=fs)
     contract = models.ForeignKey(
         Contract,

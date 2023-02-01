@@ -774,17 +774,23 @@ def timer():
 #t = threading.Thread(target=timer)
 #t.start()
 
+@method_decorator(csrf_exempt)
+def pdf_view(request, bill_number):
+    
+    pdf=create_pdf(bill_number)[1]
+    #pdf.close()
+    return FileResponse(pdf, as_attachment=True, filename='factura3.pdf')
+    #FileResponse(open('report.pdf', 'rb'), as_attachment=True, content_type='application/pdf')
 
-def pdf_view(request):
-    pdf=create_pdf()
-    return FileResponse(pdf, as_attachment=True, filename='factura.pdf')
-
+    
+@method_decorator(csrf_exempt)
 def send_pdf_view(request):
-    pdf=create_pdf()
-    subject = 'Hola'
-    contact_message = "Pruebaaaa"
+    jd = json.loads(request.body) 
+    pdf=create_pdf(jd['bill_number'])[0]
+    subject = 'Factura Mkaly'
+    contact_message = "A continuacion anexamos su factura"
     from_email = settings.EMAIL_HOST_USER
-    to_email = [from_email, 'camyj2010@gmail.com']
+    to_email = [from_email, jd['email']]
     EmailMsg=EmailMessage(subject,contact_message,from_email,to_email)
     EmailMsg.attach('factura.pdf',pdf,'application/pdf')
     EmailMsg.send()
@@ -878,7 +884,7 @@ def create_pdf(billNumber):
     p.setFont("Helvetica-Bold",4)
     p.drawRightString(65,70,"No. Factura             :")
     p.drawCentredString(75,70,str(bill["bill_number"])) # DATO NUMERO DE FACTURA
-    p.drawRightString(65,75,"No. Factura Electornica :")
+    p.drawRightString(65,75,"No. Factura Electronica :")
     p.drawCentredString(75,75,str(bill["electronic_payment_number"])) # DATO NUMERO DE FACTURA ELECTRONICA
     p.drawRightString(135,70,"Fecha Expedicion:")
     p.drawRightString(160,70,str(bill["expedition_date"])) # DATO FECHA DE EXPEDICION
@@ -953,11 +959,16 @@ def create_pdf(billNumber):
     p.drawRightString(140,193,"PAGO TOTAL           :")
     p.drawCentredString(150,193,str(round(datosConsumo[4],2))) # DATO PAGO TOTAL 
     p.line(15,220,185,220)
-    p.line(100,220,100,238)
-    p.drawString(20,225,"We declare that above mentioned")
-    p.drawString(20,230,"information is true.")
-    p.drawString(20,235,"(This is system generated invoice)")
-    p.drawRightString(180,235,"Authorised Signatory")
+    absolute_pathPubli = os.path.dirname(__file__)
+    print(absolute_pathPubli)
+    relative_pathPubli = ".\static\media\images_pdf\DirectvtP.png"
+    full_pathPubli = os.path.join(absolute_pathPubli, relative_pathPubli)
+    p.saveState()
+    p.scale(1,-1)
+    x_val = 10
+    y_val = -255
+    p.drawImage(full_pathPubli,x_val,y_val,width=185,height=30)
+    p.restoreState()
     p.showPage()
     p.save()
 
@@ -965,10 +976,10 @@ def create_pdf(billNumber):
     # present the option to save the file.
     buffer.seek(0)
     pdf = buffer.getvalue()
-    buffer.close()
+    #buffer.close()
     
-    billForPDF.pdf_bill.save("factura3.pdf", ContentFile(pdf))
-    return pdf
+    billForPDF.pdf_bill.save("factura.pdf", ContentFile(pdf))
+    return pdf, buffer
 """
 def consumption(id):
         url = "https://energy-service-ds-v3cot.ondigitalocean.app/consumption"

@@ -107,3 +107,32 @@ export const getClients = async () => {
 		throw e;
 	}
 };
+
+export const getPDF = async (data) => {
+	try {
+		const PDF = await axios.get(`${API}/pdf_view_download/${data}`);
+		return PDF;
+	} catch (e) {
+		throw e;
+	}
+};
+
+
+export const postCorreoPdf = async (data)=> {
+	try {
+		const PDF = await axios.post(`${API}/pdf_view/`,data);
+		return PDF;
+	} catch (e) {
+		throw e;
+	}
+};
+
+
+// export const postCorreoPdf = async (billN, email)=> {
+// 	try {
+// 		const PDF = await axios.post(`${API}/pdf_view`,{"email": email, "bill_number":billN});
+// 		return PDF;
+// 	} catch (e) {
+// 		throw e;
+// 	}
+// };
