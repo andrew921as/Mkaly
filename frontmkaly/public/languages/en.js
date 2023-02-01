@@ -274,11 +274,12 @@ export default {
 		activate: 'Activate/Deactivate',
 		title: 'Table Of Clients',
 		search: 'Search Client',
-	consultBill:{
-		Title:"Consult bill",
-		description:"Please enter the bill number",
-		billNumber:"# Bill number",
-		billEmail:"@ Email",
-		Title2:"Download Bill",
+	},
+	consultBill: {
+		Title: 'Consult bill',
+		description: 'Please enter the bill number',
+		billNumber: '# Bill number',
+		billEmail: '@ Email',
+		Title2: 'Download Bill',
 	},
 };
