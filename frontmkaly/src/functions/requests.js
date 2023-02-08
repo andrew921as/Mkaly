@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API = 'http://localhost:8000';
+const API = 'https://backmkaly.onrender.com';
 
 // POST REQUESTS
 export const payBill = async (billId) => {
