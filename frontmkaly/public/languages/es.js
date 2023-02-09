@@ -11,7 +11,8 @@ export default {
 			About: 'Acerca de nosotros',
 			New: 'Nuvos Proyectos',
 			Contact: 'Contactanos',
-			Consult: 'Consultar Facturas',
+			Consult: 'Consultar Factura',
+			Download: 'Descargar Factura',
 			Language: 'Cambiar idioma',
 			Login: 'Iniciar sesion',
 		},
@@ -96,7 +97,8 @@ export default {
 			TitleRegPago: 'Registrar pago en línea',
 			ButtonPay: 'Pagar',
 			TitleMessage: 'Importante',
-			MessageImp: 'Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.',
+			MessageImp:
+				'Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.',
 			success: 'Pago exitoso',
 			warningAlreadyPaid: 'Error, la factura ya está pagada',
 			warning: 'No se encontró la factura',
@@ -109,12 +111,13 @@ export default {
 			TitleRegPago: 'Registrar pago',
 			ButtonPay: 'Pagar',
 			TitleMessage: 'Importante',
-			MessageImp: 'Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.',
-		  success: "Pago exitoso",
-			warningAlreadyPaid: "Error, la factura ya está pagada",
-			warning: "No se encontró la factura",
-			error: "Hubo un error"
-		}
+			MessageImp:
+				'Recuerde que solo se pueden hacer pagos de los meses vencidos en linea. En tambien tiene la opion de acérquese a una de nuestras sedes o contactar nuestro call center.',
+			success: 'Pago exitoso',
+			warningAlreadyPaid: 'Error, la factura ya está pagada',
+			warning: 'No se encontró la factura',
+			error: 'Hubo un error',
+		},
 	},
 	InvoiceCa: {
 		UpTo: 'AL DIA',
@@ -284,12 +287,11 @@ export default {
 		title: 'Tabla de clientes',
 		search: 'Buscar Clientes',
 	},
-	consultBill:{
-		Title:"Consultar factura",
-		description:"Enivar factura electronica",
-		billNumber:"# Numero de factura",
-		billEmail:"@ Correo electronico",
-		Title2:"Descargar factura",
+	consultBill: {
+		Title: 'Consultar factura',
+		description: 'Enivar factura electronica',
+		billNumber: '# Numero de factura',
+		billEmail: '@ Correo electronico',
+		Title2: 'Descargar factura',
 	},
 };
-
